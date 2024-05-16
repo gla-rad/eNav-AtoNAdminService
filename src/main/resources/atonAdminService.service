@@ -1,0 +1,9 @@
+[Unit]
+Description=e-Navigation AtoN Service
+After=syslog.target
+
+[Service]
+ExecStart=/opt/e-nav/atonService/atonService.jar
+
+[Install]
+WantedBy=multi-user.target

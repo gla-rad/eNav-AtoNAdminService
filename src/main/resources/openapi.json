@@ -1,0 +1,31 @@
+{
+  "openAPI": {
+    "info": {
+      "version": 1.0,
+      "title": "AtoN Administration Service - SECOM Interfaces",
+      "description": "The SECOM interfaces of the AtoN Administration Service",
+      "termsOfService": "https://gla-rad.org/",
+      "contact": {
+        "email": "Nikolaos.Vastardis@gla-rad.org"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "servers": [
+      {
+        "url": "https://rnavlab.gla-rad.org/enav/aton-admin-service"
+      },{
+        "url": "https://enav.grad-rrnav.pub/enav/aton-admin-service"
+      }, {
+        "url": "http://localhost:8769"
+      }
+    ]
+  },
+  "resourcePackages": [
+    "org.grad.eNav.atonAdminService.controllers.secom"
+  ],
+  "prettyPrint": true,
+  "cacheTTL": 0
+}

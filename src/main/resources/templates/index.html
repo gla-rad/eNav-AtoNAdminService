@@ -1,0 +1,84 @@
+<!--
+  ~ Copyright (c) 2024 GLA Research and Development Directorate
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+<body>
+    <noscript>
+        <h2 style="color: #ff0000">
+            Seems your browser doesn't support Javascript!
+            Websocket relies on Javascript being enabled.
+            Please enable Javascript and reload this page!
+        </h2>
+    </noscript>
+    <div class="d-flex flex-column vh-100">
+        <div th:replace="~{fragments/general.html :: navbar}"></div>
+        <div class="flex-fill flex-grow-1 flex-shrink-0 sky-bg">
+            <div id="main-content" class="container mt-3">
+                <div th:replace="~{fragments/general.html :: login-card}"></div>
+                <div class="card shadow" sec:authorize="isAuthenticated()">
+                    <div class="card-header">
+                        <h2>AtoN Message Monitoring</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row form-group">
+                                    <div class="col-md-5 d-flex align-items-center">
+                                        <label class="m-1" for="connect">Endpoint Connection:</label>
+                                        <select name="VDES Connection" id="endpoint" style="min-width: 150px;">
+                                            <option th:each="endpoint : ${endpoints}" th:value="${endpoint}" th:text="${endpoint}"/>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <button id="connect" class="btn btn-primary" type="button">Connect</button>
+                                        <button id="disconnect" class="btn btn-secondary" type="button" disabled="disabled">Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="messages" class="table table-striped text-break">
+                                    <thead>
+                                    <tr class="d-flex">
+                                        <th class="col-4">ID Code</th>
+                                        <th class="col-4">Description</th>
+                                        <th class="col-2">Start Date</th>
+                                        <th class="col-2">End Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="incoming">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{fragments/general.html :: footer}"></div>
+    </div>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/sockjs-client/sockjs.min.js}"></script>
+    <script th:src="@{/webjars/stomp-websocket/stomp.min.js}"></script>
+    <script th:src="@{/src/index.js}"></script>
+</body>
+</html>

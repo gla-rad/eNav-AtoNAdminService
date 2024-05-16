@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- Use Spring default values -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- Now configure an additional log file just for the SECOM requests -->
+    <springProperty scope="context" name="secomReqLogFile" source="logging.secom.requests.file.name"/>
+    <springProperty scope="context" name="secomReqRollingLogFile" source="logging.secom.requests.rollingpolicy.file-name"/>
+    <springProperty scope="context" name="secomReqRollingLogMaxSize" source="logging.secom.requests.rollingpolicy.max-file-size"/>
+    <springProperty scope="context" name="secomReqRollingLogMaxHistory" source="logging.secom.requests.rollingpolicy.max-history"/>
+    <springProperty scope="context" name="secomReqRollingLogTotalSizeCap" source="logging.secom.requests.rollingpolicy.total-size-cap"/>
+
+    <!-- If the secom requests log file has been specified, log the requests and keep it rolling... -->
+    <if condition='isDefined("secomReqLogFile") &amp;&amp; !property("secomReqLogFile").trim().isEmpty()'>
+        <then>
+            <property name="SECOM_REQ_LOG_FILE" value="${secomReqLogFile}"/>
+            <appender name="SECOMREQFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <encoder>
+                    <pattern>${FILE_LOG_PATTERN}</pattern>
+                    <charset>${FILE_LOG_CHARSET}</charset>
+                </encoder>
+                <file>${SECOM_REQ_LOG_FILE}</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>${secomReqRollingLogFile:-${SECOM_REQ_LOG_FILE}.%d{yyyy-MM-dd}.%i.gz}</fileNamePattern>
+                    <cleanHistoryOnStart>false</cleanHistoryOnStart>
+                    <maxFileSize>${secomReqRollingLogMaxSize:-10MB}</maxFileSize>
+                    <maxHistory>${secomReqRollingLogMaxHistory:-10}</maxHistory>
+                    <totalSizeCap>${secomReqRollingLogTotalSizeCap:-0}</totalSizeCap>
+                </rollingPolicy>
+            </appender>
+            <logger name="org.grad.secom.springboot3.config.SecomRequestLoggingFilterConfig$1" additivity="false" level="info">
+                <appender-ref ref="SECOMREQFILE"/>
+            </logger>
+        </then>
+    </if>
+
+</configuration>
