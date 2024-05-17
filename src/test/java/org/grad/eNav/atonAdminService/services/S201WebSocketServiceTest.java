@@ -86,7 +86,6 @@ class S201WebSocketServiceTest {
         // Create a new AtoN message
         this.aidsToNavigation = new BeaconCardinal();
         this.aidsToNavigation.setId(BigInteger.valueOf(1));
-        this.aidsToNavigation.setAtonNumber("AtonNumber001");
         this.aidsToNavigation.setIdCode("ID001");
         this.aidsToNavigation.setGeometry(factory.createPoint(new Coordinate(53.61, 1.594)));
         // Add the feature name entries
@@ -152,7 +151,6 @@ class S201WebSocketServiceTest {
         assertEquals("/topic/S201", topicArgument.getValue());
         assertNotNull(payLoadArgument.getValue());
         assertEquals(this.aidsToNavigation.getId(), payLoadArgument.getValue().getId());
-        assertEquals(this.aidsToNavigation.getAtonNumber(), payLoadArgument.getValue().getAtonNumber());
         assertEquals(this.aidsToNavigation.getIdCode(), payLoadArgument.getValue().getIdCode());
         assertEquals(this.aidsToNavigation.getInformations().size(), payLoadArgument.getValue().getInformations().size());
         assertEquals(this.aidsToNavigation.getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),
@@ -199,7 +197,6 @@ class S201WebSocketServiceTest {
         assertEquals("/topic/deletions/S201", topicArgument.getValue());
         assertNotNull(payLoadArgument.getValue());
         assertEquals(this.aidsToNavigation.getId(), payLoadArgument.getValue().getId());
-        assertEquals(this.aidsToNavigation.getAtonNumber(), payLoadArgument.getValue().getAtonNumber());
         assertEquals(this.aidsToNavigation.getIdCode(), payLoadArgument.getValue().getIdCode());
         assertEquals(this.aidsToNavigation.getInformations().size(), payLoadArgument.getValue().getInformations().size());
         assertEquals(this.aidsToNavigation.getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),

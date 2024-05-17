@@ -18,11 +18,13 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s201.gml.cs0._1.StatusType;
 import _int.iho.s201.gml.cs0._1.VirtualAISAidToNavigationTypeType;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * The S-201 Virtual AIS Aids to Navigation Entity Class.
@@ -38,91 +40,16 @@ import java.math.BigDecimal;
 public class VirtualAISAidToNavigation extends AISAidToNavigation {
 
     // Class Variables
-    @Enumerated(EnumType.STRING)
-    private VirtualAISAidToNavigationTypeType virtualAISAidToNavigationType;
-
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
-
-    @Enumerated(EnumType.STRING)
-    private StatusType status;
-
     private BigDecimal estimatedRangeOfTransmission;
 
     private BigDecimal mmsiCode;
 
-    /**
-     * Gets virtual ais aid to navigation type.
-     *
-     * @return the virtual ais aid to navigation type
-     */
-    public VirtualAISAidToNavigationTypeType getVirtualAISAidToNavigationType() {
-        return virtualAISAidToNavigationType;
-    }
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = StatusType.class)
+    private List<StatusType> statuses;
 
-    /**
-     * Sets virtual ais aid to navigation type.
-     *
-     * @param virtualAISAidToNavigationType the virtual ais aid to navigation type
-     */
-    public void setVirtualAISAidToNavigationType(VirtualAISAidToNavigationTypeType virtualAISAidToNavigationType) {
-        this.virtualAISAidToNavigationType = virtualAISAidToNavigationType;
-    }
-
-    /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    /**
-     * Gets status.
-     *
-     * @return the status
-     */
-    public StatusType getStatus() {
-        return status;
-    }
-
-    /**
-     * Sets status.
-     *
-     * @param status the status
-     */
-    public void setStatus(StatusType status) {
-        this.status = status;
-    }
+    @Enumerated(EnumType.STRING)
+    private VirtualAISAidToNavigationTypeType virtualAISAidToNavigationType;
 
     /**
      * Gets estimated range of transmission.
@@ -158,5 +85,41 @@ public class VirtualAISAidToNavigation extends AISAidToNavigation {
      */
     public void setMmsiCode(BigDecimal mmsiCode) {
         this.mmsiCode = mmsiCode;
+    }
+
+    /**
+     * Gets virtual ais aid to navigation type.
+     *
+     * @return the virtual ais aid to navigation type
+     */
+    public VirtualAISAidToNavigationTypeType getVirtualAISAidToNavigationType() {
+        return virtualAISAidToNavigationType;
+    }
+
+    /**
+     * Sets virtual ais aid to navigation type.
+     *
+     * @param virtualAISAidToNavigationType the virtual ais aid to navigation type
+     */
+    public void setVirtualAISAidToNavigationType(VirtualAISAidToNavigationTypeType virtualAISAidToNavigationType) {
+        this.virtualAISAidToNavigationType = virtualAISAidToNavigationType;
+    }
+
+    /**
+     * Gets statuses.
+     *
+     * @return the statuses
+     */
+    public List<StatusType> getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * Sets statuses.
+     *
+     * @param statuses the statuses
+     */
+    public void setStatuses(List<StatusType> statuses) {
+        this.statuses = statuses;
     }
 }

@@ -43,8 +43,6 @@ public class AidsToNavigationDto {
     // Class Variables
     private BigInteger id;
 
-    private String atonNumber;
-
     private String idCode;
     
     private LocalDate dateEnd;
@@ -89,26 +87,6 @@ public class AidsToNavigationDto {
      */
     public void setId(BigInteger id) {
         this.id = id;
-    }
-
-    /**
-     * Gets aton number.
-     *
-     * @return the aton number
-     */
-    @Deprecated
-    public String getAtonNumber() {
-        return atonNumber;
-    }
-
-    /**
-     * Sets aton number.
-     *
-     * @param atonNumber the aton number
-     */
-    @Deprecated
-    public void setAtonNumber(String atonNumber) {
-        this.atonNumber = atonNumber;
     }
 
     /**

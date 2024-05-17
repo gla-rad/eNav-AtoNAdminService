@@ -105,7 +105,6 @@ class AidsToNavigationServiceTest {
         for(long i=0; i<10; i++) {
             AidsToNavigation aidsToNavigation = new BeaconCardinal();
             aidsToNavigation.setId(BigInteger.valueOf(i));
-            aidsToNavigation.setAtonNumber("AtonNumber" + i);
             aidsToNavigation.setIdCode("ID"+i);
             aidsToNavigation.setGeometry(factory.createPoint(new Coordinate(i%180, i%90)));
             // Add the feature name entries
@@ -124,7 +123,6 @@ class AidsToNavigationServiceTest {
 
         // Create a new AtoN message
         this.newAidsToNavigation = new BeaconCardinal();
-        this.newAidsToNavigation.setAtonNumber("AtonNumber001");
         this.newAidsToNavigation.setIdCode("ID001");
         this.newAidsToNavigation.setGeometry(factory.createPoint(new Coordinate(1, 1)));
         // Add the feature name entries
@@ -141,7 +139,6 @@ class AidsToNavigationServiceTest {
         // Create an existing AtoN message with ID
         this.existingAidsToNavigation = new BeaconCardinal();
         this.existingAidsToNavigation.setId(BigInteger.valueOf(1));
-        this.existingAidsToNavigation.setAtonNumber("AtonNumber010");
         this.existingAidsToNavigation.setIdCode("ID010");
         this.existingAidsToNavigation.setGeometry(factory.createPoint(new Coordinate(10, 10)));
         // Add the feature name entries
@@ -182,7 +179,6 @@ class AidsToNavigationServiceTest {
         // Test each of the result entries
         for(int i=0; i < result.getSize(); i++){
             assertEquals(this.aidsToNavigationList.get(i).getId(), result.getContent().get(i).getId());
-            assertEquals(this.aidsToNavigationList.get(i).getAtonNumber(), result.getContent().get(i).getAtonNumber());
             assertEquals(this.aidsToNavigationList.get(i).getIdCode(), result.getContent().get(i).getIdCode());
             assertEquals(this.aidsToNavigationList.get(i).getInformations().size(), result.getContent().get(i).getInformations().size());
             assertEquals(this.aidsToNavigationList.get(i).getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),
@@ -273,7 +269,6 @@ class AidsToNavigationServiceTest {
         // Test each of the result entries
         for(int i=0; i < result.getSize(); i++){
             assertEquals(this.aidsToNavigationList.get(i).getId(), result.getContent().get(i).getId());
-            assertEquals(this.aidsToNavigationList.get(i).getAtonNumber(), result.getContent().get(i).getAtonNumber());
             assertEquals(this.aidsToNavigationList.get(i).getIdCode(), result.getContent().get(i).getIdCode());
             assertEquals(this.aidsToNavigationList.get(i).getInformations().size(), result.getContent().get(i).getInformations().size());
             assertEquals(this.aidsToNavigationList.get(i).getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),
@@ -310,7 +305,6 @@ class AidsToNavigationServiceTest {
         // Test the result
         assertNotNull(result);
         assertEquals(this.newAidsToNavigation.getId(), result.getId());
-        assertEquals(this.newAidsToNavigation.getAtonNumber(), result.getAtonNumber());
         assertEquals(this.newAidsToNavigation.getIdCode(), result.getIdCode());
         assertEquals(this.newAidsToNavigation.getInformations().size(), result.getInformations().size());
         assertEquals(this.newAidsToNavigation.getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),

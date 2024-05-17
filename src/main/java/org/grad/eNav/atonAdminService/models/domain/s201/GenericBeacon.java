@@ -52,19 +52,23 @@ public abstract class GenericBeacon extends StructureObject {
     @Enumerated(EnumType.STRING)
     private RadarConspicuousType radarConspicuous;
 
-    @Enumerated(EnumType.STRING)
-    private VisualProminenceType visuallyConspicuous;
-
     private BigDecimal height;
+
+    private BigDecimal elevation;
 
     @Enumerated(EnumType.STRING)
     private MarksNavigationalSystemOfType marksNavigationalSystemOf;
+
+    @Enumerated(EnumType.STRING)
+    private VisualProminenceType visualProminence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
 
     private BigDecimal verticalLength;
+
+    private BigDecimal verticalAccuracy;
 
     private String objectNameInNationalLanguage;
 
@@ -147,24 +151,6 @@ public abstract class GenericBeacon extends StructureObject {
     }
 
     /**
-     * Gets visually conspicuous.
-     *
-     * @return the visually conspicuous
-     */
-    public VisualProminenceType getVisuallyConspicuous() {
-        return visuallyConspicuous;
-    }
-
-    /**
-     * Sets visually conspicuous.
-     *
-     * @param visuallyConspicuous the visually conspicuous
-     */
-    public void setVisuallyConspicuous(VisualProminenceType visuallyConspicuous) {
-        this.visuallyConspicuous = visuallyConspicuous;
-    }
-
-    /**
      * Gets height.
      *
      * @return the height
@@ -183,6 +169,24 @@ public abstract class GenericBeacon extends StructureObject {
     }
 
     /**
+     * Gets elevation.
+     *
+     * @return the elevation
+     */
+    public BigDecimal getElevation() {
+        return elevation;
+    }
+
+    /**
+     * Sets elevation.
+     *
+     * @param elevation the elevation
+     */
+    public void setElevation(BigDecimal elevation) {
+        this.elevation = elevation;
+    }
+
+    /**
      * Gets marks navigational system of.
      *
      * @return the marks navigational system of
@@ -198,6 +202,24 @@ public abstract class GenericBeacon extends StructureObject {
      */
     public void setMarksNavigationalSystemOf(MarksNavigationalSystemOfType marksNavigationalSystemOf) {
         this.marksNavigationalSystemOf = marksNavigationalSystemOf;
+    }
+
+    /**
+     * Gets visual prominence.
+     *
+     * @return the visual prominence
+     */
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
+    }
+
+    /**
+     * Sets visual prominence.
+     *
+     * @param visualProminence the visual prominence
+     */
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
     }
 
     /**
@@ -234,6 +256,24 @@ public abstract class GenericBeacon extends StructureObject {
      */
     public void setVerticalLength(BigDecimal verticalLength) {
         this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
     }
 
     /**

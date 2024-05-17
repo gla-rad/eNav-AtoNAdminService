@@ -16,14 +16,13 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.ColourPatternType;
-import _int.iho.s201.gml.cs0._1.ColourType;
-import _int.iho.s201.gml.cs0._1.MarksNavigationalSystemOfType;
-import _int.iho.s201.gml.cs0._1.StatusType;
+import _int.iho.s201.gml.cs0._1.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -54,6 +53,13 @@ public class RetroReflector extends Equipment {
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
+
+    @Enumerated(EnumType.STRING)
+    protected VerticalDatumType verticalDatum;
+
+    protected BigDecimal height;
+
+    protected BigDecimal verticalAccuracy;
 
     /**
      * Gets colours.
@@ -125,5 +131,59 @@ public class RetroReflector extends Equipment {
      */
     public void setStatuses(List<StatusType> statuses) {
         this.statuses = statuses;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
+     * Gets height.
+     *
+     * @return the height
+     */
+    public BigDecimal getHeight() {
+        return height;
+    }
+
+    /**
+     * Sets height.
+     *
+     * @param height the height
+     */
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
     }
 }

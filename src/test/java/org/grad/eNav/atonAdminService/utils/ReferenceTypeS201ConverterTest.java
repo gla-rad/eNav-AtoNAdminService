@@ -50,7 +50,6 @@ class ReferenceTypeS201ConverterTest {
         // Initialise a single AtoN object
         this.aidToNavigation = new VirtualAISAidToNavigation();
         aidToNavigation.setId(BigInteger.ZERO);
-        aidToNavigation.setAtonNumber("Virtual AtoN Number");
         aidToNavigation.setIdCode("Virtual AtoN ID");
         aidToNavigation.setGeometry(factory.createPoint(new Coordinate(0, 0)));
         // Add the feature name entries
@@ -67,7 +66,6 @@ class ReferenceTypeS201ConverterTest {
         for (long i = 0; i < 10; i++) {
             AidsToNavigation tempAidToNavigation = new BeaconCardinal();
             tempAidToNavigation.setId(BigInteger.valueOf(i));
-            tempAidToNavigation.setAtonNumber("AtonNumber" + i);
             tempAidToNavigation.setIdCode("ID" + i);
             tempAidToNavigation.setGeometry(factory.createPoint(new Coordinate(i % 180, i % 90)));
             // Add the feature name entries

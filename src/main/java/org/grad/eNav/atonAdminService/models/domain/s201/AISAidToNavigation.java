@@ -16,9 +16,9 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 /**
@@ -37,24 +37,31 @@ import java.util.List;
 @Entity
 public abstract class AISAidToNavigation extends Equipment {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "broadcasts", orphanRemoval = false)
-    private List<RadioStation> broadcastedBy;
+    // Class Variables
+    @JsonBackReference
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "broadcast_by_join_table",
+            joinColumns = { @JoinColumn(name = "ais_aton_id") },
+            inverseJoinColumns = { @JoinColumn(name = "radio_station_id") }
+    )
+    private List<RadioStation> broadcastBy;
 
     /**
-     * Gets broadcasted by.
+     * Gets broadcast by.
      *
-     * @return the broadcasted by
+     * @return the broadcast by
      */
-    public List<RadioStation> getBroadcastedBy() {
-        return broadcastedBy;
+    public List<RadioStation> getBroadcastBy() {
+        return broadcastBy;
     }
 
     /**
-     * Sets broadcasted by.
+     * Sets broadcast by.
      *
-     * @param broadcastedBy the broadcasted by
+     * @param broadcastBy the broadcast by
      */
-    public void setBroadcastedBy(List<RadioStation> broadcastedBy) {
-        this.broadcastedBy = broadcastedBy;
+    public void setBroadcastBy(List<RadioStation> broadcastBy) {
+        this.broadcastBy = broadcastBy;
     }
 }

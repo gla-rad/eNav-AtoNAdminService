@@ -29,7 +29,7 @@ import jakarta.persistence.Enumerated;
  * super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201gml.cs0._1.BuoyCardinal
+ * @see _int.iho.s201.gml.cs0._1.BuoyCardinal
  */
 @Entity
 public class BuoyCardinal extends GenericBuoy {

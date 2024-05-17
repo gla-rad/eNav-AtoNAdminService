@@ -53,20 +53,28 @@ public class SiloTank extends StructureObject {
     private List<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
-    private RadarConspicuousType radarConspicuous;
+    private ConditionType conditionType;
 
-    @Enumerated(EnumType.STRING)
-    private VisualProminenceType visuallyConspicuous;
+    private BigDecimal elevation;
 
     private BigDecimal height;
+
+    private BigDecimal verticalAccuracy;
+
+    private BigDecimal verticalLength;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
 
-    private String objectNameInNationalLanguage;
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
 
-    private String objectName;
+    @Enumerated(EnumType.STRING)
+    private RadarConspicuousType radarConspicuous;
+
+    @Enumerated(EnumType.STRING)
+    private VisualProminenceType visualProminence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -145,39 +153,39 @@ public class SiloTank extends StructureObject {
     }
 
     /**
-     * Gets radar conspicuous.
+     * Gets condition type.
      *
-     * @return the radar conspicuous
+     * @return the condition type
      */
-    public RadarConspicuousType getRadarConspicuous() {
-        return radarConspicuous;
+    public ConditionType getConditionType() {
+        return conditionType;
     }
 
     /**
-     * Sets radar conspicuous.
+     * Sets condition type.
      *
-     * @param radarConspicuous the radar conspicuous
+     * @param conditionType the condition type
      */
-    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
-        this.radarConspicuous = radarConspicuous;
+    public void setConditionType(ConditionType conditionType) {
+        this.conditionType = conditionType;
     }
 
     /**
-     * Gets visually conspicuous.
+     * Gets elevation.
      *
-     * @return the visually conspicuous
+     * @return the elevation
      */
-    public VisualProminenceType getVisuallyConspicuous() {
-        return visuallyConspicuous;
+    public BigDecimal getElevation() {
+        return elevation;
     }
 
     /**
-     * Sets visually conspicuous.
+     * Sets elevation.
      *
-     * @param visuallyConspicuous the visually conspicuous
+     * @param elevation the elevation
      */
-    public void setVisuallyConspicuous(VisualProminenceType visuallyConspicuous) {
-        this.visuallyConspicuous = visuallyConspicuous;
+    public void setElevation(BigDecimal elevation) {
+        this.elevation = elevation;
     }
 
     /**
@@ -199,6 +207,42 @@ public class SiloTank extends StructureObject {
     }
 
     /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
      * Gets nature of constructions.
      *
      * @return the nature of constructions
@@ -217,39 +261,57 @@ public class SiloTank extends StructureObject {
     }
 
     /**
-     * Gets object name in national language.
+     * Gets product type.
      *
-     * @return the object name in national language
+     * @return the product type
      */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
+    public ProductType getProductType() {
+        return productType;
     }
 
     /**
-     * Sets object name in national language.
+     * Sets product type.
      *
-     * @param objectNameInNationalLanguage the object name in national language
+     * @param productType the product type
      */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
     }
 
     /**
-     * Gets object name.
+     * Gets radar conspicuous.
      *
-     * @return the object name
+     * @return the radar conspicuous
      */
-    public String getObjectName() {
-        return objectName;
+    public RadarConspicuousType getRadarConspicuous() {
+        return radarConspicuous;
     }
 
     /**
-     * Sets object name.
+     * Sets radar conspicuous.
      *
-     * @param objectName the object name
+     * @param radarConspicuous the radar conspicuous
      */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
+    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
+        this.radarConspicuous = radarConspicuous;
+    }
+
+    /**
+     * Gets visual prominence.
+     *
+     * @return the visual prominence
+     */
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
+    }
+
+    /**
+     * Sets visual prominence.
+     *
+     * @param visualProminence the visual prominence
+     */
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
     }
 
     /**

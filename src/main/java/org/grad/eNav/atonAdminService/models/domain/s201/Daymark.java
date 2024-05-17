@@ -50,19 +50,26 @@ public class Daymark extends Equipment {
 
     private BigDecimal height;
 
+    private BigDecimal elevation;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
-
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
 
     private String topmarkDaymarkShape;
+
+    private BigDecimal verticalLength;
+
+    private BigDecimal verticalAccuracy;
+
+    @Enumerated(EnumType.STRING)
+    protected VerticalDatumType verticalDatum;
+
+    private BigDecimal orientation;
 
     /**
      * Gets category of special purpose mark.
@@ -137,6 +144,24 @@ public class Daymark extends Equipment {
     }
 
     /**
+     * Gets elevation.
+     *
+     * @return the elevation
+     */
+    public BigDecimal getElevation() {
+        return elevation;
+    }
+
+    /**
+     * Sets elevation.
+     *
+     * @param elevation the elevation
+     */
+    public void setElevation(BigDecimal elevation) {
+        this.elevation = elevation;
+    }
+
+    /**
      * Gets nature of constructions.
      *
      * @return the nature of constructions
@@ -152,42 +177,6 @@ public class Daymark extends Equipment {
      */
     public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
         this.natureOfConstructions = natureOfConstructions;
-    }
-
-    /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
     }
 
     /**
@@ -224,5 +213,77 @@ public class Daymark extends Equipment {
      */
     public void setTopmarkDaymarkShape(String topmarkDaymarkShape) {
         this.topmarkDaymarkShape = topmarkDaymarkShape;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
+     * Gets orientation.
+     *
+     * @return the orientation
+     */
+    public BigDecimal getOrientation() {
+        return orientation;
+    }
+
+    /**
+     * Sets orientation.
+     *
+     * @param orientation the orientation
+     */
+    public void setOrientation(BigDecimal orientation) {
+        this.orientation = orientation;
     }
 }

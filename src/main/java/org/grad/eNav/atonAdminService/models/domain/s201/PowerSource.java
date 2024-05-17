@@ -16,56 +16,53 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.StatusType;
-import _int.iho.s201.gml.cs0._1.VerticalDatumType;
+import _int.iho.s201.gml.cs0._1.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.math.BigDecimal;
+
 import java.util.List;
 
 /**
- * The S-201 Radar Reflector Entity Class.
+ * The S-201 PowerSource Entity Class.
  * <p>
- * This is the basic class for implementing the S-201-compatible Radar Reflector
- * type. It is modelled as an entity that extends the {@link Equipment} super
+ * This is the basic class for implementing the S-201-compatible PowerSource type.
+ * It is modelled as an entity that extends the {@link Equipment} super
  * class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.RadarReflector
+ * @see _int.iho.s201.gml.cs0._1.PowerSource
  */
 @Entity
-public class RadarReflector extends Equipment {
+public class PowerSource extends Equipment {
 
     // Class Variables
-    protected BigDecimal height;
+    @Enumerated(EnumType.STRING)
+    private CategoryOfPowerSourceType categoryOfPowerSource;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
 
-    @Enumerated(EnumType.STRING)
-    protected VerticalDatumType verticalDatum;
-
-    protected BigDecimal verticalAccuracy;
+    private String manufacturer;
 
     /**
-     * Gets height.
+     * Gets category of power source.
      *
-     * @return the height
+     * @return the category of power source
      */
-    public BigDecimal getHeight() {
-        return height;
+    public CategoryOfPowerSourceType getCategoryOfPowerSource() {
+        return categoryOfPowerSource;
     }
 
     /**
-     * Sets height.
+     * Sets category of power source.
      *
-     * @param height the height
+     * @param categoryOfPowerSource the category of power source
      */
-    public void setHeight(BigDecimal height) {
-        this.height = height;
+    public void setCategoryOfPowerSource(CategoryOfPowerSourceType categoryOfPowerSource) {
+        this.categoryOfPowerSource = categoryOfPowerSource;
     }
 
     /**
@@ -87,38 +84,20 @@ public class RadarReflector extends Equipment {
     }
 
     /**
-     * Gets vertical datum.
+     * Gets manufacturer.
      *
-     * @return the vertical datum
+     * @return the manufacturer
      */
-    public VerticalDatumType getVerticalDatum() {
-        return verticalDatum;
+    public String getManufacturer() {
+        return manufacturer;
     }
 
     /**
-     * Sets vertical datum.
+     * Sets manufacturer.
      *
-     * @param verticalDatum the vertical datum
+     * @param manufacturer the manufacturer
      */
-    public void setVerticalDatum(VerticalDatumType verticalDatum) {
-        this.verticalDatum = verticalDatum;
-    }
-
-    /**
-     * Gets vertical accuracy.
-     *
-     * @return the vertical accuracy
-     */
-    public BigDecimal getVerticalAccuracy() {
-        return verticalAccuracy;
-    }
-
-    /**
-     * Sets vertical accuracy.
-     *
-     * @param verticalAccuracy the vertical accuracy
-     */
-    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
-        this.verticalAccuracy = verticalAccuracy;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }

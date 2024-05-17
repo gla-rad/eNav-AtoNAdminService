@@ -21,14 +21,16 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * The S-201 Light Float Entity Class.
  * <p>
- * This is the basic class for implementing the S-201-compatible Light
- * Float type. It is modelled as an entity that extends the
- * {@link AidsToNavigation} super class.
+ * This is the basic class for implementing the S-201-compatible Light Float
+ * type. It is modelled as an entity that extends the {@link AidsToNavigation}
+ * super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  * @see _int.iho.s201.gml.cs0._1.LightFloat
@@ -46,18 +48,26 @@ public class LightFloat extends StructureObject {
     private List<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
-    private RadarConspicuousType radarConspicuous;
-
-    @Enumerated(EnumType.STRING)
-    private VisualProminenceType visuallyConspicuous;
-
-    @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
 
-    private String objectNameInNationalLanguage;
+    @Enumerated(EnumType.STRING)
+    private RadarConspicuousType radarConspicuous;
 
-    private String objectName;
+    @Enumerated(EnumType.STRING)
+    private VisualProminenceType visualProminence;
+
+    private BigDecimal horizontalAccuracy;
+
+    private BigDecimal horizontalLength;
+
+    private BigDecimal horizontalWidth;
+
+    private BigDecimal verticalAccuracy;
+
+    private BigDecimal verticalLength;
+
+    private Boolean mannedStructure;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -100,42 +110,6 @@ public class LightFloat extends StructureObject {
     }
 
     /**
-     * Gets radar conspicuous.
-     *
-     * @return the radar conspicuous
-     */
-    public RadarConspicuousType getRadarConspicuous() {
-        return radarConspicuous;
-    }
-
-    /**
-     * Sets radar conspicuous.
-     *
-     * @param radarConspicuous the radar conspicuous
-     */
-    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
-        this.radarConspicuous = radarConspicuous;
-    }
-
-    /**
-     * Gets visually conspicuous.
-     *
-     * @return the visually conspicuous
-     */
-    public VisualProminenceType getVisuallyConspicuous() {
-        return visuallyConspicuous;
-    }
-
-    /**
-     * Sets visually conspicuous.
-     *
-     * @param visuallyConspicuous the visually conspicuous
-     */
-    public void setVisuallyConspicuous(VisualProminenceType visuallyConspicuous) {
-        this.visuallyConspicuous = visuallyConspicuous;
-    }
-
-    /**
      * Gets nature of constructions.
      *
      * @return the nature of constructions
@@ -154,39 +128,147 @@ public class LightFloat extends StructureObject {
     }
 
     /**
-     * Gets object name in national language.
+     * Gets radar conspicuous.
      *
-     * @return the object name in national language
+     * @return the radar conspicuous
      */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
+    public RadarConspicuousType getRadarConspicuous() {
+        return radarConspicuous;
     }
 
     /**
-     * Sets object name in national language.
+     * Sets radar conspicuous.
      *
-     * @param objectNameInNationalLanguage the object name in national language
+     * @param radarConspicuous the radar conspicuous
      */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
+    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
+        this.radarConspicuous = radarConspicuous;
     }
 
     /**
-     * Gets object name.
+     * Gets visual prominence.
      *
-     * @return the object name
+     * @return the visual prominence
      */
-    public String getObjectName() {
-        return objectName;
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
     }
 
     /**
-     * Sets object name.
+     * Sets visual prominence.
      *
-     * @param objectName the object name
+     * @param visualProminence the visual prominence
      */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
+    }
+
+    /**
+     * Gets horizontal accuracy.
+     *
+     * @return the horizontal accuracy
+     */
+    public BigDecimal getHorizontalAccuracy() {
+        return horizontalAccuracy;
+    }
+
+    /**
+     * Sets horizontal accuracy.
+     *
+     * @param horizontalAccuracy the horizontal accuracy
+     */
+    public void setHorizontalAccuracy(BigDecimal horizontalAccuracy) {
+        this.horizontalAccuracy = horizontalAccuracy;
+    }
+
+    /**
+     * Gets horizontal length.
+     *
+     * @return the horizontal length
+     */
+    public BigDecimal getHorizontalLength() {
+        return horizontalLength;
+    }
+
+    /**
+     * Sets horizontal length.
+     *
+     * @param horizontalLength the horizontal length
+     */
+    public void setHorizontalLength(BigDecimal horizontalLength) {
+        this.horizontalLength = horizontalLength;
+    }
+
+    /**
+     * Gets horizontal width.
+     *
+     * @return the horizontal width
+     */
+    public BigDecimal getHorizontalWidth() {
+        return horizontalWidth;
+    }
+
+    /**
+     * Sets horizontal width.
+     *
+     * @param horizontalWidth the horizontal width
+     */
+    public void setHorizontalWidth(BigDecimal horizontalWidth) {
+        this.horizontalWidth = horizontalWidth;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets manned structure.
+     *
+     * @return the manned structure
+     */
+    public Boolean getMannedStructure() {
+        return mannedStructure;
+    }
+
+    /**
+     * Sets manned structure.
+     *
+     * @param mannedStructure the manned structure
+     */
+    public void setMannedStructure(Boolean mannedStructure) {
+        this.mannedStructure = mannedStructure;
     }
 
     /**

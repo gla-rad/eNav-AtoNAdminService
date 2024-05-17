@@ -17,11 +17,15 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s201.gml.cs0._1.CategoryOfFogSignalType;
+import _int.iho.s201.gml.cs0._1.SignalGenerationType;
 import _int.iho.s201.gml.cs0._1.StatusType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -41,11 +45,23 @@ public class FogSignal extends Equipment {
     @Enumerated(EnumType.STRING)
     private CategoryOfFogSignalType categoryOfFogSignal;
 
+    private BigInteger signalFrequency;
+
+    private SignalGenerationType signalGeneration;
+
+    private String signalGroup;
+
+    private BigDecimal signalPeriod;
+
     private String signalSequence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
+
+    protected BigDecimal valueOfMaximumRange;
+
+    protected Double signalOutput;
 
     /**
      * Gets category of fog signal.
@@ -63,6 +79,78 @@ public class FogSignal extends Equipment {
      */
     public void setCategoryOfFogSignal(CategoryOfFogSignalType categoryOfFogSignal) {
         this.categoryOfFogSignal = categoryOfFogSignal;
+    }
+
+    /**
+     * Gets signal frequency.
+     *
+     * @return the signal frequency
+     */
+    public BigInteger getSignalFrequency() {
+        return signalFrequency;
+    }
+
+    /**
+     * Sets signal frequency.
+     *
+     * @param signalFrequency the signal frequency
+     */
+    public void setSignalFrequency(BigInteger signalFrequency) {
+        this.signalFrequency = signalFrequency;
+    }
+
+    /**
+     * Gets signal generation.
+     *
+     * @return the signal generation
+     */
+    public SignalGenerationType getSignalGeneration() {
+        return signalGeneration;
+    }
+
+    /**
+     * Sets signal generation.
+     *
+     * @param signalGeneration the signal generation
+     */
+    public void setSignalGeneration(SignalGenerationType signalGeneration) {
+        this.signalGeneration = signalGeneration;
+    }
+
+    /**
+     * Gets signal group.
+     *
+     * @return the signal group
+     */
+    public String getSignalGroup() {
+        return signalGroup;
+    }
+
+    /**
+     * Sets signal group.
+     *
+     * @param signalGroup the signal group
+     */
+    public void setSignalGroup(String signalGroup) {
+        this.signalGroup = signalGroup;
+    }
+
+    /**
+     * Gets signal period.
+     *
+     * @return the signal period
+     */
+    public BigDecimal getSignalPeriod() {
+        return signalPeriod;
+    }
+
+    /**
+     * Sets signal period.
+     *
+     * @param signalPeriod the signal period
+     */
+    public void setSignalPeriod(BigDecimal signalPeriod) {
+        this.signalPeriod = signalPeriod;
     }
 
     /**
@@ -99,5 +187,41 @@ public class FogSignal extends Equipment {
      */
     public void setStatuses(List<StatusType> statuses) {
         this.statuses = statuses;
+    }
+
+    /**
+     * Gets value of maximum range.
+     *
+     * @return the value of maximum range
+     */
+    public BigDecimal getValueOfMaximumRange() {
+        return valueOfMaximumRange;
+    }
+
+    /**
+     * Sets value of maximum range.
+     *
+     * @param valueOfMaximumRange the value of maximum range
+     */
+    public void setValueOfMaximumRange(BigDecimal valueOfMaximumRange) {
+        this.valueOfMaximumRange = valueOfMaximumRange;
+    }
+
+    /**
+     * Gets signal output.
+     *
+     * @return the signal output
+     */
+    public Double getSignalOutput() {
+        return signalOutput;
+    }
+
+    /**
+     * Sets signal output.
+     *
+     * @param signalOutput the signal output
+     */
+    public void setSignalOutput(Double signalOutput) {
+        this.signalOutput = signalOutput;
     }
 }

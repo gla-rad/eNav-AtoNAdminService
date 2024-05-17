@@ -50,15 +50,11 @@ public class LightVessel extends StructureObject {
     private RadarConspicuousType radarConspicuous;
 
     @Enumerated(EnumType.STRING)
-    private VisualProminenceType visuallyConspicuous;
+    private VisualProminenceType visualProminence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
-
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -119,21 +115,21 @@ public class LightVessel extends StructureObject {
     }
 
     /**
-     * Gets visually conspicuous.
+     * Gets visual prominence.
      *
-     * @return the visually conspicuous
+     * @return the visual prominence
      */
-    public VisualProminenceType getVisuallyConspicuous() {
-        return visuallyConspicuous;
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
     }
 
     /**
-     * Sets visually conspicuous.
+     * Sets visual conspicuous.
      *
-     * @param visuallyConspicuous the visually conspicuous
+     * @param visualProminence the visual prominence
      */
-    public void setVisuallyConspicuous(VisualProminenceType visuallyConspicuous) {
-        this.visuallyConspicuous = visuallyConspicuous;
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
     }
 
     /**
@@ -152,42 +148,6 @@ public class LightVessel extends StructureObject {
      */
     public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
         this.natureOfConstructions = natureOfConstructions;
-    }
-
-    /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
     }
 
     /**

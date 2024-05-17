@@ -58,7 +58,6 @@ class AssociationTest {
         for(long i=0; i<2; i++) {
             AidsToNavigation aidsToNavigation = new BeaconCardinal();
             aidsToNavigation.setId(BigInteger.valueOf(i));
-            aidsToNavigation.setAtonNumber("AtonNumber" + i);
             aidsToNavigation.setIdCode("ID"+i);
             aidsToNavigation.setGeometry(factory.createPoint(new Coordinate(i%180, i%90)));
             // Add the feature name entries

@@ -37,6 +37,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -63,10 +64,6 @@ public abstract class AidsToNavigation implements Serializable {
     @SequenceGenerator(name="aids_to_navigation_generator", sequenceName = "aids_to_navigation_seq", allocationSize=1)
     private BigInteger id;
 
-    @KeywordField(name="aton_number", sortable = Sortable.YES)
-    @Column(unique=true)
-    private String atonNumber;
-
     @NotNull
     @KeywordField(name="id_code", sortable = Sortable.YES)
     @Column(unique=true)
@@ -84,9 +81,27 @@ public abstract class AidsToNavigation implements Serializable {
     @GenericField(indexNullAs = "1970-01-01")
     private LocalDate periodStart;
 
-    private BigInteger scaleMinimum;
+    @GenericField(indexNullAs = "1970-01-01")
+    private LocalDate sourceDate;
+
+    @KeywordField(name="source_indication", sortable = Sortable.YES)
+    private String sourceIndication;
 
     private String pictorialRepresentation;
+
+    @KeywordField(name="inspection_frequency", sortable = Sortable.YES)
+    private String inspectionFrequency;
+
+    @KeywordField(name="inspection_requirements", sortable = Sortable.YES)
+    private String inspectionRequirements;
+
+    @KeywordField(name="aton_maintenance_record", sortable = Sortable.YES)
+    private String atonMaintenanceRecord;
+
+    @GenericField(indexNullAs = "1970-01-01")
+    private LocalDate installationDate;
+
+    private BigInteger scaleMinimum;
 
     @JsonSerialize(using = GeometryJSONSerializer.class)
     @JsonDeserialize(using = GeometryJSONDeserializer.class)
@@ -109,6 +124,9 @@ public abstract class AidsToNavigation implements Serializable {
     @ManyToMany(mappedBy = "peers")
     final private Set<Association> associations = new HashSet<>();
 
+    @ElementCollection
+    private List<String> seasonalActionRequireds;
+
     @GenericField()
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
@@ -129,26 +147,6 @@ public abstract class AidsToNavigation implements Serializable {
      */
     public void setId(BigInteger id) {
         this.id = id;
-    }
-
-    /**
-     * Gets aton number.
-     *
-     * @return the aton number
-     */
-    @Deprecated
-    public String getAtonNumber() {
-        return atonNumber;
-    }
-
-    /**
-     * Sets aton number.
-     *
-     * @param atonNumber the aton number
-     */
-    @Deprecated
-    public void setAtonNumber(String atonNumber) {
-        this.atonNumber = atonNumber;
     }
 
     /**
@@ -239,6 +237,114 @@ public abstract class AidsToNavigation implements Serializable {
      */
     public void setPeriodStart(LocalDate periodStart) {
         this.periodStart = periodStart;
+    }
+
+    /**
+     * Gets source date.
+     *
+     * @return the source date
+     */
+    public LocalDate getSourceDate() {
+        return sourceDate;
+    }
+
+    /**
+     * Sets source date.
+     *
+     * @param sourceDate the source date
+     */
+    public void setSourceDate(LocalDate sourceDate) {
+        this.sourceDate = sourceDate;
+    }
+
+    /**
+     * Gets source indication.
+     *
+     * @return the source indication
+     */
+    public String getSourceIndication() {
+        return sourceIndication;
+    }
+
+    /**
+     * Sets source indication.
+     *
+     * @param sourceIndication the source indication
+     */
+    public void setSourceIndication(String sourceIndication) {
+        this.sourceIndication = sourceIndication;
+    }
+
+    /**
+     * Gets inspection frequency.
+     *
+     * @return the inspection frequency
+     */
+    public String getInspectionFrequency() {
+        return inspectionFrequency;
+    }
+
+    /**
+     * Sets inspection frequency.
+     *
+     * @param inspectionFrequency the inspection frequency
+     */
+    public void setInspectionFrequency(String inspectionFrequency) {
+        this.inspectionFrequency = inspectionFrequency;
+    }
+
+    /**
+     * Gets inspection requirements.
+     *
+     * @return the inspection requirements
+     */
+    public String getInspectionRequirements() {
+        return inspectionRequirements;
+    }
+
+    /**
+     * Sets inspection requirements.
+     *
+     * @param inspectionRequirements the inspection requirements
+     */
+    public void setInspectionRequirements(String inspectionRequirements) {
+        this.inspectionRequirements = inspectionRequirements;
+    }
+
+    /**
+     * Gets aton maintenance record.
+     *
+     * @return the aton maintenance record
+     */
+    public String getAtonMaintenanceRecord() {
+        return atonMaintenanceRecord;
+    }
+
+    /**
+     * Sets aton maintenance record.
+     *
+     * @param atonMaintenanceRecord the aton maintenance record
+     */
+    public void setAtonMaintenanceRecord(String atonMaintenanceRecord) {
+        this.atonMaintenanceRecord = atonMaintenanceRecord;
+    }
+
+    /**
+     * Gets installation date.
+     *
+     * @return the installation date
+     */
+    public LocalDate getInstallationDate() {
+        return installationDate;
+    }
+
+    /**
+     * Sets installation date.
+     *
+     * @param installationDate the installation date
+     */
+    public void setInstallationDate(LocalDate installationDate) {
+        this.installationDate = installationDate;
     }
 
     /**
@@ -377,6 +483,24 @@ public abstract class AidsToNavigation implements Serializable {
         if (associations != null) {
             this.associations.addAll(associations);
         }
+    }
+
+    /**
+     * Gets seasonal action requireds.
+     *
+     * @return the seasonal action requireds
+     */
+    public List<String> getSeasonalActionRequireds() {
+        return seasonalActionRequireds;
+    }
+
+    /**
+     * Sets seasonal action requireds.
+     *
+     * @param seasonalActionRequireds the seasonal action requireds
+     */
+    public void setSeasonalActionRequireds(List<String> seasonalActionRequireds) {
+        this.seasonalActionRequireds = seasonalActionRequireds;
     }
 
     /**

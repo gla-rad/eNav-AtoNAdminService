@@ -16,9 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfRecommendedTrackType;
-import _int.iho.s201.gml.cs0._1.StatusType;
-import _int.iho.s201.gml.cs0._1.TrafficFlowType;
+import _int.iho.s201.gml.cs0._1.*;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,37 +36,39 @@ public class RecommendedTrack extends AidsToNavigation {
 
     // Class Variables
     @Enumerated(EnumType.STRING)
-    protected CategoryOfRecommendedTrackType categoryOfRecommendedTrack;
+    private CategoryOfRecommendedTrackType categoryOfRecommendedTrack;
 
-    protected String objectNameInNationalLanguage;
+    private BigDecimal depthRangeMaximumValue;
 
-    protected String objectName;
+    private BigDecimal depthRangeMinimumValue;
 
-    protected BigDecimal orientation;
+    private BigDecimal orientation;
 
-    /**
-     * The Statuses.
-     */
+    private QualityOfVerticalMeasurementType qualityOfVerticalMeasurement;
+
+    private BigDecimal soundingAccuracy;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    protected List<StatusType> statuses;
+    private List<StatusType> statuses;
 
-    /**
-     * The Traffic flow.
-     */
     @Enumerated(EnumType.STRING)
-    protected TrafficFlowType trafficFlow;
+    @ElementCollection(targetClass = TechniqueOfSoundingMeasurementType.class)
+    private List<TechniqueOfSoundingMeasurementType> techniqueOfSoundingMeasurements;
 
-    /**
-     * The Navigation lines.
-     */
+    @Enumerated(EnumType.STRING)
+    private TrafficFlowType trafficFlow;
+
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "recommended_track_nav_lines",
             joinColumns = { @JoinColumn(name = "recommended_track_id") },
             inverseJoinColumns = { @JoinColumn(name = "navigation_line_id") }
     )
-    protected List<NavigationLine> navigationLines;
+    private List<NavigationLine> navigationLines;
+
+    @Enumerated(EnumType.STRING)
+    protected VerticalDatumType verticalDatum;
 
     /**
      * Gets category of recommended track.
@@ -89,39 +89,39 @@ public class RecommendedTrack extends AidsToNavigation {
     }
 
     /**
-     * Gets object name in national language.
+     * Gets depth range maximum value.
      *
-     * @return the object name in national language
+     * @return the depth range maximum value
      */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
+    public BigDecimal getDepthRangeMaximumValue() {
+        return depthRangeMaximumValue;
     }
 
     /**
-     * Sets object name in national language.
+     * Sets depth range maximum value.
      *
-     * @param objectNameInNationalLanguage the object name in national language
+     * @param depthRangeMaximumValue the depth range maximum value
      */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
+    public void setDepthRangeMaximumValue(BigDecimal depthRangeMaximumValue) {
+        this.depthRangeMaximumValue = depthRangeMaximumValue;
     }
 
     /**
-     * Gets object name.
+     * Gets depth range minimum value.
      *
-     * @return the object name
+     * @return the depth range minimum value
      */
-    public String getObjectName() {
-        return objectName;
+    public BigDecimal getDepthRangeMinimumValue() {
+        return depthRangeMinimumValue;
     }
 
     /**
-     * Sets object name.
+     * Sets depth range minimum value.
      *
-     * @param objectName the object name
+     * @param depthRangeMinimumValue the depth range minimum value
      */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
+    public void setDepthRangeMinimumValue(BigDecimal depthRangeMinimumValue) {
+        this.depthRangeMinimumValue = depthRangeMinimumValue;
     }
 
     /**
@@ -143,6 +143,42 @@ public class RecommendedTrack extends AidsToNavigation {
     }
 
     /**
+     * Gets quality of vertical measurement.
+     *
+     * @return the quality of vertical measurement
+     */
+    public QualityOfVerticalMeasurementType getQualityOfVerticalMeasurement() {
+        return qualityOfVerticalMeasurement;
+    }
+
+    /**
+     * Sets quality of vertical measurement.
+     *
+     * @param qualityOfVerticalMeasurement the quality of vertical measurement
+     */
+    public void setQualityOfVerticalMeasurement(QualityOfVerticalMeasurementType qualityOfVerticalMeasurement) {
+        this.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
+    }
+
+    /**
+     * Gets sounding accuracy.
+     *
+     * @return the sounding accuracy
+     */
+    public BigDecimal getSoundingAccuracy() {
+        return soundingAccuracy;
+    }
+
+    /**
+     * Sets sounding accuracy.
+     *
+     * @param soundingAccuracy the sounding accuracy
+     */
+    public void setSoundingAccuracy(BigDecimal soundingAccuracy) {
+        this.soundingAccuracy = soundingAccuracy;
+    }
+
+    /**
      * Gets statuses.
      *
      * @return the statuses
@@ -158,6 +194,24 @@ public class RecommendedTrack extends AidsToNavigation {
      */
     public void setStatuses(List<StatusType> statuses) {
         this.statuses = statuses;
+    }
+
+    /**
+     * Gets technique of sounding measurements.
+     *
+     * @return the technique of sounding measurements
+     */
+    public List<TechniqueOfSoundingMeasurementType> getTechniqueOfSoundingMeasurements() {
+        return techniqueOfSoundingMeasurements;
+    }
+
+    /**
+     * Sets technique of sounding measurements.
+     *
+     * @param techniqueOfSoundingMeasurements the technique of sounding measurements
+     */
+    public void setTechniqueOfSoundingMeasurements(List<TechniqueOfSoundingMeasurementType> techniqueOfSoundingMeasurements) {
+        this.techniqueOfSoundingMeasurements = techniqueOfSoundingMeasurements;
     }
 
     /**
@@ -194,5 +248,23 @@ public class RecommendedTrack extends AidsToNavigation {
      */
     public void setNavigationLines(List<NavigationLine> navigationLines) {
         this.navigationLines = navigationLines;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
     }
 }

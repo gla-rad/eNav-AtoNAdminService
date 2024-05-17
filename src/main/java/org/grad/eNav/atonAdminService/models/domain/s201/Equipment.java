@@ -17,8 +17,11 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+
+import java.util.List;
 
 /**
  * The S-201 Equipment Entity Class.
@@ -35,10 +38,31 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public abstract class Equipment extends AidsToNavigation {
 
+    @ElementCollection
+    private List<String> remoteMonitoringSystems;
+
     // Class Variables
     @JsonBackReference
     @ManyToOne
     private StructureObject parent;
+
+    /**
+     * Gets remote monitoring systems.
+     *
+     * @return the remote monitoring systems
+     */
+    public List<String> getRemoteMonitoringSystems() {
+        return remoteMonitoringSystems;
+    }
+
+    /**
+     * Sets remote monitoring systems.
+     *
+     * @param remoteMonitoringSystems the remote monitoring systems
+     */
+    public void setRemoteMonitoringSystems(List<String> remoteMonitoringSystems) {
+        this.remoteMonitoringSystems = remoteMonitoringSystems;
+    }
 
     /**
      * Gets parent.

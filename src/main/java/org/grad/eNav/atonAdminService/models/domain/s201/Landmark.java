@@ -54,7 +54,7 @@ public class Landmark extends StructureObject {
     private RadarConspicuousType radarConspicuous;
 
     @Enumerated(EnumType.STRING)
-    private VisualProminenceType visuallyConspicuous;
+    private VisualProminenceType visualProminence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = FunctionType.class)
@@ -66,13 +66,20 @@ public class Landmark extends StructureObject {
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
 
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
-
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
+
+    @Enumerated(EnumType.STRING)
+    protected VerticalDatumType verticalDatum;
+
+    private BigDecimal elevation;
+
+    private BigDecimal verticalAccuracy;
+
+    private BigDecimal verticalLength;
+
+    private Boolean mannedStructure;
 
     /**
      * Gets category of landmarks.
@@ -147,21 +154,21 @@ public class Landmark extends StructureObject {
     }
 
     /**
-     * Gets visually conspicuous.
+     * Gets visual prominence
      *
-     * @return the visually conspicuous
+     * @return the visual prominence
      */
-    public VisualProminenceType getVisuallyConspicuous() {
-        return visuallyConspicuous;
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
     }
 
     /**
-     * Sets visually conspicuous.
+     * Sets visual prominence.
      *
-     * @param visuallyConspicuous the visually conspicuous
+     * @param visualProminence the visual prominence
      */
-    public void setVisuallyConspicuous(VisualProminenceType visuallyConspicuous) {
-        this.visuallyConspicuous = visuallyConspicuous;
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
     }
 
     /**
@@ -219,42 +226,6 @@ public class Landmark extends StructureObject {
     }
 
     /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    /**
      * Gets statuses.
      *
      * @return the statuses
@@ -270,5 +241,95 @@ public class Landmark extends StructureObject {
      */
     public void setStatuses(List<StatusType> statuses) {
         this.statuses = statuses;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
+     * Gets elevation.
+     *
+     * @return the elevation
+     */
+    public BigDecimal getElevation() {
+        return elevation;
+    }
+
+    /**
+     * Sets elevation.
+     *
+     * @param elevation the elevation
+     */
+    public void setElevation(BigDecimal elevation) {
+        this.elevation = elevation;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets manned structure.
+     *
+     * @return the manned structure
+     */
+    public Boolean getMannedStructure() {
+        return mannedStructure;
+    }
+
+    /**
+     * Sets manned structure.
+     *
+     * @param mannedStructure the manned structure
+     */
+    public void setMannedStructure(Boolean mannedStructure) {
+        this.mannedStructure = mannedStructure;
     }
 }

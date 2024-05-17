@@ -67,6 +67,10 @@ public abstract class GenericBuoy extends StructureObject {
 
     private BigDecimal verticalLength;
 
+    private BigDecimal verticalAccuracy;
+
+    private String typeOfBuoy;
+
     /**
      * Gets buoy shape.
      *
@@ -245,5 +249,41 @@ public abstract class GenericBuoy extends StructureObject {
      */
     public void setVerticalLength(BigDecimal verticalLength) {
         this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets type of buoy.
+     *
+     * @return the type of buoy
+     */
+    public String getTypeOfBuoy() {
+        return typeOfBuoy;
+    }
+
+    /**
+     * Sets type of buoy.
+     *
+     * @param typeOfBuoy the type of buoy
+     */
+    public void setTypeOfBuoy(String typeOfBuoy) {
+        this.typeOfBuoy = typeOfBuoy;
     }
 }

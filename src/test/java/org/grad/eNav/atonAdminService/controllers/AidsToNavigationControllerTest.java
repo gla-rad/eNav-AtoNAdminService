@@ -115,7 +115,6 @@ class AidsToNavigationControllerTest {
         for(long i=0; i<10; i++) {
             AidsToNavigation aidsToNavigation = new BeaconCardinal();
             aidsToNavigation.setId(BigInteger.valueOf(i));
-            aidsToNavigation.setAtonNumber("AtonNumber" + i);
             aidsToNavigation.setIdCode("ID"+i);
             aidsToNavigation.setGeometry(factory.createPoint(new Coordinate(i%180, i%90)));
             // Add the feature name entries
@@ -135,7 +134,6 @@ class AidsToNavigationControllerTest {
         // Create a AtoN message with an ID
         existingAidsToNavigation = new BeaconCardinal();
         existingAidsToNavigation.setId(BigInteger.valueOf(1));
-        existingAidsToNavigation.setAtonNumber("AtonNumber001");
         existingAidsToNavigation.setIdCode("ID001");
         existingAidsToNavigation.setGeometry(factory.createPoint(new Coordinate(1, 1)));
         // Add the feature name entries
@@ -173,7 +171,6 @@ class AidsToNavigationControllerTest {
         // Validate the entries one by one
         for(int i=0; i< page.getSize(); i++) {
             assertEquals(page.getContent().get(i).getId(), result.getContent().get(i).getId());
-            assertEquals(page.getContent().get(i).getAtonNumber(), result.getContent().get(i).getAtonNumber());
             assertEquals(page.getContent().get(i).getIdCode(), result.getContent().get(i).getIdCode());
             assertEquals(page.getContent().get(i).getInformations().size(), result.getContent().get(i).getInformations().size());
             assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),
@@ -235,7 +232,6 @@ class AidsToNavigationControllerTest {
         // Validate the entries one by one
         for(int i=0; i< page.getSize(); i++) {
             assertEquals(page.getContent().get(i).getId(), result.getData().get(i).getId());
-            assertEquals(page.getContent().get(i).getAtonNumber(), result.getData().get(i).getAtonNumber());
             assertEquals(page.getContent().get(i).getIdCode(), result.getData().get(i).getIdCode());
             assertEquals(page.getContent().get(i).getInformations().size(), result.getData().get(i).getInformations().size());
             assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),

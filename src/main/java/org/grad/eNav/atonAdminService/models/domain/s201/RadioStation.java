@@ -18,10 +18,10 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s201.gml.cs0._1.CategoryOfRadioStationType;
 import _int.iho.s201.gml.cs0._1.StatusType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 /**
  * The S-201 Radio Station Entity Class.
@@ -43,8 +43,9 @@ public class RadioStation extends Equipment {
     @Enumerated(EnumType.STRING)
     private StatusType status;
 
-    @ManyToOne
-    private AISAidToNavigation broadcasts;
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "broadcastBy")
+    private List<AISAidToNavigation> broadcasts;
 
     /**
      * Gets category of radio station.
@@ -87,7 +88,7 @@ public class RadioStation extends Equipment {
      *
      * @return the broadcasts
      */
-    public AISAidToNavigation getBroadcasts() {
+    public List<AISAidToNavigation> getBroadcasts() {
         return broadcasts;
     }
 
@@ -96,7 +97,7 @@ public class RadioStation extends Equipment {
      *
      * @param broadcasts the broadcasts
      */
-    public void setBroadcasts(AISAidToNavigation broadcasts) {
+    public void setBroadcasts(List<AISAidToNavigation> broadcasts) {
         this.broadcasts = broadcasts;
     }
 }

@@ -16,10 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfPileType;
-import _int.iho.s201.gml.cs0._1.ColourPatternType;
-import _int.iho.s201.gml.cs0._1.ColourType;
-import _int.iho.s201.gml.cs0._1.VisualProminenceType;
+import _int.iho.s201.gml.cs0._1.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -53,9 +50,16 @@ public class Pile extends StructureObject {
     private List<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
-    private VisualProminenceType visuallyConspicuous;
+    private VisualProminenceType visualProminence;
+
+    @Enumerated(EnumType.STRING)
+    protected VerticalDatumType verticalDatum;
 
     private BigDecimal height;
+
+    private BigDecimal verticalAccuracy;
+
+    private BigDecimal verticalLength;
 
     /**
      * Gets category of pile.
@@ -112,21 +116,39 @@ public class Pile extends StructureObject {
     }
 
     /**
-     * Gets visually conspicuous.
+     * Gets visual prominence.
      *
-     * @return the visually conspicuous
+     * @return the visual prominence
      */
-    public VisualProminenceType getVisuallyConspicuous() {
-        return visuallyConspicuous;
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
     }
 
     /**
-     * Sets visually conspicuous.
+     * Sets visual prominence.
      *
-     * @param visuallyConspicuous the visually conspicuous
+     * @param visualProminence the visual prominence
      */
-    public void setVisuallyConspicuous(VisualProminenceType visuallyConspicuous) {
-        this.visuallyConspicuous = visuallyConspicuous;
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
     }
 
     /**
@@ -145,5 +167,41 @@ public class Pile extends StructureObject {
      */
     public void setHeight(BigDecimal height) {
         this.height = height;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
     }
 }

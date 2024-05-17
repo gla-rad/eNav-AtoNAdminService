@@ -63,10 +63,6 @@ public class Light extends Equipment {
 
     private BigInteger multiplicityOfLights;
 
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
-
     private BigDecimal orientation;
 
     private BigDecimal sectorLimitOne;
@@ -83,7 +79,20 @@ public class Light extends Equipment {
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
 
+    private BigDecimal verticalAccuracy;
+
     private BigDecimal valueOfNominalRange;
+
+    @Enumerated(EnumType.STRING)
+    protected VerticalDatumType verticalDatum;
+
+    private String typeOfLight;
+
+    private BigDecimal valueOfGeographicalRange;
+
+    private BigDecimal candela;
+
+    private BigDecimal valueOfLuminousRange;
 
     /**
      * Gets category of lights.
@@ -230,42 +239,6 @@ public class Light extends Equipment {
     }
 
     /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    /**
      * Gets orientation.
      *
      * @return the orientation
@@ -392,6 +365,24 @@ public class Light extends Equipment {
     }
 
     /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
      * Gets value of nominal range.
      *
      * @return the value of nominal range
@@ -407,5 +398,95 @@ public class Light extends Equipment {
      */
     public void setValueOfNominalRange(BigDecimal valueOfNominalRange) {
         this.valueOfNominalRange = valueOfNominalRange;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
+     * Gets type of light.
+     *
+     * @return the type of light
+     */
+    public String getTypeOfLight() {
+        return typeOfLight;
+    }
+
+    /**
+     * Sets type of light.
+     *
+     * @param typeOfLight the type of light
+     */
+    public void setTypeOfLight(String typeOfLight) {
+        this.typeOfLight = typeOfLight;
+    }
+
+    /**
+     * Gets value of geographical range.
+     *
+     * @return the value of geographical range
+     */
+    public BigDecimal getValueOfGeographicalRange() {
+        return valueOfGeographicalRange;
+    }
+
+    /**
+     * Sets value of geographical range.
+     *
+     * @param valueOfGeographicalRange the value of geographical range
+     */
+    public void setValueOfGeographicalRange(BigDecimal valueOfGeographicalRange) {
+        this.valueOfGeographicalRange = valueOfGeographicalRange;
+    }
+
+    /**
+     * Gets candela.
+     *
+     * @return the candela
+     */
+    public BigDecimal getCandela() {
+        return candela;
+    }
+
+    /**
+     * Sets candela.
+     *
+     * @param candela the candela
+     */
+    public void setCandela(BigDecimal candela) {
+        this.candela = candela;
+    }
+
+    /**
+     * Gets value of luminous range.
+     *
+     * @return the value of luminous range
+     */
+    public BigDecimal getValueOfLuminousRange() {
+        return valueOfLuminousRange;
+    }
+
+    /**
+     * Sets value of luminous range.
+     *
+     * @param valueOfLuminousRange the value of luminous range
+     */
+    public void setValueOfLuminousRange(BigDecimal valueOfLuminousRange) {
+        this.valueOfLuminousRange = valueOfLuminousRange;
     }
 }
