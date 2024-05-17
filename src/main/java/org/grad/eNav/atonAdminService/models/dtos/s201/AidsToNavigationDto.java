@@ -53,11 +53,21 @@ public class AidsToNavigationDto {
 
     private LocalDate periodStart;
 
-    private List<String> seasonalActionRequireds;
+    private LocalDate sourceDate;
 
-    private BigInteger scaleMinimum;
+    private String sourceIndication;
 
     private String pictorialRepresentation;
+
+    private String inspectionFrequency;
+
+    private String inspectionRequirements;
+
+    private String atonMaintenanceRecord;
+
+    private LocalDate installationDate;
+
+    private BigInteger scaleMinimum;
 
     @JsonSerialize(using = GeometryJSONSerializer.class)
     @JsonDeserialize(using = GeometryJSONDeserializer.class)
@@ -66,6 +76,8 @@ public class AidsToNavigationDto {
     private Set<InformationDto> informations;
 
     private Set<FeatureNameDto> featureNames;
+
+    private List<String> seasonalActionRequireds;
 
     private String atonType;
 
@@ -179,40 +191,41 @@ public class AidsToNavigationDto {
         this.periodStart = periodStart;
     }
 
+
     /**
-     * Gets seasonal action requireds.
+     * Gets source date.
      *
-     * @return the seasonal action requireds
+     * @return the source date
      */
-    public List<String> getSeasonalActionRequireds() {
-        return seasonalActionRequireds;
+    public LocalDate getSourceDate() {
+        return sourceDate;
     }
 
     /**
-     * Sets seasonal action requireds.
+     * Sets source date.
      *
-     * @param seasonalActionRequireds the seasonal action requireds
+     * @param sourceDate the source date
      */
-    public void setSeasonalActionRequireds(List<String> seasonalActionRequireds) {
-        this.seasonalActionRequireds = seasonalActionRequireds;
+    public void setSourceDate(LocalDate sourceDate) {
+        this.sourceDate = sourceDate;
     }
 
     /**
-     * Gets scale minimum.
+     * Gets source indication.
      *
-     * @return the scale minimum
+     * @return the source indication
      */
-    public BigInteger getScaleMinimum() {
-        return scaleMinimum;
+    public String getSourceIndication() {
+        return sourceIndication;
     }
 
     /**
-     * Sets scale minimum.
+     * Sets source indication.
      *
-     * @param scaleMinimum the scale minimum
+     * @param sourceIndication the source indication
      */
-    public void setScaleMinimum(BigInteger scaleMinimum) {
-        this.scaleMinimum = scaleMinimum;
+    public void setSourceIndication(String sourceIndication) {
+        this.sourceIndication = sourceIndication;
     }
 
     /**
@@ -231,6 +244,96 @@ public class AidsToNavigationDto {
      */
     public void setPictorialRepresentation(String pictorialRepresentation) {
         this.pictorialRepresentation = pictorialRepresentation;
+    }
+
+    /**
+     * Gets inspection frequency.
+     *
+     * @return the inspection frequency
+     */
+    public String getInspectionFrequency() {
+        return inspectionFrequency;
+    }
+
+    /**
+     * Sets inspection frequency.
+     *
+     * @param inspectionFrequency the inspection frequency
+     */
+    public void setInspectionFrequency(String inspectionFrequency) {
+        this.inspectionFrequency = inspectionFrequency;
+    }
+
+    /**
+     * Gets inspection requirements.
+     *
+     * @return the inspection requirements
+     */
+    public String getInspectionRequirements() {
+        return inspectionRequirements;
+    }
+
+    /**
+     * Sets inspection requirements.
+     *
+     * @param inspectionRequirements the inspection requirements
+     */
+    public void setInspectionRequirements(String inspectionRequirements) {
+        this.inspectionRequirements = inspectionRequirements;
+    }
+
+    /**
+     * Gets aton maintenance record.
+     *
+     * @return the aton maintenance record
+     */
+    public String getAtonMaintenanceRecord() {
+        return atonMaintenanceRecord;
+    }
+
+    /**
+     * Sets aton maintenance record.
+     *
+     * @param atonMaintenanceRecord the aton maintenance record
+     */
+    public void setAtonMaintenanceRecord(String atonMaintenanceRecord) {
+        this.atonMaintenanceRecord = atonMaintenanceRecord;
+    }
+
+    /**
+     * Gets installation date.
+     *
+     * @return the installation date
+     */
+    public LocalDate getInstallationDate() {
+        return installationDate;
+    }
+
+    /**
+     * Sets installation date.
+     *
+     * @param installationDate the installation date
+     */
+    public void setInstallationDate(LocalDate installationDate) {
+        this.installationDate = installationDate;
+    }
+
+    /**
+     * Gets scale minimum.
+     *
+     * @return the scale minimum
+     */
+    public BigInteger getScaleMinimum() {
+        return scaleMinimum;
+    }
+
+    /**
+     * Sets scale minimum.
+     *
+     * @param scaleMinimum the scale minimum
+     */
+    public void setScaleMinimum(BigInteger scaleMinimum) {
+        this.scaleMinimum = scaleMinimum;
     }
 
     /**
@@ -285,6 +388,24 @@ public class AidsToNavigationDto {
      */
     public void setFeatureNames(Set<FeatureNameDto> featureNames) {
         this.featureNames = featureNames;
+    }
+
+    /**
+     * Gets seasonal action requireds.
+     *
+     * @return the seasonal action requireds
+     */
+    public List<String> getSeasonalActionRequireds() {
+        return seasonalActionRequireds;
+    }
+
+    /**
+     * Sets seasonal action requireds.
+     *
+     * @param seasonalActionRequireds the seasonal action requireds
+     */
+    public void setSeasonalActionRequireds(List<String> seasonalActionRequireds) {
+        this.seasonalActionRequireds = seasonalActionRequireds;
     }
 
     /**
