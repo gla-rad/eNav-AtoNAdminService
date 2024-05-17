@@ -71,7 +71,7 @@ var datasetColumnDefs = [
     placeholder: "The Dataset Product Edition",
     type: "select",
     options: {
-        "0.0.1":"0.0.1"
+        "1.1.0":"1.1.0"
     },
     required: true
  }, {
