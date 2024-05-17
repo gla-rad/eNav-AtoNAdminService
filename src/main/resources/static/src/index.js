@@ -28,7 +28,7 @@ function setConnected(connected) {
 function connect() {
     var endpoint = $( "#endpoint option:selected" ).text();
     if(stompClient == null) {
-        var socket = new SockJS(window.location.pathname + 'aton-service-websocket');
+        var socket = new SockJS(window.location.pathname + 'aton-admin-service-websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, (frame) => {
             setConnected(true);
