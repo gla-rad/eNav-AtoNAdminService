@@ -107,6 +107,46 @@ IDE. Nothing exotic about the goals, just clean and install should do:
 
     mvn clean package
 
+## Database Configuration
+The service uses hibernate to initialise the database structure. The database
+connection parameters such as the URL and username/password should be provided
+in the application properties. Here is an example:
+
+```yaml
+spring:
+    datasource:
+        url: 'jdbc:postgresql://localhost:5432/aton_admin_service'
+        username: sysadmin
+        password: sysadmin
+```
+
+To create a local database for development/testing you should install a
+PostgreSQL server and the postGIS extension. On an Ubuntu system this
+can be done easily as follows:
+
+```bash
+sudo apt install postgresql postgresql-contrib
+sudo apt install postgis
+sudo -i -u postgres
+psql
+```
+
+The last two commands will allow you to connect to the newly installed server.
+Then create enable the postGIS extension and create a database and a
+user for the service to connect to:
+
+```
+postgres=# CREATE DATABASE aton_admin_service;
+postgres=# \c aton_admin_service;
+postgres=# CREATE EXTENSION postgis;
+postgres=# CREATE USER sysadmin WITH PASSWORD 'sysadmin';
+postgres=# GRANT ALL PRIVILEGES ON DATABASE aton_admin_service to sysadmin;
+```
+
+If you, like me don't remember your PostgreSQL command
+[here](https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546) is a quick
+cheatsheet.
+
 ## How to Run
 
 This service can be used in two ways (based on the use or not of the Spring Cloud
