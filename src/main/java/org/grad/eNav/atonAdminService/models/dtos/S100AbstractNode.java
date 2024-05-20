@@ -16,8 +16,13 @@
 
 package org.grad.eNav.atonAdminService.models.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.grad.eNav.atonAdminService.models.IJsonSerializable;
+import org.grad.eNav.atonAdminService.utils.GeometryJSONConverter;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.spatial4j.io.jackson.GeometryAsGeoJSONSerializer;
 
 import java.util.Objects;
 
@@ -33,7 +38,8 @@ import java.util.Objects;
 public abstract class S100AbstractNode implements IJsonSerializable {
 
     // Class Variables
-    private JsonNode bbox;
+    @JsonSerialize(using = GeometryAsGeoJSONSerializer.class)
+    private Geometry geometry;
     private String content;
 
     /**
@@ -46,11 +52,11 @@ public abstract class S100AbstractNode implements IJsonSerializable {
     /**
      * The Fully Populated Constructor.
      *
-     * @param bbox          The object bounding box
+     * @param geometry          The object bounding box
      * @param content       The XML content
      */
-    public S100AbstractNode(JsonNode bbox, String content) {
-        this.bbox = bbox;
+    public S100AbstractNode(JsonNode geometry, String content) {
+        this.geometry = GeometryJSONConverter.convertToGeometry(geometry);
         this.content = content;
     }
 
@@ -73,21 +79,32 @@ public abstract class S100AbstractNode implements IJsonSerializable {
     }
 
     /**
-     * Gets bbox.
+     * Gets geometry.
      *
-     * @return Value of bbox.
+     * @return Value of geometry.
      */
-    public JsonNode getBbox() {
-        return bbox;
+    public Geometry getGeometry() {
+        return geometry;
     }
 
     /**
-     * Sets new bbox.
+     * Sets new geometry.
      *
-     * @param bbox New value of bbox.
+     * @param geometry New value of geometry.
      */
-    public void setBbox(JsonNode bbox) {
-        this.bbox = bbox;
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
+    }
+
+    /**
+     * A helper function that returns the geometry of the abstract node as a
+     * GeoJSON node.
+     *
+     * @return the geometry as GeoJSON
+     */
+    @JsonIgnore
+    public JsonNode getGeometryAsJson() {
+        return GeometryJSONConverter.convertFromGeometry(this.geometry);
     }
 
     /** {@inheritDoc} */
@@ -96,12 +113,12 @@ public abstract class S100AbstractNode implements IJsonSerializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         S100AbstractNode that = (S100AbstractNode) o;
-        return Objects.equals(bbox, that.bbox) && Objects.equals(content, that.content);
+        return Objects.equals(geometry, that.geometry) && Objects.equals(content, that.content);
     }
 
     /** {@inheritDoc} */
     @Override
     public int hashCode() {
-        return Objects.hash(bbox, content);
+        return Objects.hash(geometry, content);
     }
 }

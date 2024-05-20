@@ -44,11 +44,11 @@ public class S201Node extends S100AbstractNode {
      * The Fully Populated  Constructor.
      *
      * @param atonUID       The AtoN UID
-     * @param bbox          The object bounding box
+     * @param geometry      The object geometry
      * @param content       The XML content
      */
-    public S201Node(String atonUID, JsonNode bbox, String content) {
-        super(bbox, content);
+    public S201Node(String atonUID, JsonNode geometry, String content) {
+        super(geometry, content);
         this.atonUID = atonUID;
     }
 
