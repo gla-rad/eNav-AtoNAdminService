@@ -224,12 +224,12 @@ public class GeomesaS201 implements GeomesaData<S201Node>{
     @Override
     public Filter getSubsetFilter() {
         // For no or invalid filters, just reject everything
-//        if(Optional.ofNullable(this.geometry)
-//                .filter(Polygon.class::isInstance)
-//                .map(Geometry::isEmpty)
-//                .orElse(Boolean.TRUE)) {
-//            return Filter.EXCLUDE;
-//        }
+        if(Optional.ofNullable(this.geometry)
+                .filter(Polygon.class::isInstance)
+                .map(Geometry::isEmpty)
+                .orElse(Boolean.TRUE)) {
+            return Filter.EXCLUDE;
+        }
 
         // there are many different geometric predicates that might be used;
         // here, we use a polygon (POLYGON) predicate as an example. This is
