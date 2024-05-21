@@ -218,7 +218,14 @@ public class SecomSubscriptionService implements MessageHandler {
                                 s201Dataset.getUuid(),
                                 s201Dataset.getGeometry(),
                                 s201Dataset.getLastUpdatedAt())
-                        .forEach(subscription -> this.sendToSubscription(subscription, s201Dataset));
+                        .forEach(subscription -> {
+                            try {
+                                this.sendToSubscription(subscription, s201Dataset);
+                            } catch (Exception ex) {
+                                log.error("Error while handling subscription with UUID {} for {}: {}",
+                                        subscription.getUuid(), subscription.getClientMrn(), ex.getMessage());
+                            }
+                        });
             } else {
                 // Get the matching subscriptions and inform them of the deletion
                 this.findAll(null,
@@ -229,7 +236,14 @@ public class SecomSubscriptionService implements MessageHandler {
                                 null)
                         .stream()
                         .map(SubscriptionRequest::getUuid)
-                        .forEach(this::delete);
+                        .forEach(uuid -> {
+                            try {
+                                this.delete(uuid);
+                            } catch (Exception ex) {
+                                log.error("Error while removing subscription for with UUID {}: {}",
+                                        uuid, ex.getMessage());
+                            }
+                        });
             }
         }
         else {
