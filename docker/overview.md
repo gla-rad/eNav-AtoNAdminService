@@ -156,7 +156,7 @@ The available environment variables are:
 The parameters will be picked up and used to populate the default
 **bootstrap.properties** of the service that look as follows:
 
-    server.port=8766
+    server.port=8769
     spring.application.name=aton-service
     spring.application.version=<application.version>
     
@@ -167,14 +167,14 @@ The parameters will be picked up and used to populate the default
     spring.cloud.config.label=${ENAV_CLOUD_CONFIG_BRANCH}
     spring.cloud.config.fail-fast=false
 
-As you can see, the service is called **aton-service** and uses the **8766** 
+As you can see, the service is called **aton-service** and uses the **8769** 
 port when running.
 
 To run the image, along with the aforementioned environment variables, you can
 use the following command:
 
     docker run -t -i --rm \
-        -p 8766:8766 \
+        -p 8769:8769 \
         -e ENAV_CLOUD_CONFIG_URI='<cloud config server url>' \
         -e ENAV_CLOUD_CONFIG_BRANCH='<cloud config config repository branch>' \
         -e ENAV_CLOUD_CONFIG_USERNAME='<config config repository username>' \
@@ -191,7 +191,7 @@ image.
 This can be done in the following way:
 
     docker run -t -i --rm \
-        -p 8766:8766 \
+        -p 8769:8769 \
         -v /path/to/config-directory/on/machine:/conf \
         <image-id>
 
@@ -200,7 +200,7 @@ Examples of the required properties files can be seen below.
 For bootstrapping, we need to disable the cloud config client, and clear our the
 environment variable inputs:
     
-    server.port=8766
+    server.port=8769
     spring.application.name=aton-service
     spring.application.version=<application.version>
     

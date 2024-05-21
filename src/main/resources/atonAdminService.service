@@ -1,9 +1,9 @@
 [Unit]
-Description=e-Navigation AtoN Service
+Description=e-Navigation AtoN Admin Service
 After=syslog.target
 
 [Service]
-ExecStart=/opt/e-nav/atonService/atonService.jar
+ExecStart=/opt/e-nav/atonAdminService/atonAdminService.jar
 
 [Install]
 WantedBy=multi-user.target

@@ -4,7 +4,7 @@
 #     docker build -t glarad/enav-aton-admin-service:latest -f Dockerfile ..
 #
 # Run like this:
-#     sudo docker run -t -i --rm -p 8766:8766 -v /path/to/config-directory/on/machine:/conf <image-id>
+#     sudo docker run -t -i --rm -p 8769:8769 -v /path/to/config-directory/on/machine:/conf <image-id>
 #
 # You can also push to docker-hub like:
 #     docker push glarad/enav-aton-admin-service:tagname
@@ -35,6 +35,6 @@ ENV SPRING_PROFILES_ACTIVE=prod
 # Define a variable for the configuration directory
 ENV CONFIG_DIR=/conf
 
-EXPOSE 8766
+EXPOSE 8769
 
 CMD ["java", "-jar", "aton-admin-service-0.0.1-SNAPSHOT.jar", "--spring.config.location=optional:classpath:/,optional:file:${CONFIG_DIR}/"]
