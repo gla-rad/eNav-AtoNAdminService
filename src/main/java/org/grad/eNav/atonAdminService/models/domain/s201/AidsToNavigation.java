@@ -109,11 +109,11 @@ public abstract class AidsToNavigation implements Serializable {
     private Geometry geometry;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
     final private Set<Information> informations = new HashSet<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
     final private Set<FeatureName> featureNames = new HashSet<>();
 
     @JsonManagedReference
