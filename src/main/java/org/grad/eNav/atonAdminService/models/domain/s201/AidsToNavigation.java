@@ -418,6 +418,9 @@ public abstract class AidsToNavigation implements Serializable {
     public void setInformations(Set<Information> informations) {
         this.informations.clear();
         if (informations != null) {
+            // Set the parent correctly
+            informations.forEach(fn -> fn.setFeature(this));
+            // And update the informations
             this.informations.addAll(informations);
         }
     }
@@ -439,6 +442,9 @@ public abstract class AidsToNavigation implements Serializable {
     public void setFeatureNames(Set<FeatureName> featureNames) {
         this.featureNames.clear();
         if (featureNames != null) {
+            // Set the parent correctly
+            featureNames.forEach(fn -> fn.setFeature(this));
+            // And update the feature names
             this.featureNames.addAll(featureNames);
         }
     }
@@ -460,6 +466,9 @@ public abstract class AidsToNavigation implements Serializable {
     public void setAggregations(Set<Aggregation> aggregations) {
         this.aggregations.clear();
         if (aggregations != null) {
+            // Set the parent correctly
+            aggregations.forEach(fn -> fn.getPeers().add(this));
+            // And update the aggregations
             this.aggregations.addAll(aggregations);
         }
     }
@@ -481,6 +490,9 @@ public abstract class AidsToNavigation implements Serializable {
     public void setAssociations(Set<Association> associations) {
         this.associations.clear();
         if (associations != null) {
+            // Set the parent correctly
+            associations.forEach(fn -> fn.getPeers().add(this));
+            // And update the associations
             this.associations.addAll(associations);
         }
     }
