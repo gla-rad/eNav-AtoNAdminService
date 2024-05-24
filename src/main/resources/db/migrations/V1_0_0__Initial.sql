@@ -16,19 +16,12 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: aggregation; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: aggregation; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.aggregation (
@@ -38,10 +31,8 @@ CREATE TABLE public.aggregation (
 );
 
 
-ALTER TABLE public.aggregation OWNER TO atonadminservice;
-
 --
--- Name: aggregation_join_table; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: aggregation_join_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.aggregation_join_table (
@@ -50,10 +41,8 @@ CREATE TABLE public.aggregation_join_table (
 );
 
 
-ALTER TABLE public.aggregation_join_table OWNER TO atonadminservice;
-
 --
--- Name: aggregation_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: aggregation_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.aggregation_seq
@@ -64,96 +53,94 @@ CREATE SEQUENCE public.aggregation_seq
     CACHE 1;
 
 
-ALTER TABLE public.aggregation_seq OWNER TO atonadminservice;
-
 --
--- Name: aids_to_navigation; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.aids_to_navigation (
-    dtype character varying(31) NOT NULL,
-    id numeric(38,0) NOT NULL,
-    aton_maintenance_record character varying(255),
+    candela numeric(38,2),
+    category_of_special_purpose_mark smallint,
+    contact_address_id numeric(38,0),
     date_end date,
     date_start date,
-    geometry public.geometry,
-    id_code character varying(255) NOT NULL,
-    inspection_frequency character varying(255),
-    inspection_requirements character varying(255),
-    installation_date date,
-    last_modified_at timestamp(6) without time zone,
-    period_end date,
-    period_start date,
-    pictorial_representation character varying(255),
-    scale_minimum numeric(38,0),
-    source_date date,
-    source_indication character varying(255),
-    marks_navigational_system_of character varying(255),
-    topmark_daymark_shape character varying(255),
-    estimated_range_of_transmission numeric(38,2),
-    mmsi_code numeric(38,0),
-    virtualaisaid_to_navigation_type character varying(255),
-    category_of_radar_transponder_beacon_type character varying(255),
-    radar_wave_length character varying(255),
-    sector_limit_one numeric(38,2),
-    sector_limit_two numeric(38,2),
-    signal_group character varying(255),
-    signal_sequence character varying(255),
-    value_of_nominal_range numeric(38,2),
-    aid_availability_category character varying(255),
-    beacon_shape character varying(255),
-    elevation numeric(38,2),
-    height numeric(38,2),
-    radar_conspicuous character varying(255),
-    vertical_accuracy numeric(38,2),
-    vertical_length numeric(38,2),
-    visual_prominence character varying(255),
-    category_of_lateral_mark character varying(255),
-    category_of_syntheticaisaidto_navigation character varying(255),
-    category_of_recommended_track character varying(255),
     depth_range_maximum_value numeric(38,2),
     depth_range_minimum_value numeric(38,2),
-    orientation numeric(38,2),
-    quality_of_vertical_measurement smallint,
-    sounding_accuracy numeric(38,2),
-    traffic_flow character varying(255),
-    vertical_datum character varying(255),
-    manned_structure boolean,
-    category_of_radio_station character varying(255),
-    status character varying(255),
-    category_of_power_source character varying(255),
-    manufacturer character varying(255),
-    candela numeric(38,2),
-    colour character varying(255),
-    exhibition_condition_of_light character varying(255),
-    light_characteristic character varying(255),
-    multiplicity_of_lights numeric(38,0),
-    signal_period numeric(38,2),
-    type_of_light character varying(255),
-    value_of_geographical_range numeric(38,2),
-    value_of_luminous_range numeric(38,2),
-    category_of_cardinal_mark character varying(255),
-    category_of_pile character varying(255),
-    buoy_shape character varying(255),
-    type_of_buoy character varying(255),
-    category_of_fog_signal character varying(255),
-    signal_frequency numeric(38,0),
-    signal_generation smallint,
-    signal_output double precision,
-    value_of_maximum_range numeric(38,2),
-    category_of_navigation_line character varying(255),
-    building_shape character varying(255),
-    category_of_silo_tank character varying(255),
-    condition_type character varying(255),
-    product_type character varying(255),
-    category_of_installation_buoy character varying(255),
-    condition character varying(255),
+    elevation numeric(38,2),
+    estimated_range_of_transmission numeric(38,2),
+    height numeric(38,2),
     horizontal_accuracy numeric(38,2),
     horizontal_length numeric(38,2),
     horizontal_width numeric(38,2),
-    category_of_special_purpose_mark smallint,
+    id numeric(38,0) NOT NULL,
+    installation_date date,
+    manned_structure boolean,
+    mmsi_code numeric(38,0),
+    multiplicity_of_lights numeric(38,0),
+    orientation numeric(38,2),
     parent_id numeric(38,0),
-    contact_address_id numeric(38,0),
+    period_end date,
+    period_start date,
+    quality_of_vertical_measurement smallint,
+    scale_minimum numeric(38,0),
+    sector_limit_one numeric(38,2),
+    sector_limit_two numeric(38,2),
+    signal_frequency numeric(38,0),
+    signal_generation smallint,
+    signal_output double precision,
+    signal_period numeric(38,2),
+    sounding_accuracy numeric(38,2),
+    source_date date,
+    value_of_geographical_range numeric(38,2),
+    value_of_luminous_range numeric(38,2),
+    value_of_maximum_range numeric(38,2),
+    value_of_nominal_range numeric(38,2),
+    vertical_accuracy numeric(38,2),
+    vertical_length numeric(38,2),
+    last_modified_at timestamp(6) without time zone,
+    dtype character varying(31) NOT NULL,
+    aid_availability_category character varying(255),
+    aton_maintenance_record character varying(255),
+    beacon_shape character varying(255),
+    building_shape character varying(255),
+    buoy_shape character varying(255),
+    category_of_cardinal_mark character varying(255),
+    category_of_fog_signal character varying(255),
+    category_of_installation_buoy character varying(255),
+    category_of_lateral_mark character varying(255),
+    category_of_navigation_line character varying(255),
+    category_of_pile character varying(255),
+    category_of_power_source character varying(255),
+    category_of_radar_transponder_beacon_type character varying(255),
+    category_of_radio_station character varying(255),
+    category_of_recommended_track character varying(255),
+    category_of_silo_tank character varying(255),
+    category_of_syntheticaisaidto_navigation character varying(255),
+    colour character varying(255),
+    condition character varying(255),
+    condition_type character varying(255),
+    exhibition_condition_of_light character varying(255),
+    id_code character varying(255) NOT NULL,
+    inspection_frequency character varying(255),
+    inspection_requirements character varying(255),
+    light_characteristic character varying(255),
+    manufacturer character varying(255),
+    marks_navigational_system_of character varying(255),
+    pictorial_representation character varying(255),
+    product_type character varying(255),
+    radar_conspicuous character varying(255),
+    radar_wave_length character varying(255),
+    signal_group character varying(255),
+    signal_sequence character varying(255),
+    source_indication character varying(255),
+    status character varying(255),
+    topmark_daymark_shape character varying(255),
+    traffic_flow character varying(255),
+    type_of_buoy character varying(255),
+    type_of_light character varying(255),
+    vertical_datum character varying(255),
+    virtualaisaid_to_navigation_type character varying(255),
+    visual_prominence character varying(255),
+    geometry public.geometry,
     CONSTRAINT aids_to_navigation_aid_availability_category_check CHECK (((aid_availability_category)::text = ANY ((ARRAY['CATEGORY_1'::character varying, 'CATEGORY_2'::character varying, 'CATEGORY_3'::character varying])::text[]))),
     CONSTRAINT aids_to_navigation_beacon_shape_check CHECK (((beacon_shape)::text = ANY ((ARRAY['STAKE_POLE_PERCH_POST'::character varying, 'BEACON_TOWER'::character varying, 'LATTICE_BEACON'::character varying, 'PILE_BEACON'::character varying])::text[]))),
     CONSTRAINT aids_to_navigation_building_shape_check CHECK (((building_shape)::text = ANY ((ARRAY['HIGH_RISE_BUILDING'::character varying, 'PYRAMID'::character varying, 'CYLINDRICAL'::character varying, 'SPHERICAL'::character varying, 'CUBIC'::character varying])::text[]))),
@@ -189,10 +176,8 @@ CREATE TABLE public.aids_to_navigation (
 );
 
 
-ALTER TABLE public.aids_to_navigation OWNER TO atonadminservice;
-
 --
--- Name: aids_to_navigation_seasonal_action_requireds; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation_seasonal_action_requireds; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.aids_to_navigation_seasonal_action_requireds (
@@ -201,10 +186,8 @@ CREATE TABLE public.aids_to_navigation_seasonal_action_requireds (
 );
 
 
-ALTER TABLE public.aids_to_navigation_seasonal_action_requireds OWNER TO atonadminservice;
-
 --
--- Name: aids_to_navigation_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.aids_to_navigation_seq
@@ -215,10 +198,8 @@ CREATE SEQUENCE public.aids_to_navigation_seq
     CACHE 1;
 
 
-ALTER TABLE public.aids_to_navigation_seq OWNER TO atonadminservice;
-
 --
--- Name: association; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: association; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.association (
@@ -228,10 +209,8 @@ CREATE TABLE public.association (
 );
 
 
-ALTER TABLE public.association OWNER TO atonadminservice;
-
 --
--- Name: association_join_table; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: association_join_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.association_join_table (
@@ -240,10 +219,8 @@ CREATE TABLE public.association_join_table (
 );
 
 
-ALTER TABLE public.association_join_table OWNER TO atonadminservice;
-
 --
--- Name: association_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: association_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.association_seq
@@ -254,10 +231,8 @@ CREATE SEQUENCE public.association_seq
     CACHE 1;
 
 
-ALTER TABLE public.association_seq OWNER TO atonadminservice;
-
 --
--- Name: beacon_special_purpose_category_of_special_purpose_marks; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: beacon_special_purpose_category_of_special_purpose_marks; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.beacon_special_purpose_category_of_special_purpose_marks (
@@ -267,10 +242,8 @@ CREATE TABLE public.beacon_special_purpose_category_of_special_purpose_marks (
 );
 
 
-ALTER TABLE public.beacon_special_purpose_category_of_special_purpose_marks OWNER TO atonadminservice;
-
 --
--- Name: broadcast_by_join_table; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: broadcast_by_join_table; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.broadcast_by_join_table (
@@ -279,10 +252,8 @@ CREATE TABLE public.broadcast_by_join_table (
 );
 
 
-ALTER TABLE public.broadcast_by_join_table OWNER TO atonadminservice;
-
 --
--- Name: buoy_special_purpose_category_of_special_purpose_marks; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: buoy_special_purpose_category_of_special_purpose_marks; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.buoy_special_purpose_category_of_special_purpose_marks (
@@ -292,10 +263,8 @@ CREATE TABLE public.buoy_special_purpose_category_of_special_purpose_marks (
 );
 
 
-ALTER TABLE public.buoy_special_purpose_category_of_special_purpose_marks OWNER TO atonadminservice;
-
 --
--- Name: contact_address; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: contact_address; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.contact_address (
@@ -307,10 +276,8 @@ CREATE TABLE public.contact_address (
 );
 
 
-ALTER TABLE public.contact_address OWNER TO atonadminservice;
-
 --
--- Name: contact_address_delivery_points; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: contact_address_delivery_points; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.contact_address_delivery_points (
@@ -319,10 +286,8 @@ CREATE TABLE public.contact_address_delivery_points (
 );
 
 
-ALTER TABLE public.contact_address_delivery_points OWNER TO atonadminservice;
-
 --
--- Name: contact_address_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: contact_address_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.contact_address_seq
@@ -333,50 +298,44 @@ CREATE SEQUENCE public.contact_address_seq
     CACHE 1;
 
 
-ALTER TABLE public.contact_address_seq OWNER TO atonadminservice;
-
 --
--- Name: dataset_content; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: dataset_content; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.dataset_content (
-    id numeric(24,0) NOT NULL,
-    content oid,
     content_length numeric(38,0),
-    delta oid,
     delta_length numeric(38,0),
+    id numeric(24,0) NOT NULL,
+    sequence_no numeric(38,0),
     generated_at timestamp(6) without time zone,
-    sequence_no numeric(38,0)
+    content oid,
+    delta oid
 );
 
 
-ALTER TABLE public.dataset_content OWNER TO atonadminservice;
-
 --
--- Name: dataset_content_log; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: dataset_content_log; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.dataset_content_log (
-    id numeric(24,0) NOT NULL,
-    content oid,
     content_length numeric(38,0),
-    dataset_type character varying(255),
-    delta oid,
     delta_length numeric(38,0),
-    generated_at timestamp(6) without time zone,
-    geometry public.geometry,
-    operation character varying(255),
+    id numeric(24,0) NOT NULL,
     sequence_no numeric(38,0),
+    generated_at timestamp(6) without time zone,
     uuid uuid NOT NULL,
+    dataset_type character varying(255),
+    operation character varying(255),
+    content oid,
+    delta oid,
+    geometry public.geometry,
     CONSTRAINT dataset_content_log_dataset_type_check CHECK (((dataset_type)::text = 'S201'::text)),
     CONSTRAINT dataset_content_log_operation_check CHECK (((operation)::text = ANY ((ARRAY['CREATED'::character varying, 'UPDATED'::character varying, 'CANCELLED'::character varying, 'DELETED'::character varying, 'OTHER'::character varying, 'AUTO'::character varying])::text[])))
 );
 
 
-ALTER TABLE public.dataset_content_log OWNER TO atonadminservice;
-
 --
--- Name: dataset_content_log_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: dataset_content_log_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.dataset_content_log_seq
@@ -387,10 +346,8 @@ CREATE SEQUENCE public.dataset_content_log_seq
     CACHE 1;
 
 
-ALTER TABLE public.dataset_content_log_seq OWNER TO atonadminservice;
-
 --
--- Name: dataset_content_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: dataset_content_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.dataset_content_seq
@@ -401,10 +358,8 @@ CREATE SEQUENCE public.dataset_content_seq
     CACHE 1;
 
 
-ALTER TABLE public.dataset_content_seq OWNER TO atonadminservice;
-
 --
--- Name: dataset_identification_generator_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: dataset_identification_generator_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.dataset_identification_generator_seq
@@ -415,10 +370,8 @@ CREATE SEQUENCE public.dataset_identification_generator_seq
     CACHE 1;
 
 
-ALTER TABLE public.dataset_identification_generator_seq OWNER TO atonadminservice;
-
 --
--- Name: daymark_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: daymark_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.daymark_colour_patterns (
@@ -428,10 +381,8 @@ CREATE TABLE public.daymark_colour_patterns (
 );
 
 
-ALTER TABLE public.daymark_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: daymark_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: daymark_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.daymark_colours (
@@ -441,10 +392,8 @@ CREATE TABLE public.daymark_colours (
 );
 
 
-ALTER TABLE public.daymark_colours OWNER TO atonadminservice;
-
 --
--- Name: daymark_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: daymark_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.daymark_nature_of_constructions (
@@ -454,10 +403,8 @@ CREATE TABLE public.daymark_nature_of_constructions (
 );
 
 
-ALTER TABLE public.daymark_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: daymark_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: daymark_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.daymark_statuses (
@@ -467,10 +414,8 @@ CREATE TABLE public.daymark_statuses (
 );
 
 
-ALTER TABLE public.daymark_statuses OWNER TO atonadminservice;
-
 --
--- Name: equipment_remote_monitoring_systems; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: equipment_remote_monitoring_systems; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.equipment_remote_monitoring_systems (
@@ -479,25 +424,21 @@ CREATE TABLE public.equipment_remote_monitoring_systems (
 );
 
 
-ALTER TABLE public.equipment_remote_monitoring_systems OWNER TO atonadminservice;
-
 --
--- Name: feature_name; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: feature_name; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.feature_name (
-    id numeric(38,0) NOT NULL,
     display_name boolean,
+    feature_id numeric(38,0),
+    id numeric(38,0) NOT NULL,
     language character varying(255),
-    name character varying(255),
-    feature_id numeric(38,0)
+    name character varying(255)
 );
 
 
-ALTER TABLE public.feature_name OWNER TO atonadminservice;
-
 --
--- Name: feature_name_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: feature_name_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.feature_name_seq
@@ -508,10 +449,8 @@ CREATE SEQUENCE public.feature_name_seq
     CACHE 1;
 
 
-ALTER TABLE public.feature_name_seq OWNER TO atonadminservice;
-
 --
--- Name: fog_signal_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: fog_signal_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.fog_signal_statuses (
@@ -521,10 +460,8 @@ CREATE TABLE public.fog_signal_statuses (
 );
 
 
-ALTER TABLE public.fog_signal_statuses OWNER TO atonadminservice;
-
 --
--- Name: generic_beacon_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_beacon_colour_patterns (
@@ -534,10 +471,8 @@ CREATE TABLE public.generic_beacon_colour_patterns (
 );
 
 
-ALTER TABLE public.generic_beacon_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: generic_beacon_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_beacon_colours (
@@ -547,10 +482,8 @@ CREATE TABLE public.generic_beacon_colours (
 );
 
 
-ALTER TABLE public.generic_beacon_colours OWNER TO atonadminservice;
-
 --
--- Name: generic_beacon_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_beacon_nature_of_constructions (
@@ -560,10 +493,8 @@ CREATE TABLE public.generic_beacon_nature_of_constructions (
 );
 
 
-ALTER TABLE public.generic_beacon_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: generic_beacon_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_beacon_statuses (
@@ -573,10 +504,8 @@ CREATE TABLE public.generic_beacon_statuses (
 );
 
 
-ALTER TABLE public.generic_beacon_statuses OWNER TO atonadminservice;
-
 --
--- Name: generic_buoy_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_buoy_colour_patterns (
@@ -586,10 +515,8 @@ CREATE TABLE public.generic_buoy_colour_patterns (
 );
 
 
-ALTER TABLE public.generic_buoy_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: generic_buoy_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_buoy_colours (
@@ -599,10 +526,8 @@ CREATE TABLE public.generic_buoy_colours (
 );
 
 
-ALTER TABLE public.generic_buoy_colours OWNER TO atonadminservice;
-
 --
--- Name: generic_buoy_nature_ofconstuctions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_nature_ofconstuctions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_buoy_nature_ofconstuctions (
@@ -612,10 +537,8 @@ CREATE TABLE public.generic_buoy_nature_ofconstuctions (
 );
 
 
-ALTER TABLE public.generic_buoy_nature_ofconstuctions OWNER TO atonadminservice;
-
 --
--- Name: generic_buoy_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.generic_buoy_statuses (
@@ -625,27 +548,23 @@ CREATE TABLE public.generic_buoy_statuses (
 );
 
 
-ALTER TABLE public.generic_buoy_statuses OWNER TO atonadminservice;
-
 --
--- Name: information; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: information; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.information (
+    feature_id numeric(38,0),
     id numeric(38,0) NOT NULL,
     file_locator character varying(255),
     file_reference character varying(255),
     headline character varying(255),
     language character varying(255),
-    text character varying(255),
-    feature_id numeric(38,0)
+    text character varying(255)
 );
 
 
-ALTER TABLE public.information OWNER TO atonadminservice;
-
 --
--- Name: information_seq; Type: SEQUENCE; Schema: public; Owner: atonadminservice
+-- Name: information_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.information_seq
@@ -656,10 +575,8 @@ CREATE SEQUENCE public.information_seq
     CACHE 1;
 
 
-ALTER TABLE public.information_seq OWNER TO atonadminservice;
-
 --
--- Name: landmark_category_of_landmarks; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: landmark_category_of_landmarks; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.landmark_category_of_landmarks (
@@ -669,10 +586,8 @@ CREATE TABLE public.landmark_category_of_landmarks (
 );
 
 
-ALTER TABLE public.landmark_category_of_landmarks OWNER TO atonadminservice;
-
 --
--- Name: landmark_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: landmark_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.landmark_colour_patterns (
@@ -682,10 +597,8 @@ CREATE TABLE public.landmark_colour_patterns (
 );
 
 
-ALTER TABLE public.landmark_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: landmark_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: landmark_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.landmark_colours (
@@ -695,10 +608,8 @@ CREATE TABLE public.landmark_colours (
 );
 
 
-ALTER TABLE public.landmark_colours OWNER TO atonadminservice;
-
 --
--- Name: landmark_functions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: landmark_functions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.landmark_functions (
@@ -708,10 +619,8 @@ CREATE TABLE public.landmark_functions (
 );
 
 
-ALTER TABLE public.landmark_functions OWNER TO atonadminservice;
-
 --
--- Name: landmark_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: landmark_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.landmark_nature_of_constructions (
@@ -721,10 +630,8 @@ CREATE TABLE public.landmark_nature_of_constructions (
 );
 
 
-ALTER TABLE public.landmark_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: landmark_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: landmark_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.landmark_statuses (
@@ -734,10 +641,8 @@ CREATE TABLE public.landmark_statuses (
 );
 
 
-ALTER TABLE public.landmark_statuses OWNER TO atonadminservice;
-
 --
--- Name: light_category_of_lights; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_category_of_lights; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_category_of_lights (
@@ -747,10 +652,8 @@ CREATE TABLE public.light_category_of_lights (
 );
 
 
-ALTER TABLE public.light_category_of_lights OWNER TO atonadminservice;
-
 --
--- Name: light_float_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_float_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_float_colour_patterns (
@@ -760,10 +663,8 @@ CREATE TABLE public.light_float_colour_patterns (
 );
 
 
-ALTER TABLE public.light_float_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: light_float_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_float_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_float_colours (
@@ -773,10 +674,8 @@ CREATE TABLE public.light_float_colours (
 );
 
 
-ALTER TABLE public.light_float_colours OWNER TO atonadminservice;
-
 --
--- Name: light_float_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_float_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_float_nature_of_constructions (
@@ -786,10 +685,8 @@ CREATE TABLE public.light_float_nature_of_constructions (
 );
 
 
-ALTER TABLE public.light_float_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: light_float_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_float_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_float_statuses (
@@ -799,10 +696,8 @@ CREATE TABLE public.light_float_statuses (
 );
 
 
-ALTER TABLE public.light_float_statuses OWNER TO atonadminservice;
-
 --
--- Name: light_light_visibilities; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_light_visibilities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_light_visibilities (
@@ -812,10 +707,8 @@ CREATE TABLE public.light_light_visibilities (
 );
 
 
-ALTER TABLE public.light_light_visibilities OWNER TO atonadminservice;
-
 --
--- Name: light_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_statuses (
@@ -825,10 +718,8 @@ CREATE TABLE public.light_statuses (
 );
 
 
-ALTER TABLE public.light_statuses OWNER TO atonadminservice;
-
 --
--- Name: light_vessel_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_vessel_colour_patterns (
@@ -838,10 +729,8 @@ CREATE TABLE public.light_vessel_colour_patterns (
 );
 
 
-ALTER TABLE public.light_vessel_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: light_vessel_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_vessel_colours (
@@ -851,10 +740,8 @@ CREATE TABLE public.light_vessel_colours (
 );
 
 
-ALTER TABLE public.light_vessel_colours OWNER TO atonadminservice;
-
 --
--- Name: light_vessel_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_vessel_nature_of_constructions (
@@ -864,10 +751,8 @@ CREATE TABLE public.light_vessel_nature_of_constructions (
 );
 
 
-ALTER TABLE public.light_vessel_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: light_vessel_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.light_vessel_statuses (
@@ -877,10 +762,8 @@ CREATE TABLE public.light_vessel_statuses (
 );
 
 
-ALTER TABLE public.light_vessel_statuses OWNER TO atonadminservice;
-
 --
--- Name: navigation_line_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: navigation_line_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.navigation_line_statuses (
@@ -890,10 +773,8 @@ CREATE TABLE public.navigation_line_statuses (
 );
 
 
-ALTER TABLE public.navigation_line_statuses OWNER TO atonadminservice;
-
 --
--- Name: offshore_platform_category_of_offshore_platforms; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_category_of_offshore_platforms; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.offshore_platform_category_of_offshore_platforms (
@@ -903,10 +784,8 @@ CREATE TABLE public.offshore_platform_category_of_offshore_platforms (
 );
 
 
-ALTER TABLE public.offshore_platform_category_of_offshore_platforms OWNER TO atonadminservice;
-
 --
--- Name: offshore_platform_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.offshore_platform_colour_patterns (
@@ -916,10 +795,8 @@ CREATE TABLE public.offshore_platform_colour_patterns (
 );
 
 
-ALTER TABLE public.offshore_platform_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: offshore_platform_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.offshore_platform_colours (
@@ -929,10 +806,8 @@ CREATE TABLE public.offshore_platform_colours (
 );
 
 
-ALTER TABLE public.offshore_platform_colours OWNER TO atonadminservice;
-
 --
--- Name: offshore_platform_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.offshore_platform_nature_of_constructions (
@@ -942,10 +817,8 @@ CREATE TABLE public.offshore_platform_nature_of_constructions (
 );
 
 
-ALTER TABLE public.offshore_platform_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: offshore_platform_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.offshore_platform_statuses (
@@ -955,10 +828,8 @@ CREATE TABLE public.offshore_platform_statuses (
 );
 
 
-ALTER TABLE public.offshore_platform_statuses OWNER TO atonadminservice;
-
 --
--- Name: physicalaisaid_to_navigation_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: physicalaisaid_to_navigation_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.physicalaisaid_to_navigation_statuses (
@@ -968,10 +839,8 @@ CREATE TABLE public.physicalaisaid_to_navigation_statuses (
 );
 
 
-ALTER TABLE public.physicalaisaid_to_navigation_statuses OWNER TO atonadminservice;
-
 --
--- Name: pile_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: pile_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pile_colour_patterns (
@@ -981,10 +850,8 @@ CREATE TABLE public.pile_colour_patterns (
 );
 
 
-ALTER TABLE public.pile_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: pile_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: pile_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pile_colours (
@@ -994,10 +861,8 @@ CREATE TABLE public.pile_colours (
 );
 
 
-ALTER TABLE public.pile_colours OWNER TO atonadminservice;
-
 --
--- Name: power_source_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: power_source_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.power_source_statuses (
@@ -1007,10 +872,8 @@ CREATE TABLE public.power_source_statuses (
 );
 
 
-ALTER TABLE public.power_source_statuses OWNER TO atonadminservice;
-
 --
--- Name: radar_reflector_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: radar_reflector_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.radar_reflector_statuses (
@@ -1020,10 +883,8 @@ CREATE TABLE public.radar_reflector_statuses (
 );
 
 
-ALTER TABLE public.radar_reflector_statuses OWNER TO atonadminservice;
-
 --
--- Name: radar_transponder_beacon_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: radar_transponder_beacon_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.radar_transponder_beacon_statuses (
@@ -1033,22 +894,18 @@ CREATE TABLE public.radar_transponder_beacon_statuses (
 );
 
 
-ALTER TABLE public.radar_transponder_beacon_statuses OWNER TO atonadminservice;
-
 --
--- Name: recommended_track_nav_lines; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_nav_lines; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.recommended_track_nav_lines (
-    recommended_track_id numeric(38,0) NOT NULL,
-    navigation_line_id numeric(38,0) NOT NULL
+    navigation_line_id numeric(38,0) NOT NULL,
+    recommended_track_id numeric(38,0) NOT NULL
 );
 
 
-ALTER TABLE public.recommended_track_nav_lines OWNER TO atonadminservice;
-
 --
--- Name: recommended_track_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.recommended_track_statuses (
@@ -1058,10 +915,8 @@ CREATE TABLE public.recommended_track_statuses (
 );
 
 
-ALTER TABLE public.recommended_track_statuses OWNER TO atonadminservice;
-
 --
--- Name: recommended_track_technique_of_sounding_measurements; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_technique_of_sounding_measurements; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.recommended_track_technique_of_sounding_measurements (
@@ -1071,10 +926,8 @@ CREATE TABLE public.recommended_track_technique_of_sounding_measurements (
 );
 
 
-ALTER TABLE public.recommended_track_technique_of_sounding_measurements OWNER TO atonadminservice;
-
 --
--- Name: retro_reflector_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: retro_reflector_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.retro_reflector_colour_patterns (
@@ -1084,10 +937,8 @@ CREATE TABLE public.retro_reflector_colour_patterns (
 );
 
 
-ALTER TABLE public.retro_reflector_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: retro_reflector_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: retro_reflector_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.retro_reflector_colours (
@@ -1097,10 +948,8 @@ CREATE TABLE public.retro_reflector_colours (
 );
 
 
-ALTER TABLE public.retro_reflector_colours OWNER TO atonadminservice;
-
 --
--- Name: retro_reflector_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: retro_reflector_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.retro_reflector_statuses (
@@ -1110,10 +959,8 @@ CREATE TABLE public.retro_reflector_statuses (
 );
 
 
-ALTER TABLE public.retro_reflector_statuses OWNER TO atonadminservice;
-
 --
--- Name: s201_dataset_content_xref; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: s201_dataset_content_xref; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.s201_dataset_content_xref (
@@ -1122,36 +969,32 @@ CREATE TABLE public.s201_dataset_content_xref (
 );
 
 
-ALTER TABLE public.s201_dataset_content_xref OWNER TO atonadminservice;
-
 --
--- Name: s201dataset; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: s201dataset; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.s201dataset (
-    uuid uuid NOT NULL,
     cancelled boolean,
+    dataset_identification_id numeric(38,0),
     created_at timestamp(6) without time zone,
-    geometry public.geometry,
     last_updated_at timestamp(6) without time zone,
     replaces uuid,
-    dataset_identification_id numeric(38,0)
+    uuid uuid NOT NULL,
+    geometry public.geometry
 );
 
 
-ALTER TABLE public.s201dataset OWNER TO atonadminservice;
-
 --
--- Name: s201dataset_identification; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: s201dataset_identification; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.s201dataset_identification (
+    dataset_reference_date date,
     id numeric(38,0) NOT NULL,
     application_profile character varying(255),
     dataset_abstract character varying(255),
     dataset_file_identifier character varying(255),
     dataset_language character varying(255),
-    dataset_reference_date date,
     dataset_title character varying(255),
     encoding_specification character varying(255),
     encoding_specification_edition character varying(255),
@@ -1160,10 +1003,8 @@ CREATE TABLE public.s201dataset_identification (
 );
 
 
-ALTER TABLE public.s201dataset_identification OWNER TO atonadminservice;
-
 --
--- Name: s201dataset_identification_dataset_topic_categories; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: s201dataset_identification_dataset_topic_categories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.s201dataset_identification_dataset_topic_categories (
@@ -1173,10 +1014,8 @@ CREATE TABLE public.s201dataset_identification_dataset_topic_categories (
 );
 
 
-ALTER TABLE public.s201dataset_identification_dataset_topic_categories OWNER TO atonadminservice;
-
 --
--- Name: silo_tank_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.silo_tank_colour_patterns (
@@ -1186,10 +1025,8 @@ CREATE TABLE public.silo_tank_colour_patterns (
 );
 
 
-ALTER TABLE public.silo_tank_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: silo_tank_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.silo_tank_colours (
@@ -1199,10 +1036,8 @@ CREATE TABLE public.silo_tank_colours (
 );
 
 
-ALTER TABLE public.silo_tank_colours OWNER TO atonadminservice;
-
 --
--- Name: silo_tank_nature_of_constructions; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_nature_of_constructions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.silo_tank_nature_of_constructions (
@@ -1212,10 +1047,8 @@ CREATE TABLE public.silo_tank_nature_of_constructions (
 );
 
 
-ALTER TABLE public.silo_tank_nature_of_constructions OWNER TO atonadminservice;
-
 --
--- Name: silo_tank_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.silo_tank_statuses (
@@ -1225,35 +1058,31 @@ CREATE TABLE public.silo_tank_statuses (
 );
 
 
-ALTER TABLE public.silo_tank_statuses OWNER TO atonadminservice;
-
 --
--- Name: subscription_request; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: subscription_request; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.subscription_request (
-    uuid uuid NOT NULL,
-    client_mrn character varying(255),
     container_type smallint,
-    created_at timestamp(6) without time zone,
     data_product_type smallint,
-    data_reference uuid,
-    geometry public.geometry,
-    product_version character varying(255),
-    subscription_geometry public.geometry,
+    created_at timestamp(6) without time zone,
     subscription_period_end timestamp(6) without time zone,
     subscription_period_start timestamp(6) without time zone,
-    unlocode character varying(255),
     updated_at timestamp(6) without time zone,
+    data_reference uuid,
+    uuid uuid NOT NULL,
+    client_mrn character varying(255),
+    product_version character varying(255),
+    unlocode character varying(255),
+    geometry public.geometry,
+    subscription_geometry public.geometry,
     CONSTRAINT subscription_request_container_type_check CHECK (((container_type >= 0) AND (container_type <= 2))),
     CONSTRAINT subscription_request_data_product_type_check CHECK (((data_product_type >= 0) AND (data_product_type <= 27)))
 );
 
 
-ALTER TABLE public.subscription_request OWNER TO atonadminservice;
-
 --
--- Name: syntheticaisaid_to_navigation_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: syntheticaisaid_to_navigation_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.syntheticaisaid_to_navigation_statuses (
@@ -1263,10 +1092,8 @@ CREATE TABLE public.syntheticaisaid_to_navigation_statuses (
 );
 
 
-ALTER TABLE public.syntheticaisaid_to_navigation_statuses OWNER TO atonadminservice;
-
 --
--- Name: topmark_colour_patterns; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: topmark_colour_patterns; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.topmark_colour_patterns (
@@ -1276,10 +1103,8 @@ CREATE TABLE public.topmark_colour_patterns (
 );
 
 
-ALTER TABLE public.topmark_colour_patterns OWNER TO atonadminservice;
-
 --
--- Name: topmark_colours; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: topmark_colours; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.topmark_colours (
@@ -1289,10 +1114,8 @@ CREATE TABLE public.topmark_colours (
 );
 
 
-ALTER TABLE public.topmark_colours OWNER TO atonadminservice;
-
 --
--- Name: topmark_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: topmark_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.topmark_statuses (
@@ -1302,10 +1125,8 @@ CREATE TABLE public.topmark_statuses (
 );
 
 
-ALTER TABLE public.topmark_statuses OWNER TO atonadminservice;
-
 --
--- Name: virtualaisaid_to_navigation_statuses; Type: TABLE; Schema: public; Owner: atonadminservice
+-- Name: virtualaisaid_to_navigation_statuses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.virtualaisaid_to_navigation_statuses (
@@ -1315,10 +1136,8 @@ CREATE TABLE public.virtualaisaid_to_navigation_statuses (
 );
 
 
-ALTER TABLE public.virtualaisaid_to_navigation_statuses OWNER TO atonadminservice;
-
 --
--- Name: aggregation_join_table aggregation_join_table_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aggregation_join_table aggregation_join_table_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aggregation_join_table
@@ -1326,7 +1145,7 @@ ALTER TABLE ONLY public.aggregation_join_table
 
 
 --
--- Name: aggregation aggregation_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aggregation aggregation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aggregation
@@ -1334,7 +1153,23 @@ ALTER TABLE ONLY public.aggregation
 
 
 --
--- Name: aids_to_navigation aids_to_navigation_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation aids_to_navigation_contact_address_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aids_to_navigation
+    ADD CONSTRAINT aids_to_navigation_contact_address_id_key UNIQUE (contact_address_id);
+
+
+--
+-- Name: aids_to_navigation aids_to_navigation_id_code_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.aids_to_navigation
+    ADD CONSTRAINT aids_to_navigation_id_code_key UNIQUE (id_code);
+
+
+--
+-- Name: aids_to_navigation aids_to_navigation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aids_to_navigation
@@ -1342,7 +1177,7 @@ ALTER TABLE ONLY public.aids_to_navigation
 
 
 --
--- Name: association_join_table association_join_table_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: association_join_table association_join_table_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.association_join_table
@@ -1350,7 +1185,7 @@ ALTER TABLE ONLY public.association_join_table
 
 
 --
--- Name: association association_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: association association_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.association
@@ -1358,7 +1193,7 @@ ALTER TABLE ONLY public.association
 
 
 --
--- Name: contact_address contact_address_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: contact_address contact_address_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contact_address
@@ -1366,7 +1201,7 @@ ALTER TABLE ONLY public.contact_address
 
 
 --
--- Name: dataset_content_log dataset_content_log_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: dataset_content_log dataset_content_log_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.dataset_content_log
@@ -1374,7 +1209,7 @@ ALTER TABLE ONLY public.dataset_content_log
 
 
 --
--- Name: dataset_content dataset_content_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: dataset_content dataset_content_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.dataset_content
@@ -1382,7 +1217,7 @@ ALTER TABLE ONLY public.dataset_content
 
 
 --
--- Name: feature_name feature_name_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: feature_name feature_name_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.feature_name
@@ -1390,7 +1225,7 @@ ALTER TABLE ONLY public.feature_name
 
 
 --
--- Name: information information_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: information information_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.information
@@ -1398,7 +1233,15 @@ ALTER TABLE ONLY public.information
 
 
 --
--- Name: s201_dataset_content_xref s201_dataset_content_xref_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201_dataset_content_xref s201_dataset_content_xref_dataset_content_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.s201_dataset_content_xref
+    ADD CONSTRAINT s201_dataset_content_xref_dataset_content_id_key UNIQUE (dataset_content_id);
+
+
+--
+-- Name: s201_dataset_content_xref s201_dataset_content_xref_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201_dataset_content_xref
@@ -1406,7 +1249,15 @@ ALTER TABLE ONLY public.s201_dataset_content_xref
 
 
 --
--- Name: s201dataset_identification s201dataset_identification_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201dataset s201dataset_dataset_identification_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.s201dataset
+    ADD CONSTRAINT s201dataset_dataset_identification_id_key UNIQUE (dataset_identification_id);
+
+
+--
+-- Name: s201dataset_identification s201dataset_identification_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201dataset_identification
@@ -1414,7 +1265,7 @@ ALTER TABLE ONLY public.s201dataset_identification
 
 
 --
--- Name: s201dataset s201dataset_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201dataset s201dataset_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201dataset
@@ -1422,7 +1273,7 @@ ALTER TABLE ONLY public.s201dataset
 
 
 --
--- Name: subscription_request subscription_request_pkey; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: subscription_request subscription_request_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.subscription_request
@@ -1430,46 +1281,14 @@ ALTER TABLE ONLY public.subscription_request
 
 
 --
--- Name: aids_to_navigation uk_1bwpbn6s5uaubdbww8y0ad49k; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
---
-
-ALTER TABLE ONLY public.aids_to_navigation
-    ADD CONSTRAINT uk_1bwpbn6s5uaubdbww8y0ad49k UNIQUE (contact_address_id);
-
-
---
--- Name: s201dataset uk_7drjusewid2c1jxw8domg7b9k; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
---
-
-ALTER TABLE ONLY public.s201dataset
-    ADD CONSTRAINT uk_7drjusewid2c1jxw8domg7b9k UNIQUE (dataset_identification_id);
-
-
---
--- Name: s201_dataset_content_xref uk_j7ai90kg34ox2sn60xsyrlgoc; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
---
-
-ALTER TABLE ONLY public.s201_dataset_content_xref
-    ADD CONSTRAINT uk_j7ai90kg34ox2sn60xsyrlgoc UNIQUE (dataset_content_id);
-
-
---
--- Name: aids_to_navigation uk_mjwf2bnpb56a0hhv0muvb13mj; Type: CONSTRAINT; Schema: public; Owner: atonadminservice
---
-
-ALTER TABLE ONLY public.aids_to_navigation
-    ADD CONSTRAINT uk_mjwf2bnpb56a0hhv0muvb13mj UNIQUE (id_code);
-
-
---
--- Name: idx4mcuo154o08owisji6m02jnef; Type: INDEX; Schema: public; Owner: atonadminservice
+-- Name: idx4mcuo154o08owisji6m02jnef; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx4mcuo154o08owisji6m02jnef ON public.dataset_content_log USING btree (dataset_type, uuid, operation, sequence_no, generated_at);
 
 
 --
--- Name: information fk2aomer28cjm92xcitwvk0ushk; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: information fk2aomer28cjm92xcitwvk0ushk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.information
@@ -1477,7 +1296,7 @@ ALTER TABLE ONLY public.information
 
 
 --
--- Name: light_float_nature_of_constructions fk2xvmp44u583s5j7mach3yp98u; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_float_nature_of_constructions fk2xvmp44u583s5j7mach3yp98u; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_float_nature_of_constructions
@@ -1485,7 +1304,7 @@ ALTER TABLE ONLY public.light_float_nature_of_constructions
 
 
 --
--- Name: offshore_platform_colours fk3omovbpo3ejssis657eqkh3ft; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_colours fk3omovbpo3ejssis657eqkh3ft; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.offshore_platform_colours
@@ -1493,7 +1312,7 @@ ALTER TABLE ONLY public.offshore_platform_colours
 
 
 --
--- Name: beacon_special_purpose_category_of_special_purpose_marks fk3wbq3tb33ytp70vsjxkeuevn4; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: beacon_special_purpose_category_of_special_purpose_marks fk3wbq3tb33ytp70vsjxkeuevn4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.beacon_special_purpose_category_of_special_purpose_marks
@@ -1501,7 +1320,7 @@ ALTER TABLE ONLY public.beacon_special_purpose_category_of_special_purpose_marks
 
 
 --
--- Name: offshore_platform_statuses fk4a92ructtenbqc6dln1l64qa0; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_statuses fk4a92ructtenbqc6dln1l64qa0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.offshore_platform_statuses
@@ -1509,7 +1328,7 @@ ALTER TABLE ONLY public.offshore_platform_statuses
 
 
 --
--- Name: syntheticaisaid_to_navigation_statuses fk4qkj34pvxx9srfyhjfh8sq0uo; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: syntheticaisaid_to_navigation_statuses fk4qkj34pvxx9srfyhjfh8sq0uo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.syntheticaisaid_to_navigation_statuses
@@ -1517,7 +1336,7 @@ ALTER TABLE ONLY public.syntheticaisaid_to_navigation_statuses
 
 
 --
--- Name: landmark_nature_of_constructions fk5fsuxp110jqqksdsb6sqhbxy1; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: landmark_nature_of_constructions fk5fsuxp110jqqksdsb6sqhbxy1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.landmark_nature_of_constructions
@@ -1525,7 +1344,7 @@ ALTER TABLE ONLY public.landmark_nature_of_constructions
 
 
 --
--- Name: silo_tank_statuses fk5oflmf4ojxpwcvsjbgv0lrddu; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_statuses fk5oflmf4ojxpwcvsjbgv0lrddu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.silo_tank_statuses
@@ -1533,7 +1352,7 @@ ALTER TABLE ONLY public.silo_tank_statuses
 
 
 --
--- Name: generic_buoy_colour_patterns fk5txne3qukaebfjb2vow00hskp; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_colour_patterns fk5txne3qukaebfjb2vow00hskp; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_buoy_colour_patterns
@@ -1541,7 +1360,7 @@ ALTER TABLE ONLY public.generic_buoy_colour_patterns
 
 
 --
--- Name: retro_reflector_colour_patterns fk5uwkfqryybf53twhaexhawx9f; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: retro_reflector_colour_patterns fk5uwkfqryybf53twhaexhawx9f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.retro_reflector_colour_patterns
@@ -1549,7 +1368,7 @@ ALTER TABLE ONLY public.retro_reflector_colour_patterns
 
 
 --
--- Name: daymark_colour_patterns fk672e8amd17ud2myo2542v68rj; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: daymark_colour_patterns fk672e8amd17ud2myo2542v68rj; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.daymark_colour_patterns
@@ -1557,7 +1376,7 @@ ALTER TABLE ONLY public.daymark_colour_patterns
 
 
 --
--- Name: light_vessel_colour_patterns fk6b35oy77hapi82aqex767k33k; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_colour_patterns fk6b35oy77hapi82aqex767k33k; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_vessel_colour_patterns
@@ -1565,7 +1384,7 @@ ALTER TABLE ONLY public.light_vessel_colour_patterns
 
 
 --
--- Name: physicalaisaid_to_navigation_statuses fk6u448qfcfxwd7w4swx76tciiv; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: physicalaisaid_to_navigation_statuses fk6u448qfcfxwd7w4swx76tciiv; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.physicalaisaid_to_navigation_statuses
@@ -1573,7 +1392,7 @@ ALTER TABLE ONLY public.physicalaisaid_to_navigation_statuses
 
 
 --
--- Name: broadcast_by_join_table fk7k5gdm25xs6sydapvsfj2la3n; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: broadcast_by_join_table fk7k5gdm25xs6sydapvsfj2la3n; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.broadcast_by_join_table
@@ -1581,7 +1400,7 @@ ALTER TABLE ONLY public.broadcast_by_join_table
 
 
 --
--- Name: light_statuses fk7l1t5s3r0to3ab0v2k73591vh; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_statuses fk7l1t5s3r0to3ab0v2k73591vh; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_statuses
@@ -1589,7 +1408,7 @@ ALTER TABLE ONLY public.light_statuses
 
 
 --
--- Name: light_category_of_lights fk7l6fwt0qt53v7txmms37v01q1; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_category_of_lights fk7l6fwt0qt53v7txmms37v01q1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_category_of_lights
@@ -1597,7 +1416,7 @@ ALTER TABLE ONLY public.light_category_of_lights
 
 
 --
--- Name: generic_buoy_statuses fk83oowdnwv9o8gj32dhkvs97t2; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_statuses fk83oowdnwv9o8gj32dhkvs97t2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_buoy_statuses
@@ -1605,7 +1424,7 @@ ALTER TABLE ONLY public.generic_buoy_statuses
 
 
 --
--- Name: generic_beacon_colour_patterns fk8c9q44e199mu3yyd2xo8e3tke; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_colour_patterns fk8c9q44e199mu3yyd2xo8e3tke; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_beacon_colour_patterns
@@ -1613,7 +1432,7 @@ ALTER TABLE ONLY public.generic_beacon_colour_patterns
 
 
 --
--- Name: landmark_category_of_landmarks fk8n27xce5ev8842t2sja4lx4sd; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: landmark_category_of_landmarks fk8n27xce5ev8842t2sja4lx4sd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.landmark_category_of_landmarks
@@ -1621,7 +1440,7 @@ ALTER TABLE ONLY public.landmark_category_of_landmarks
 
 
 --
--- Name: light_vessel_statuses fk8x7eiobw1vjaaokxoekrow8db; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_statuses fk8x7eiobw1vjaaokxoekrow8db; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_vessel_statuses
@@ -1629,7 +1448,7 @@ ALTER TABLE ONLY public.light_vessel_statuses
 
 
 --
--- Name: s201_dataset_content_xref fk9j9b0r5frutdrps6f9f96sqwp; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201_dataset_content_xref fk9j9b0r5frutdrps6f9f96sqwp; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201_dataset_content_xref
@@ -1637,7 +1456,7 @@ ALTER TABLE ONLY public.s201_dataset_content_xref
 
 
 --
--- Name: buoy_special_purpose_category_of_special_purpose_marks fk9jw2xf1miah3fwe0kychek7pm; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: buoy_special_purpose_category_of_special_purpose_marks fk9jw2xf1miah3fwe0kychek7pm; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.buoy_special_purpose_category_of_special_purpose_marks
@@ -1645,7 +1464,7 @@ ALTER TABLE ONLY public.buoy_special_purpose_category_of_special_purpose_marks
 
 
 --
--- Name: daymark_statuses fk9uj205brx918jmmvva7dv1qwe; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: daymark_statuses fk9uj205brx918jmmvva7dv1qwe; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.daymark_statuses
@@ -1653,7 +1472,7 @@ ALTER TABLE ONLY public.daymark_statuses
 
 
 --
--- Name: feature_name fkab5fn0026au99gmc56o0kaj6j; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: feature_name fkab5fn0026au99gmc56o0kaj6j; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.feature_name
@@ -1661,7 +1480,7 @@ ALTER TABLE ONLY public.feature_name
 
 
 --
--- Name: silo_tank_colour_patterns fkamr0dmcs7cnq6sipg7wj9b8rm; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_colour_patterns fkamr0dmcs7cnq6sipg7wj9b8rm; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.silo_tank_colour_patterns
@@ -1669,7 +1488,7 @@ ALTER TABLE ONLY public.silo_tank_colour_patterns
 
 
 --
--- Name: light_float_colours fkba022nc7q3lj8gymm48xp7v12; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_float_colours fkba022nc7q3lj8gymm48xp7v12; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_float_colours
@@ -1677,7 +1496,7 @@ ALTER TABLE ONLY public.light_float_colours
 
 
 --
--- Name: radar_transponder_beacon_statuses fkbddvdidj0cosfjt8nau1sik47; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: radar_transponder_beacon_statuses fkbddvdidj0cosfjt8nau1sik47; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.radar_transponder_beacon_statuses
@@ -1685,7 +1504,7 @@ ALTER TABLE ONLY public.radar_transponder_beacon_statuses
 
 
 --
--- Name: silo_tank_colours fkbenumyd918txgdetfa4ehdlfj; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_colours fkbenumyd918txgdetfa4ehdlfj; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.silo_tank_colours
@@ -1693,7 +1512,7 @@ ALTER TABLE ONLY public.silo_tank_colours
 
 
 --
--- Name: navigation_line_statuses fkbyxrjlfbms9c8whwph5engt82; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: navigation_line_statuses fkbyxrjlfbms9c8whwph5engt82; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.navigation_line_statuses
@@ -1701,7 +1520,7 @@ ALTER TABLE ONLY public.navigation_line_statuses
 
 
 --
--- Name: pile_colour_patterns fkc0kbdg6qr78unrd9fm61g1e2i; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: pile_colour_patterns fkc0kbdg6qr78unrd9fm61g1e2i; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pile_colour_patterns
@@ -1709,7 +1528,7 @@ ALTER TABLE ONLY public.pile_colour_patterns
 
 
 --
--- Name: generic_beacon_colours fkcid9qtjlrhjb39v7tcpwh6tfu; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_colours fkcid9qtjlrhjb39v7tcpwh6tfu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_beacon_colours
@@ -1717,7 +1536,7 @@ ALTER TABLE ONLY public.generic_beacon_colours
 
 
 --
--- Name: recommended_track_technique_of_sounding_measurements fkco8lqmtudll0hsu3yyysw5gk7; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_technique_of_sounding_measurements fkco8lqmtudll0hsu3yyysw5gk7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recommended_track_technique_of_sounding_measurements
@@ -1725,7 +1544,7 @@ ALTER TABLE ONLY public.recommended_track_technique_of_sounding_measurements
 
 
 --
--- Name: fog_signal_statuses fkd1fov6iuwkqj2rue5aph9lset; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: fog_signal_statuses fkd1fov6iuwkqj2rue5aph9lset; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fog_signal_statuses
@@ -1733,7 +1552,7 @@ ALTER TABLE ONLY public.fog_signal_statuses
 
 
 --
--- Name: broadcast_by_join_table fkd4rfi17wmgtxabphk6qpdwc9o; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: broadcast_by_join_table fkd4rfi17wmgtxabphk6qpdwc9o; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.broadcast_by_join_table
@@ -1741,7 +1560,7 @@ ALTER TABLE ONLY public.broadcast_by_join_table
 
 
 --
--- Name: landmark_colour_patterns fkdlymx2s2ovrw9qgqkf4yr9wio; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: landmark_colour_patterns fkdlymx2s2ovrw9qgqkf4yr9wio; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.landmark_colour_patterns
@@ -1749,7 +1568,7 @@ ALTER TABLE ONLY public.landmark_colour_patterns
 
 
 --
--- Name: landmark_statuses fkdnhsghr8jgyf2ot43vagnyswm; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: landmark_statuses fkdnhsghr8jgyf2ot43vagnyswm; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.landmark_statuses
@@ -1757,7 +1576,7 @@ ALTER TABLE ONLY public.landmark_statuses
 
 
 --
--- Name: association_join_table fkdv9k366f0aksy16igah9ys268; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: association_join_table fkdv9k366f0aksy16igah9ys268; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.association_join_table
@@ -1765,7 +1584,7 @@ ALTER TABLE ONLY public.association_join_table
 
 
 --
--- Name: offshore_platform_nature_of_constructions fkdyg1o4yv2qnokwsanryipmq09; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_nature_of_constructions fkdyg1o4yv2qnokwsanryipmq09; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.offshore_platform_nature_of_constructions
@@ -1773,7 +1592,7 @@ ALTER TABLE ONLY public.offshore_platform_nature_of_constructions
 
 
 --
--- Name: landmark_functions fkdysttmq6d6t9appu8v9t5viin; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: landmark_functions fkdysttmq6d6t9appu8v9t5viin; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.landmark_functions
@@ -1781,7 +1600,7 @@ ALTER TABLE ONLY public.landmark_functions
 
 
 --
--- Name: generic_buoy_nature_ofconstuctions fkef2xdjm0jjf9vd1rjmydxv8aj; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_nature_ofconstuctions fkef2xdjm0jjf9vd1rjmydxv8aj; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_buoy_nature_ofconstuctions
@@ -1789,7 +1608,7 @@ ALTER TABLE ONLY public.generic_buoy_nature_ofconstuctions
 
 
 --
--- Name: recommended_track_nav_lines fkeni1a0te0u215bn43ltt0cu1r; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_nav_lines fkeni1a0te0u215bn43ltt0cu1r; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recommended_track_nav_lines
@@ -1797,7 +1616,7 @@ ALTER TABLE ONLY public.recommended_track_nav_lines
 
 
 --
--- Name: virtualaisaid_to_navigation_statuses fkfivvugv07uj29agevx1oso1k5; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: virtualaisaid_to_navigation_statuses fkfivvugv07uj29agevx1oso1k5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.virtualaisaid_to_navigation_statuses
@@ -1805,7 +1624,7 @@ ALTER TABLE ONLY public.virtualaisaid_to_navigation_statuses
 
 
 --
--- Name: aggregation_join_table fkfo0k46oyqmnspjake95x8wejs; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aggregation_join_table fkfo0k46oyqmnspjake95x8wejs; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aggregation_join_table
@@ -1813,7 +1632,7 @@ ALTER TABLE ONLY public.aggregation_join_table
 
 
 --
--- Name: topmark_statuses fkfrgb3vgon7cwt2avbak7p7cfl; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: topmark_statuses fkfrgb3vgon7cwt2avbak7p7cfl; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.topmark_statuses
@@ -1821,7 +1640,7 @@ ALTER TABLE ONLY public.topmark_statuses
 
 
 --
--- Name: aggregation_join_table fkgi1orxdge89o874tr8uqv3g2m; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aggregation_join_table fkgi1orxdge89o874tr8uqv3g2m; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aggregation_join_table
@@ -1829,7 +1648,7 @@ ALTER TABLE ONLY public.aggregation_join_table
 
 
 --
--- Name: topmark_colour_patterns fkh78djj7ilv86539msxim0jkjl; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: topmark_colour_patterns fkh78djj7ilv86539msxim0jkjl; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.topmark_colour_patterns
@@ -1837,7 +1656,7 @@ ALTER TABLE ONLY public.topmark_colour_patterns
 
 
 --
--- Name: generic_beacon_nature_of_constructions fkhtwo4tjm2umvxk5g35odb1w5b; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_nature_of_constructions fkhtwo4tjm2umvxk5g35odb1w5b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_beacon_nature_of_constructions
@@ -1845,7 +1664,7 @@ ALTER TABLE ONLY public.generic_beacon_nature_of_constructions
 
 
 --
--- Name: power_source_statuses fki2x0jiu2e09bu4el1x4x8djr9; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: power_source_statuses fki2x0jiu2e09bu4el1x4x8djr9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.power_source_statuses
@@ -1853,7 +1672,7 @@ ALTER TABLE ONLY public.power_source_statuses
 
 
 --
--- Name: pile_colours fkj16km8aaau28qdgw8gnipkfvw; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: pile_colours fkj16km8aaau28qdgw8gnipkfvw; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pile_colours
@@ -1861,7 +1680,7 @@ ALTER TABLE ONLY public.pile_colours
 
 
 --
--- Name: aids_to_navigation fkjjj5kqsvrxff5te4ucsyny2dr; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation fkjjj5kqsvrxff5te4ucsyny2dr; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aids_to_navigation
@@ -1869,7 +1688,7 @@ ALTER TABLE ONLY public.aids_to_navigation
 
 
 --
--- Name: light_light_visibilities fkjtynffudccc1r1xumt3fjxbk3; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_light_visibilities fkjtynffudccc1r1xumt3fjxbk3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_light_visibilities
@@ -1877,7 +1696,7 @@ ALTER TABLE ONLY public.light_light_visibilities
 
 
 --
--- Name: light_float_statuses fkk9q8q6seqe0drxjth225y9t0s; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_float_statuses fkk9q8q6seqe0drxjth225y9t0s; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_float_statuses
@@ -1885,7 +1704,7 @@ ALTER TABLE ONLY public.light_float_statuses
 
 
 --
--- Name: aids_to_navigation_seasonal_action_requireds fkkspjecmrl39rkqcr4phh8vbeu; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation_seasonal_action_requireds fkkspjecmrl39rkqcr4phh8vbeu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aids_to_navigation_seasonal_action_requireds
@@ -1893,7 +1712,7 @@ ALTER TABLE ONLY public.aids_to_navigation_seasonal_action_requireds
 
 
 --
--- Name: aids_to_navigation fkl4aphybohji5bxrkpu2evte79; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: aids_to_navigation fkl4aphybohji5bxrkpu2evte79; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.aids_to_navigation
@@ -1901,7 +1720,7 @@ ALTER TABLE ONLY public.aids_to_navigation
 
 
 --
--- Name: daymark_nature_of_constructions fklexo016yqlakrcdxj5eh3xpuu; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: daymark_nature_of_constructions fklexo016yqlakrcdxj5eh3xpuu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.daymark_nature_of_constructions
@@ -1909,7 +1728,7 @@ ALTER TABLE ONLY public.daymark_nature_of_constructions
 
 
 --
--- Name: s201dataset_identification_dataset_topic_categories fklo1rb7bjutii5rm3rg68klfso; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201dataset_identification_dataset_topic_categories fklo1rb7bjutii5rm3rg68klfso; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201dataset_identification_dataset_topic_categories
@@ -1917,7 +1736,7 @@ ALTER TABLE ONLY public.s201dataset_identification_dataset_topic_categories
 
 
 --
--- Name: retro_reflector_colours fklsj15gkc4u2mdwms7utewcv9c; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: retro_reflector_colours fklsj15gkc4u2mdwms7utewcv9c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.retro_reflector_colours
@@ -1925,7 +1744,7 @@ ALTER TABLE ONLY public.retro_reflector_colours
 
 
 --
--- Name: recommended_track_nav_lines fklu033whce7cmk4enhusmkuign; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_nav_lines fklu033whce7cmk4enhusmkuign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recommended_track_nav_lines
@@ -1933,7 +1752,7 @@ ALTER TABLE ONLY public.recommended_track_nav_lines
 
 
 --
--- Name: light_float_colour_patterns fkm6yh2wjl4sx9v1bf17o90a5x0; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_float_colour_patterns fkm6yh2wjl4sx9v1bf17o90a5x0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_float_colour_patterns
@@ -1941,7 +1760,7 @@ ALTER TABLE ONLY public.light_float_colour_patterns
 
 
 --
--- Name: s201_dataset_content_xref fkmn60fyowkvc248qp9yvowwu49; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201_dataset_content_xref fkmn60fyowkvc248qp9yvowwu49; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201_dataset_content_xref
@@ -1949,7 +1768,7 @@ ALTER TABLE ONLY public.s201_dataset_content_xref
 
 
 --
--- Name: offshore_platform_colour_patterns fkmpg445gugc7hk2l3vcrj6v22p; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_colour_patterns fkmpg445gugc7hk2l3vcrj6v22p; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.offshore_platform_colour_patterns
@@ -1957,7 +1776,7 @@ ALTER TABLE ONLY public.offshore_platform_colour_patterns
 
 
 --
--- Name: recommended_track_statuses fkn0lmw8trccihu8avhljnditfy; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: recommended_track_statuses fkn0lmw8trccihu8avhljnditfy; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recommended_track_statuses
@@ -1965,7 +1784,7 @@ ALTER TABLE ONLY public.recommended_track_statuses
 
 
 --
--- Name: s201dataset fknaigvoqgxkei9dsw4tffp5iwk; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: s201dataset fknaigvoqgxkei9dsw4tffp5iwk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.s201dataset
@@ -1973,7 +1792,7 @@ ALTER TABLE ONLY public.s201dataset
 
 
 --
--- Name: topmark_colours fko38bvwbecuavymunepg8b83ca; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: topmark_colours fko38bvwbecuavymunepg8b83ca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.topmark_colours
@@ -1981,7 +1800,7 @@ ALTER TABLE ONLY public.topmark_colours
 
 
 --
--- Name: equipment_remote_monitoring_systems fkof6rshd86e3cld5lr1bpay0iu; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: equipment_remote_monitoring_systems fkof6rshd86e3cld5lr1bpay0iu; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.equipment_remote_monitoring_systems
@@ -1989,7 +1808,7 @@ ALTER TABLE ONLY public.equipment_remote_monitoring_systems
 
 
 --
--- Name: daymark_colours fkolv2h9xncd5r5wi34iduf5bmg; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: daymark_colours fkolv2h9xncd5r5wi34iduf5bmg; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.daymark_colours
@@ -1997,7 +1816,7 @@ ALTER TABLE ONLY public.daymark_colours
 
 
 --
--- Name: landmark_colours fkp5xq9ykqfhqelsd6vqybexxi8; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: landmark_colours fkp5xq9ykqfhqelsd6vqybexxi8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.landmark_colours
@@ -2005,7 +1824,7 @@ ALTER TABLE ONLY public.landmark_colours
 
 
 --
--- Name: offshore_platform_category_of_offshore_platforms fkpbhlf959xo5lg7xsaftlxykm4; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: offshore_platform_category_of_offshore_platforms fkpbhlf959xo5lg7xsaftlxykm4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.offshore_platform_category_of_offshore_platforms
@@ -2013,7 +1832,7 @@ ALTER TABLE ONLY public.offshore_platform_category_of_offshore_platforms
 
 
 --
--- Name: association_join_table fkptw72of63ump5specjkwfoigi; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: association_join_table fkptw72of63ump5specjkwfoigi; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.association_join_table
@@ -2021,7 +1840,7 @@ ALTER TABLE ONLY public.association_join_table
 
 
 --
--- Name: contact_address_delivery_points fkq880q356fw5jdjprxp63fok3t; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: contact_address_delivery_points fkq880q356fw5jdjprxp63fok3t; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.contact_address_delivery_points
@@ -2029,7 +1848,7 @@ ALTER TABLE ONLY public.contact_address_delivery_points
 
 
 --
--- Name: generic_buoy_colours fkqlayplmfv7p4rubc3r7vx6geg; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_buoy_colours fkqlayplmfv7p4rubc3r7vx6geg; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_buoy_colours
@@ -2037,7 +1856,7 @@ ALTER TABLE ONLY public.generic_buoy_colours
 
 
 --
--- Name: generic_beacon_statuses fkrs59lewrie8cuivokrykq1sxm; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: generic_beacon_statuses fkrs59lewrie8cuivokrykq1sxm; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generic_beacon_statuses
@@ -2045,7 +1864,7 @@ ALTER TABLE ONLY public.generic_beacon_statuses
 
 
 --
--- Name: silo_tank_nature_of_constructions fks8beivg3tnqciji0y1fqwp77i; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: silo_tank_nature_of_constructions fks8beivg3tnqciji0y1fqwp77i; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.silo_tank_nature_of_constructions
@@ -2053,7 +1872,7 @@ ALTER TABLE ONLY public.silo_tank_nature_of_constructions
 
 
 --
--- Name: light_vessel_colours fksb65mo973oqic4bk110898ktd; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_colours fksb65mo973oqic4bk110898ktd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_vessel_colours
@@ -2061,7 +1880,7 @@ ALTER TABLE ONLY public.light_vessel_colours
 
 
 --
--- Name: radar_reflector_statuses fksnim7v1rd2333g21ybcpt7chv; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: radar_reflector_statuses fksnim7v1rd2333g21ybcpt7chv; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.radar_reflector_statuses
@@ -2069,7 +1888,7 @@ ALTER TABLE ONLY public.radar_reflector_statuses
 
 
 --
--- Name: light_vessel_nature_of_constructions fksw1yugjjvc3121lw576nlgin6; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: light_vessel_nature_of_constructions fksw1yugjjvc3121lw576nlgin6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.light_vessel_nature_of_constructions
@@ -2077,7 +1896,7 @@ ALTER TABLE ONLY public.light_vessel_nature_of_constructions
 
 
 --
--- Name: retro_reflector_statuses fkteix1uk4u4ybcq2q1uhxdpa1; Type: FK CONSTRAINT; Schema: public; Owner: atonadminservice
+-- Name: retro_reflector_statuses fkteix1uk4u4ybcq2q1uhxdpa1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.retro_reflector_statuses
@@ -2087,4 +1906,3 @@ ALTER TABLE ONLY public.retro_reflector_statuses
 --
 -- PostgreSQL database dump complete
 --
-
