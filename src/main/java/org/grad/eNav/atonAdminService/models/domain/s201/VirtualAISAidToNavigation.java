@@ -24,6 +24,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class VirtualAISAidToNavigation extends AISAidToNavigation {
     // Class Variables
     private BigDecimal estimatedRangeOfTransmission;
 
-    private BigDecimal mmsiCode;
+    private BigInteger mmsiCode;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -74,7 +75,7 @@ public class VirtualAISAidToNavigation extends AISAidToNavigation {
      *
      * @return the mmsi code
      */
-    public BigDecimal getMmsiCode() {
+    public BigInteger getMmsiCode() {
         return mmsiCode;
     }
 
@@ -83,7 +84,7 @@ public class VirtualAISAidToNavigation extends AISAidToNavigation {
      *
      * @param mmsiCode the mmsi code
      */
-    public void setMmsiCode(BigDecimal mmsiCode) {
+    public void setMmsiCode(BigInteger mmsiCode) {
         this.mmsiCode = mmsiCode;
     }
 

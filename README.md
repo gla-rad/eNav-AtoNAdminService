@@ -147,6 +147,13 @@ If you, like me don't remember your PostgreSQL command
 [here](https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546) is a quick
 cheatsheet.
 
+Just as a note, if you would like to dump the database to generate a migration
+or something yoy use pgdump as follows:
+
+```
+pg_dump --schema-only --no-owner  aton_admin_service -h localhost -U atonadminservice -W > aton_admin_service_dump.sql
+```
+
 ## How to Run
 
 This service can be used in two ways (based on the use or not of the Spring Cloud

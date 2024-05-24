@@ -70,10 +70,6 @@ public abstract class GenericBeacon extends StructureObject {
 
     private BigDecimal verticalAccuracy;
 
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
-
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private List<StatusType> statuses;
@@ -274,42 +270,6 @@ public abstract class GenericBeacon extends StructureObject {
      */
     public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
         this.verticalAccuracy = verticalAccuracy;
-    }
-
-    /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
     }
 
     /**

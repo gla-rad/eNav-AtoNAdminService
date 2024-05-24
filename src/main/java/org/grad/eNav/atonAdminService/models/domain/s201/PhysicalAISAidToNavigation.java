@@ -22,6 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class PhysicalAISAidToNavigation extends AISAidToNavigation {
     /**
      * The Mmsi code.
      */
-    protected BigDecimal mmsiCode;
+    protected BigInteger mmsiCode;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -72,7 +73,7 @@ public class PhysicalAISAidToNavigation extends AISAidToNavigation {
      *
      * @return the mmsi code
      */
-    public BigDecimal getMmsiCode() {
+    public BigInteger getMmsiCode() {
         return mmsiCode;
     }
 
@@ -81,7 +82,7 @@ public class PhysicalAISAidToNavigation extends AISAidToNavigation {
      *
      * @param mmsiCode the mmsi code
      */
-    public void setMmsiCode(BigDecimal mmsiCode) {
+    public void setMmsiCode(BigInteger mmsiCode) {
         this.mmsiCode = mmsiCode;
     }
 

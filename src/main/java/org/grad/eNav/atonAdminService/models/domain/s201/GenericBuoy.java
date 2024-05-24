@@ -48,7 +48,7 @@ public abstract class GenericBuoy extends StructureObject {
     private List<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
-    private RadarConspicuousType radarConspicious;
+    private RadarConspicuousType radarConspicuous;
 
     @Enumerated(EnumType.STRING)
     private MarksNavigationalSystemOfType marksNavigationalSystemOf;
@@ -56,10 +56,6 @@ public abstract class GenericBuoy extends StructureObject {
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfconstuctions;
-
-    private String objectNameInNationalLanguage;
-
-    private String objectName;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -126,21 +122,21 @@ public abstract class GenericBuoy extends StructureObject {
     }
 
     /**
-     * Gets radar conspicious.
+     * Gets radar conspicuous.
      *
-     * @return the radar conspicious
+     * @return the radar conspicuous
      */
-    public RadarConspicuousType getRadarConspicious() {
-        return radarConspicious;
+    public RadarConspicuousType getRadarConspicuous() {
+        return radarConspicuous;
     }
 
     /**
-     * Sets radar conspicious.
+     * Sets radar conspicuous.
      *
-     * @param radarConspicious the radar conspicious
+     * @param radarConspicuous the radar conspicuous
      */
-    public void setRadarConspicious(RadarConspicuousType radarConspicious) {
-        this.radarConspicious = radarConspicious;
+    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
+        this.radarConspicuous = radarConspicuous;
     }
 
     /**
@@ -177,42 +173,6 @@ public abstract class GenericBuoy extends StructureObject {
      */
     public void setNatureOfconstuctions(List<NatureOfConstructionType> natureOfconstuctions) {
         this.natureOfconstuctions = natureOfconstuctions;
-    }
-
-    /**
-     * Gets object name in national language.
-     *
-     * @return the object name in national language
-     */
-    public String getObjectNameInNationalLanguage() {
-        return objectNameInNationalLanguage;
-    }
-
-    /**
-     * Sets object name in national language.
-     *
-     * @param objectNameInNationalLanguage the object name in national language
-     */
-    public void setObjectNameInNationalLanguage(String objectNameInNationalLanguage) {
-        this.objectNameInNationalLanguage = objectNameInNationalLanguage;
-    }
-
-    /**
-     * Gets object name.
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
-
-    /**
-     * Sets object name.
-     *
-     * @param objectName the object name
-     */
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
     }
 
     /**
