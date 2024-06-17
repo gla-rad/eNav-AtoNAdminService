@@ -1,4 +1,4 @@
-# The GLA e-Navigation Service Architecture - AtoN Admin Service
+# The GLA e-Navigation Service Architecture - AtoN Administration Service
 
 ## Quick Reference
 
