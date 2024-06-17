@@ -157,7 +157,7 @@ The parameters will be picked up and used to populate the default
 **bootstrap.properties** of the service that look as follows:
 
     server.port=8769
-    spring.application.name=aton-service
+    spring.application.name=aton-admin-service
     spring.application.version=<application.version>
     
     # The Spring Cloud Discovery Config
@@ -167,7 +167,7 @@ The parameters will be picked up and used to populate the default
     spring.cloud.config.label=${ENAV_CLOUD_CONFIG_BRANCH}
     spring.cloud.config.fail-fast=false
 
-As you can see, the service is called **aton-service** and uses the **8769** 
+As you can see, the service is called **aton-admin-ervice** and uses the **8769** 
 port when running.
 
 To run the image, along with the aforementioned environment variables, you can
@@ -281,13 +281,13 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     spring.jpa.properties.hibernate.search.backend.analysis.configurer=class:org.grad.eNav.atonAdminService.config.CustomLuceneAnalysisConfigurer
     
     # Datasource Configuration
-    spring.datasource.url=jdbc:postgresql:///${service.variable.database.server.name}:${service.variable.database.server.port}/aton_service
+    spring.datasource.url=jdbc:postgresql:///${service.variable.database.server.name}:${service.variable.database.server.port}/aton_admin_service
     spring.datasource.username=<changeit>
     spring.datasource.password=<changeit>
     
     # Keycloak Configuration
     keycloak.enabled=true
-    spring.security.oauth2.client.registration.keycloak.client-id=aton-service
+    spring.security.oauth2.client.registration.keycloak.client-id=aton-admin-service
     spring.security.oauth2.client.registration.keycloak.client-secret=<changeit>
     spring.security.oauth2.client.registration.keycloak.client-name=Keycloak
     spring.security.oauth2.client.registration.keycloak.provider=keycloak
@@ -303,7 +303,7 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     feign.client.config.default.readTimeout=20000
     
     # Feign Security
-    spring.security.oauth2.client.registration.feign.client-id=aton-service
+    spring.security.oauth2.client.registration.feign.client-id=aton-admin-service
     spring.security.oauth2.client.registration.feign.client-secret=<changeit>
     spring.security.oauth2.client.registration.feign.authorization-grant-type=client_credentials
     spring.security.oauth2.client.registration.feign.scope=web-origins,openid
@@ -322,7 +322,7 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     gla.rad.aton-service.geometry=POLYGON ((-180 -90, -180 90, 180 90, 180 -90, -180 -90))
     
     # Front-end Information
-    gla.rad.service.info.name=AtoN Service
+    gla.rad.service.info.name=AtoN Admin Service
     gla.rad.service.info.version=${spring.application.version}
     gla.rad.service.info.organization=Research and Development Directorate of GLA of UK and Ireland
     gla.rad.service.info.electronicMailAddresses[0]=Nikolaos.Vastardis@gla-rad.org

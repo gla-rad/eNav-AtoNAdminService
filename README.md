@@ -303,7 +303,7 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     spring.jpa.properties.hibernate.search.backend.analysis.configurer=class:org.grad.eNav.atonAdminService.config.CustomLuceneAnalysisConfigurer
     
     # Datasource Configuration
-    spring.datasource.url=jdbc:postgresql:///${service.variable.database.server.name}:${service.variable.database.server.port}/aton_service
+    spring.datasource.url=jdbc:postgresql:///${service.variable.database.server.name}:${service.variable.database.server.port}/aton_admin_service
     spring.datasource.username=<changeit>
     spring.datasource.password=<changeit>
     
