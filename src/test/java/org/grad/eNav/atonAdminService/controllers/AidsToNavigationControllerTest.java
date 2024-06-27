@@ -149,6 +149,51 @@ class AidsToNavigationControllerTest {
     }
 
     /**
+     * Test that we can retrieve a list of the Aids to Navigation currently in
+     * the database in a single result.
+     */
+    @Test
+    void testGetListOfAidsToNavigation() throws Exception {
+        // Created a result page to be returned by the mocked service
+        Page<AidsToNavigation> page = new PageImpl<>(this.aidsToNavigationList.subList(0, 5), this.pageable, this.aidsToNavigationList.size());
+        doReturn(page).when(this.aidsToNavigationService).findAll(any(), any(), any(), any(), any());
+
+        // Perform the MVC request
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/atons/list"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+
+        // Parse and validate the response
+        List<AidsToNavigationDto> result = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
+        assertEquals(page.getSize(), result.size());
+
+        // Validate the entries one by one
+        for(int i=0; i< page.getSize(); i++) {
+            assertEquals(page.getContent().get(i).getId(), result.get(i).getId());
+            assertEquals(page.getContent().get(i).getIdCode(), result.get(i).getIdCode());
+            assertEquals(page.getContent().get(i).getInformations().size(), result.get(i).getInformations().size());
+            assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),
+                    result.get(i).getInformations().stream().findFirst().map(InformationDto::getFileLocator).orElse(null));
+            assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getFileReference).orElse(null),
+                    result.get(i).getInformations().stream().findFirst().map(InformationDto::getFileReference).orElse(null));
+            assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getHeadline).orElse(null),
+                    result.get(i).getInformations().stream().findFirst().map(InformationDto::getHeadline).orElse(null));
+            assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getLanguage).orElse(null),
+                    result.get(i).getInformations().stream().findFirst().map(InformationDto::getLanguage).orElse(null));
+            assertEquals(page.getContent().get(i).getInformations().stream().findFirst().map(Information::getText).orElse(null),
+                    result.get(i).getInformations().stream().findFirst().map(InformationDto::getText).orElse(null));
+            assertEquals(page.getContent().get(i).getFeatureNames().size(), result.get(i).getFeatureNames().size());
+            assertEquals(page.getContent().get(i).getFeatureNames().stream().findFirst().map(FeatureName::getName).orElse(null),
+                    result.get(i).getFeatureNames().stream().findFirst().map(FeatureNameDto::getName).orElse(null));
+            assertEquals(page.getContent().get(i).getFeatureNames().stream().findFirst().map(FeatureName::getDisplayName).orElse(null),
+                    result.get(i).getFeatureNames().stream().findFirst().map(FeatureNameDto::getDisplayName).orElse(null));
+            assertEquals(page.getContent().get(i).getFeatureNames().stream().findFirst().map(FeatureName::getLanguage).orElse(null),
+                    result.get(i).getFeatureNames().stream().findFirst().map(FeatureNameDto::getLanguage).orElse(null));
+        }
+    }
+
+    /**
      * Test that we can retrieve the Aids to Navigation currently in the database
      * in a paged result.
      */

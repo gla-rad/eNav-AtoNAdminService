@@ -29,6 +29,7 @@ import org.grad.eNav.atonAdminService.utils.HeaderUtil;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -66,6 +68,37 @@ public class AidsToNavigationController {
      */
     @Autowired
     DomainDtoMapper<AidsToNavigation, AidsToNavigationDto> aidsToNavigationToDtoMapper;
+
+    /**
+     * GET /api/atons/list : Returns a full list of the current Aids to
+     * navigation that match the provided criteria.
+     *
+     * @param idCode the Aids to Navigation number
+     * @param geometry the geometry for AtoN message filtering
+     * @param startDate the start date for AtoN message filtering
+     * @param endDate the end date for AtoN message filtering
+     * @return the ResponseEntity with status 200 (OK) and the list of stations in body
+     */
+    @GetMapping(value="/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AidsToNavigationDto>> getListOfAidsToNavigation(@RequestParam("idCode") Optional<String> idCode,
+                                                                               @RequestParam("geometry") Optional<Geometry> geometry,
+                                                                               @RequestParam("startDate") Optional<LocalDateTime> startDate,
+                                                                               @RequestParam("endDate") Optional<LocalDateTime> endDate) {
+        log.debug("REST request to get list of Aids to Navigation");
+        idCode.ifPresent(v -> log.debug("Aids to Navigation ID code specified as: {}", idCode));
+        geometry.ifPresent(v -> log.debug("Aids to Navigation geometry specified as: {}", GeometryJSONConverter.convertFromGeometry(v).toString()));
+        startDate.ifPresent(v -> log.debug("Aids to Navigation start date specified as: {}", startDate));
+        endDate.ifPresent(v -> log.debug("Aids to Navigation end date specified as: {}", endDate));
+        Page<AidsToNavigation> atonPage = this.aidsToNavigationService.findAll(
+                idCode.orElse(null),
+                geometry.orElse(null),
+                startDate.orElse(null),
+                endDate.orElse(null),
+                PageRequest.of(0, Integer.MAX_VALUE)
+        );
+        return ResponseEntity.ok()
+                .body(this.aidsToNavigationToDtoMapper.convertToList(atonPage.getContent(), AidsToNavigationDto.class));
+    }
 
     /**
      * GET /api/atons : Returns a paged list of all current Aids to navigation.
