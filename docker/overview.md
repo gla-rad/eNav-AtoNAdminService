@@ -197,22 +197,6 @@ This can be done in the following way:
 
 Examples of the required properties files can be seen below.
 
-For bootstrapping, we need to disable the cloud config client, and clear our the
-environment variable inputs:
-    
-    server.port=8769
-    spring.application.name=aton-admin-service
-    spring.application.version=<application.version>
-    
-    # Disable the cloud config
-    spring.cloud.config.enabled=false
-    
-    # Clear out the environment variables
-    spring.cloud.config.uri=
-    spring.cloud.config.username=
-    spring.cloud.config.password=
-    spring.cloud.config.label=
-
 While the application properties need to provide the service with an OAuth2.0
 server like keycloak, logging configuration, the eureka client connection etc.:
 
@@ -229,6 +213,14 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     service.variable.database.server.name=<database.server.name>
     service.variable.database.server.port=<database.server.port>
     service.variable.mcp.service-registry.endpoint=<mcp.service-registry.endpoint>
+
+    # Service properties
+    server.port=8769
+    spring.application.name=aton-admin-service
+    spring.application.version=0.0.1
+    
+    # Disable the cloud config
+    spring.cloud.config.enabled=false
     
     # Eureka Client Configuration
     eureka.client.service-url.defaultZone=http://${service.variable.eureka.server.name}:${service.variable.eureka.server.port}/eureka/
