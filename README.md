@@ -186,7 +186,7 @@ The parameters will be picked up and used to populate the default
     spring.application.version=<application.version>
     
     # The Spring Cloud Discovery Config
-    spring.cloud.config.uri=${ENAV_CLOUD_CONFIG_URI}
+    spring.config.import=optional:configserver:${ENAV_CLOUD_CONFIG_URI}
     spring.cloud.config.username=${ENAV_CLOUD_CONFIG_USERNAME}
     spring.cloud.config.password=${ENAV_CLOUD_CONFIG_PASSWORD}
     spring.cloud.config.label=${ENAV_CLOUD_CONFIG_BRANCH}
