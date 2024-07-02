@@ -209,7 +209,7 @@ use the following command:
 
 In order to run the service in a **Local Config** configuration, you just need
 to provide a local configuration directory that contains the necessary
-**.properties** files (including bootstrap).
+**application.properties** files.
 
 This can be done in the following way:
 

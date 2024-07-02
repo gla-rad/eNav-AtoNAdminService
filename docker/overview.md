@@ -185,8 +185,7 @@ use the following command:
 
 In order to run the image in a **Local Config** configuration, you just need
 to mount a local configuration directory that contains the necessary 
-**.properties** files (including bootstrap) into the **/conf** directory of the
-image.
+**application.properties** into the **/conf** directory of the image.
 
 This can be done in the following way:
 
