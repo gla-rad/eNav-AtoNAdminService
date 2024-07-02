@@ -154,7 +154,7 @@ The available environment variables are:
     ENAV_CLOUD_CONFIG_PASSWORD=<The cloud configration server password>
     
 The parameters will be picked up and used to populate the default
-**bootstrap.properties** of the service that look as follows:
+**application.properties** of the service that look as follows:
 
     server.port=8769
     spring.application.name=aton-admin-service
