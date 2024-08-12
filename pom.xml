@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.7</version>
+		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -18,7 +18,7 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<spring-cloud.version>2023.0.2</spring-cloud.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
 		<springdoc.version>2.5.0</springdoc.version>
 		<bootstrap.version>5.3.2</bootstrap.version>
 		<jquery.version>3.7.1</jquery.version>
@@ -28,7 +28,7 @@
 		<zookeeper.version>3.9.2</zookeeper.version>
 		<kafka.version>3.7.0</kafka.version>
 		<pact-version>4.6.3</pact-version>
-		<secomlib-version>0.0.43</secomlib-version>
+		<secomlib-version>0.0.45</secomlib-version>
 		<hibernate.search-orm.version>7.1.1.Final</hibernate.search-orm.version>
 		<hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
 	</properties>
