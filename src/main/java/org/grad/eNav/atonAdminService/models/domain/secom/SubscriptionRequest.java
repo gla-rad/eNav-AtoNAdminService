@@ -369,11 +369,11 @@ public class SubscriptionRequest {
                                 .map(UnLoCodeMapEntry::getGeometry)
                                 .orElse(null),
                         new GeometryFactory(new PrecisionModel(), 4326).createPolygon(new Coordinate[]{
-                                new Coordinate(-180, -90),
-                                new Coordinate(-180, 90),
-                                new Coordinate(180, 90),
-                                new Coordinate(180, -90),
-                                new Coordinate(-180, -90),
+                                new Coordinate(-90, -180),
+                                new Coordinate(90, -180),
+                                new Coordinate(90, 180),
+                                new Coordinate(-90, 180),
+                                new Coordinate(-90, -180),
                         }) // Add the whole world if nothing else is there
                 ))
                 .ifPresent(this::setSubscriptionGeometry);
