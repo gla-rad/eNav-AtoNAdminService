@@ -49,6 +49,7 @@ import org.grad.secom.core.models.enums.SubscriptionEventEnum;
 import org.grad.secom.springboot3.components.SecomClient;
 import org.hibernate.search.backend.lucene.LuceneExtension;
 import org.hibernate.search.backend.lucene.search.sort.dsl.LuceneSearchSortFactory;
+import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
 import org.hibernate.search.engine.search.query.SearchQuery;
 import org.hibernate.search.mapper.orm.Search;
@@ -494,36 +495,56 @@ public class SecomSubscriptionService implements MessageHandler {
                     BooleanPredicateClausesStep<?> step = f.bool()
                         .must(f.matchAll());
                     Optional.ofNullable(containerType).ifPresent(v -> {
-                        step.should(f.match()
+                        final SearchPredicate existingValuePred = f.match()
                                 .field("containerType")
-                                .matching(v.name()));
-                        step.should(f.match()
+                                .matching(v.name())
+                                .toPredicate();
+                        final SearchPredicate emptyValuePred = f.match()
                                 .field("containerType")
-                                .matching("NULL"));
+                                .matching("NULL")
+                                .toPredicate();
+                        step.must(f.bool()
+                                .should(existingValuePred)
+                                .should(emptyValuePred));
                     });
                     Optional.ofNullable(dataProductType).ifPresent(v -> {
-                        step.should(f.match()
+                        final SearchPredicate existingValuePred = f.match()
                                 .field("dataProductType")
-                                .matching(v.name()));
-                        step.should(f.match()
+                                .matching(v.name())
+                                .toPredicate();
+                        final SearchPredicate emptyValuePred = f.match()
                                 .field("dataProductType")
-                                .matching("NULL"));
+                                .matching("NULL")
+                                .toPredicate();
+                        step.must(f.bool()
+                                .should(existingValuePred)
+                                .should(emptyValuePred));
                     });
                     Optional.ofNullable(productVersion).ifPresent(v -> {
-                        step.should(f.match()
+                        final SearchPredicate existingValuePred = f.match()
                                 .field("productVersion")
-                                .matching(v));
-                        step.should(f.match()
+                                .matching(v)
+                                .toPredicate();
+                        final SearchPredicate emptyValuePred = f.match()
                                 .field("productVersion")
-                                .matching("NULL"));
+                                .matching("NULL")
+                                .toPredicate();
+                        step.must(f.bool()
+                                .should(existingValuePred)
+                                .should(emptyValuePred));
                     });
                     Optional.ofNullable(dataReference).ifPresent(v -> {
-                        step.should(f.match()
+                        final SearchPredicate existingValuePred = f.match()
                                 .field("dataReference")
-                                .matching(v.toString()));
-                        step.should(f.match()
+                                .matching(v.toString())
+                                .toPredicate();
+                        final SearchPredicate emptyValuePred = f.match()
                                 .field("dataReference")
-                                .matching("NULL"));
+                                .matching("NULL")
+                                .toPredicate();
+                        step.must(f.bool()
+                                .should(existingValuePred)
+                                .should(emptyValuePred));
                     });
                     Optional.ofNullable(geometry).ifPresent(g -> {
                         step.must(f.extension(LuceneExtension.get())
