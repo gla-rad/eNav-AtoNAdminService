@@ -42,6 +42,7 @@ public class WKTUtils {
     public static Geometry convertWKTtoGeometry(String geometryAsWKT) throws ParseException {
         WKTReader wktReader = new WKTReader();
         Geometry geometry = wktReader.read(geometryAsWKT);
+        geometry.apply(new InvertCoordinateFilter());
         return geometry;
     }
 

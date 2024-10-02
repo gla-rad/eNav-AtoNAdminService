@@ -217,9 +217,7 @@ public class S201DatasetBuilder {
         return Optional.ofNullable(prefix)
                 .filter(StringUtils::isNotBlank)
                 .map(p -> p.endsWith(":") ? p : p+":")
-                .orElse("urn:mrn:test:201:") +
-                Optional.ofNullable(uuid)
-                        .orElse(UUID.randomUUID());
+                .orElse("urn:mrn:test:201:") + Optional.ofNullable(uuid).orElse(UUID.randomUUID());
     }
 
 }

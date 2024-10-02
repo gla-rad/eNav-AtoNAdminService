@@ -69,9 +69,9 @@ class WKTUtilsTest {
      */
     @Test
     void testConvertWKTtoGeometry() throws ParseException {
-        assertEquals(this.point, WKTUtils.convertWKTtoGeometry("POINT (52.001 1.002)"));
-        assertEquals(this.lineString, WKTUtils.convertWKTtoGeometry("LINESTRING (52.001 1.002, 53.001 2.002)"));
-        assertEquals(this.polygon, WKTUtils.convertWKTtoGeometry("POLYGON ((52.001 1.002, 53.001 1.002, 53.001 2.002, 52.001 2.002, 52.001 1.002))"));
+        assertEquals(this.point, WKTUtils.convertWKTtoGeometry("POINT (1.002 52.001)"));
+        assertEquals(this.lineString, WKTUtils.convertWKTtoGeometry("LINESTRING (1.002 52.001, 2.002 53.001)"));
+        assertEquals(this.polygon, WKTUtils.convertWKTtoGeometry("POLYGON ((1.002 52.001, 1.002 53.001, 2.002 53.001, 2.002 52.001, 1.002 52.001))"));
     }
 
     /**
@@ -90,9 +90,9 @@ class WKTUtilsTest {
      */
     @Test
     void testConvertWKTtoGeoJson() throws ParseException {
-        assertEquals(this.pointJson, WKTUtils.convertWKTtoGeoJson("POINT (52.001 1.002)"));
-        assertEquals(this.lineStringJson, WKTUtils.convertWKTtoGeoJson(("LINESTRING (52.001 1.002, 53.001 2.002)")));
-        assertEquals(this.polygonJson, WKTUtils.convertWKTtoGeoJson(("POLYGON ((52.001 1.002, 53.001 1.002, 53.001 2.002, 52.001 2.002, 52.001 1.002))")));
+        assertEquals(this.pointJson, WKTUtils.convertWKTtoGeoJson("POINT (1.002 52.001)"));
+        assertEquals(this.lineStringJson, WKTUtils.convertWKTtoGeoJson(("LINESTRING (1.002 52.001, 2.002 53.001)")));
+        assertEquals(this.polygonJson, WKTUtils.convertWKTtoGeoJson(("POLYGON ((1.002 52.001, 1.002 53.001, 2.002 53.001, 2.002 52.001, 1.002 52.001))")));
     }
 
     /**

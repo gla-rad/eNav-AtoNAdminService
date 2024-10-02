@@ -180,7 +180,7 @@ function loadAtonGeometry(event, table, button, config) {
     // Recreate the drawn items feature group
     drawnItems.clearLayers();
     if(geometry) {
-        var geomLayer = L.geoJson(geometry);
+        var geomLayer = L.geoJson(geometry, {coordsToLatLng: (coords)=>coords});
         addNonGroupLayers(geomLayer, drawnItems);
         atonMessagesMap.setView(geomLayer.getBounds().getCenter(), 5);
     }

@@ -217,7 +217,7 @@ public class GeomesaS201 implements GeomesaData<S201Node>{
      * A subsequent filter to further refine the feature search.
      *
      * In the current context of S201 this could be a generic polygon that
-     * defines the area of a VDES station.
+     * defines the area of interest.
      *
      * @return The subsequent filter to further refine the search
      */
