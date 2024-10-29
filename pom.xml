@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
+		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -20,17 +20,18 @@
 		<java.version>21</java.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 		<springdoc.version>2.5.0</springdoc.version>
-		<bootstrap.version>5.3.2</bootstrap.version>
+		<bootstrap.version>5.3.3</bootstrap.version>
 		<jquery.version>3.7.1</jquery.version>
-		<fa.version>6.5.1</fa.version>
+		<fa.version>6.5.2</fa.version>
 		<geomesa.version>5.0.0</geomesa.version>
 		<scala.abi.version>2.13</scala.abi.version>
 		<zookeeper.version>3.9.2</zookeeper.version>
 		<kafka.version>3.7.0</kafka.version>
 		<pact-version>4.6.3</pact-version>
-		<secomlib-version>0.0.48</secomlib-version>
+		<secomlib-version>0.0.49</secomlib-version>
 		<hibernate.search-orm.version>7.1.1.Final</hibernate.search-orm.version>
 		<hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
+		<lucene.spatial.version>9.8.0</lucene.spatial.version>
 	</properties>
 
 	<repositories>
@@ -176,12 +177,12 @@
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-spatial3d</artifactId>
-			<version>9.8.0</version>
+			<version>${lucene.spatial.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-spatial-extras</artifactId>
-			<version>9.8.0</version>
+			<version>${lucene.spatial.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
