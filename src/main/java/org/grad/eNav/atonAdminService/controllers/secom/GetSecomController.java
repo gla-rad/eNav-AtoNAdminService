@@ -54,7 +54,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -113,8 +115,8 @@ public class GetSecomController implements GetSecomInterface {
                                  @QueryParam("productVersion") String productVersion,
                                  @QueryParam("geometry") String geometry,
                                  @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                 @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})")) LocalDateTime validFrom,
-                                 @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})")) LocalDateTime validTo,
+                                 @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validFrom,
+                                 @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validTo,
                                  @QueryParam("page") @Min(0) Integer page,
                                  @QueryParam("pageSize") @Min(0) Integer pageSize) {
         log.debug("SECOM request to get page of Dataset");
@@ -132,6 +134,12 @@ public class GetSecomController implements GetSecomInterface {
                 .map(p -> PageRequest.of(p, Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)))
                 .map(Pageable.class::cast)
                 .orElse(Pageable.unpaged());
+        LocalDateTime validFromLdt = Optional.ofNullable(validFrom)
+                .map(i -> LocalDateTime.ofInstant(i, ZoneId.systemDefault()))
+                .orElse(null);
+        LocalDateTime validToLdt = Optional.ofNullable(validTo)
+                .map(i -> LocalDateTime.ofInstant(i, ZoneId.systemDefault()))
+                .orElse(null);
 
         // Parse the arguments
         final ContainerTypeEnum reqContainerType = Optional.ofNullable(containerType)
@@ -160,7 +168,7 @@ public class GetSecomController implements GetSecomInterface {
             // Retrieve all matching datasets
             Page<S201Dataset> result;
             try {
-                result = this.datasetService.findAll(dataReference, jtsGeometry, validFrom, validTo, Boolean.FALSE, pageable);
+                result = this.datasetService.findAll(dataReference, jtsGeometry, validFromLdt, validToLdt, Boolean.FALSE, pageable);
             } catch (Exception ex) {
                 log.error("Error while retrieving the dataset query results: {} ", ex.getMessage());
                 throw new ValidationException(ex.getMessage());
@@ -189,7 +197,7 @@ public class GetSecomController implements GetSecomInterface {
                 // Create and populate the data response object
                 final DataResponseObject dataResponseObject = new DataResponseObject();
                 try {
-                    dataResponseObject.setData(this.s100ExchangeSetService.packageToExchangeSet(result.getContent(), validFrom, validTo));
+                    dataResponseObject.setData(this.s100ExchangeSetService.packageToExchangeSet(result.getContent(), validFromLdt, validToLdt));
                 } catch (IOException | JAXBException ex) {
                     log.error("Error while packaging the exchange set response: {} ", ex.getMessage());
                     throw new ValidationException(ex.getMessage());

@@ -51,7 +51,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -105,8 +108,8 @@ public class GetSummarySecomController implements GetSummarySecomInterface {
                                                @QueryParam("productVersion") String productVersion,
                                                @QueryParam("geometry") String geometry,
                                                @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                               @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})")) LocalDateTime validFrom,
-                                               @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})")) LocalDateTime validTo,
+                                               @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validFrom,
+                                               @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validTo,
                                                @QueryParam("page") @Min(0) Integer page,
                                                @QueryParam("pageSize") @Min(0) Integer pageSize) {
         log.debug("SECOM request to get page of Dataset Summary");
@@ -123,6 +126,12 @@ public class GetSummarySecomController implements GetSummarySecomInterface {
                 .map(p -> PageRequest.of(p, Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)))
                 .map(Pageable.class::cast)
                 .orElse(Pageable.unpaged());
+        LocalDateTime validFromLdt = Optional.ofNullable(validFrom)
+                .map(i -> LocalDateTime.ofInstant(i, ZoneId.systemDefault()))
+                .orElse(null);
+        LocalDateTime validToLdt = Optional.ofNullable(validTo)
+                .map(i -> LocalDateTime.ofInstant(i, ZoneId.systemDefault()))
+                .orElse(null);
 
         // Parse the arguments
         final ContainerTypeEnum reqContainerType = Optional.ofNullable(containerType)
@@ -148,7 +157,7 @@ public class GetSummarySecomController implements GetSummarySecomInterface {
         if(reqContainerType == ContainerTypeEnum.S100_DataSet) {
             // We only support specifically S-201 Datasets
             if (reqDataProductType == SECOM_DataProductType.S201) {
-                this.datasetService.findAll(null, jtsGeometry, validFrom, validTo, Boolean.FALSE, pageable)
+                this.datasetService.findAll(null, jtsGeometry, validFromLdt, validToLdt, Boolean.FALSE, pageable)
                         .stream()
                         .map(dataset -> {
                             // Create and populate the summary object
@@ -163,7 +172,7 @@ public class GetSummarySecomController implements GetSummarySecomInterface {
                             summaryObject.setInfo_name(dataset.getDatasetIdentificationInformation().getDatasetTitle());
                             summaryObject.setInfo_status(InfoStatusEnum.PRESENT.getValue());
                             summaryObject.setInfo_description(dataset.getDatasetIdentificationInformation().getDatasetAbstract());
-                            summaryObject.setInfo_lastModifiedDate(dataset.getLastUpdatedAt());
+                            summaryObject.setInfo_lastModifiedDate(Optional.ofNullable(dataset.getLastUpdatedAt()).map(ldt-> ldt.atZone(ZoneId.systemDefault())).map(ZonedDateTime::toInstant).orElse(null));
                             summaryObject.setInfo_size(Optional.of(dataset)
                                     .map(S201Dataset::getDatasetContent)
                                     .map(DatasetContent::getContentLength)

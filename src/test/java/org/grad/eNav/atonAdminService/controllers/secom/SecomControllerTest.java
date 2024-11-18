@@ -67,6 +67,7 @@ import java.math.BigInteger;
 import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
@@ -229,12 +230,12 @@ class SecomControllerTest {
         // Setup an acknowledgement
         this.acknowledgementObject = new AcknowledgementObject();
         EnvelopeAckObject envelopeAckObject = new EnvelopeAckObject();
-        envelopeAckObject.setCreatedAt(LocalDateTime.now());
+        envelopeAckObject.setCreatedAt(Instant.now());
         envelopeAckObject.setTransactionIdentifier(UUID.randomUUID());
         envelopeAckObject.setAckType(AckTypeEnum.DELIVERED_ACK);
         envelopeAckObject.setEnvelopeSignatureCertificate("Signature Certificate");
         envelopeAckObject.setEnvelopeRootCertificateThumbprint("Root Certificate Thumbprint");
-        envelopeAckObject.setEnvelopeSignatureTime(LocalDateTime.now());
+        envelopeAckObject.setEnvelopeSignatureTime(Instant.now());
         this.acknowledgementObject.setEnvelope(envelopeAckObject);
         this.acknowledgementObject.setEnvelopeSignature("Envelope Signature");
     }
