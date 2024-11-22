@@ -24,12 +24,12 @@ USING generated_at AT TIME ZONE current_setting('TIMEZONE');
 -- Alter the dataset_content table
 --
 
-ALTER TABLE s125dataset
+ALTER TABLE s201dataset
 ALTER COLUMN created_at
 TYPE timestamptz
 USING created_at AT TIME ZONE current_setting('TIMEZONE');
 
-ALTER TABLE s125dataset
+ALTER TABLE s201dataset
 ALTER COLUMN last_updated_at
 TYPE timestamptz
 USING last_updated_at AT TIME ZONE current_setting('TIMEZONE');
