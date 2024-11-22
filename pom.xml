@@ -12,7 +12,7 @@
 
 	<groupId>org.grad</groupId>
 	<artifactId>aton-admin-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>AtoN Administration Service</name>
 	<description>GRAD e-Navigation AtoN Administration Microservice</description>
 
