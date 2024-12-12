@@ -152,9 +152,12 @@ public class S100ExchangeSetService {
         final String certificatePem = signatureCertificate.getCertificate();
 
         // Create a temporary directory for constructing the exchange set
+        final String timestampSuffix = LocalDateTime.now()
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                .replaceAll("[:\\.]","-");
         final File tmpExchangeSetDir = Files.createTempDirectory(
                 Paths.get(this.s100ExchangeSetDir),
-                String.format("%s%s", this.s100ExchangeSetPrefix, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                String.format("%s%s", this.s100ExchangeSetPrefix, timestampSuffix)
         ).toFile();
 
         // -------------------------------------------------------------------//

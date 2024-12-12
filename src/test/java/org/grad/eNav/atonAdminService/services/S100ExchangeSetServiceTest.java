@@ -141,7 +141,9 @@ class S100ExchangeSetServiceTest {
         this.testCertificatePem = new String(in.readAllBytes(), StandardCharsets.UTF_8)
                 .replaceAll("-----BEGIN CERTIFICATE-----","")
                 .replaceAll("-----END CERTIFICATE-----","")
-                .replaceAll(System.lineSeparator(),"");
+                .replaceAll(System.lineSeparator(),"")
+                .replaceAll("\r\n","")
+                .replaceAll("\n","");
     }
 
     /**
