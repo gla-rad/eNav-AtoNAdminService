@@ -433,6 +433,18 @@ discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
+## Testing
+
+To stress test your deployment in JMeter, download and configure the client. Open the Test Plan in the GUI and select 'User Defined Variables'. Change the value in the host-name variable to your deployment. 
+
+You will need to issue a test certificate and convert it to a Java Keystore file. You then update the ***jmeter/bin/system.properties*** file to use the jks file for authentication. In system.properties, un-comment the following lines and fill in the details for your jks file:
+```
+  javax.net.ssl.keyStore={location of your file}
+  javax.net.ssl.keyStorePassword={keyfile password}
+```
+
+The test is pre-configured to test the implemented GET interfaces in the SECOM api 100 times in 1 second.
+
 ## License
 
 Distributed under the Apache License, Version 2.0. See [LICENSE](./LICENSE.md)
