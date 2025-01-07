@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.s100.gml.base._5_0.MDTopicCategoryCode;
+import _int.iho.s201.s100.gml.base._5_2.MDTopicCategoryCode;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.engine.backend.types.Sortable;

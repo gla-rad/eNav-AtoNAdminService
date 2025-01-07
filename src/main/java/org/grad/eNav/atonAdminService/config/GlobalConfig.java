@@ -19,7 +19,7 @@ package org.grad.eNav.atonAdminService.config;
 import _int.iho.s201.gml.cs0._1.AidsToNavigationType;
 import _int.iho.s201.gml.cs0._1.Dataset;
 import _int.iho.s201.gml.cs0._1.impl.*;
-import _int.iho.s201.s100.gml.base._5_0.impl.DataSetIdentificationTypeImpl;
+import _int.iho.s201.s100.gml.base._5_2.impl.DataSetIdentificationTypeImpl;
 import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.CaseUtils;

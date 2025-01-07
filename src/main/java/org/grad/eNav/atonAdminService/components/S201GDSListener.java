@@ -15,8 +15,8 @@
  */
 
 package org.grad.eNav.atonAdminService.components;
-import _int.iho.s201.s100.gml.profiles._5_0.AbstractGMLType;
-import _int.iho.s201.s100.gml.profiles._5_0.ReferenceType;
+import _int.iho.s201.s100.gml.profiles._5_2.AbstractGMLType;
+import _int.iho.s201.s100.gml.profiles._5_2.ReferenceType;
 import _int.iho.s201.gml.cs0._1.AidsToNavigationType;
 import _int.iho.s201.gml.cs0._1.EquipmentType;
 import _int.iho.s201.gml.cs0._1.StructureObjectType;

@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.services;
 
-import _int.iho.s100.catalog._5_0.*;
+import _int.iho.s100.catalog._5_2.*;
 import feign.FeignException;
 import feign.Response;
 import jakarta.xml.bind.JAXBException;

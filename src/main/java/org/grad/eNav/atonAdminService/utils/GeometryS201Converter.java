@@ -16,17 +16,17 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
-import _int.iho.s201.s100.gml.base._5_0.*;
-import _int.iho.s201.s100.gml.base._5_0.CurveType;
-import _int.iho.s201.s100.gml.base._5_0.PointType;
-import _int.iho.s201.s100.gml.base._5_0.SurfaceType;
-import _int.iho.s201.s100.gml.base._5_0.impl.*;
-import _int.iho.s201.s100.gml.base._5_0.impl.CurveTypeImpl;
-import _int.iho.s201.s100.gml.base._5_0.impl.PointTypeImpl;
-import _int.iho.s201.s100.gml.base._5_0.impl.SurfaceTypeImpl;
-import _int.iho.s201.s100.gml.profiles._5_0.*;
-import _int.iho.s201.s100.gml.profiles._5_0.ObjectFactory;
-import _int.iho.s201.s100.gml.profiles._5_0.impl.*;
+import _int.iho.s201.s100.gml.base._5_2.*;
+import _int.iho.s201.s100.gml.base._5_2.CurveType;
+import _int.iho.s201.s100.gml.base._5_2.PointType;
+import _int.iho.s201.s100.gml.base._5_2.SurfaceType;
+import _int.iho.s201.s100.gml.base._5_2.impl.*;
+import _int.iho.s201.s100.gml.base._5_2.impl.CurveTypeImpl;
+import _int.iho.s201.s100.gml.base._5_2.impl.PointTypeImpl;
+import _int.iho.s201.s100.gml.base._5_2.impl.SurfaceTypeImpl;
+import _int.iho.s201.s100.gml.profiles._5_2.*;
+import _int.iho.s201.s100.gml.profiles._5_2.ObjectFactory;
+import _int.iho.s201.s100.gml.profiles._5_2.impl.*;
 import _int.iho.s201.gml.cs0._1.AidsToNavigationType;
 import jakarta.xml.bind.JAXBElement;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
@@ -276,7 +276,7 @@ public class GeometryS201Converter {
 
         // Generate the elements
         SurfaceProperty surfaceProperty = new SurfacePropertyImpl();
-        _int.iho.s201.s100.gml.base._5_0.SurfaceType surfaceType = new SurfaceTypeImpl();
+        _int.iho.s201.s100.gml.base._5_2.SurfaceType surfaceType = new SurfaceTypeImpl();
         Patches patches = new PatchesImpl();
 
         // Populate the elements

@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.services;
 
-import _int.iho.s100.catalog._5_0.*;
+import _int.iho.s100.catalog._5_2.*;
 import feign.Response;
 import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
