@@ -181,7 +181,7 @@ The available environment variables are:
 The parameters will be picked up and used to populate the default
 **application.properties** of the service that look as follows:
 
-    server.port=8766
+    server.port=8769
     spring.application.name=aton-admin-service
     spring.application.version=<application.version>
     
