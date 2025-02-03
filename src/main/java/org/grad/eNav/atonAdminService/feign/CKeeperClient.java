@@ -20,6 +20,7 @@ import feign.Response;
 import org.grad.eNav.atonAdminService.config.FeignClientConfig;
 import org.grad.eNav.atonAdminService.models.dtos.SignatureCertificateDto;
 import org.grad.eNav.atonAdminService.models.dtos.SignatureVerificationRequestDto;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,7 @@ import java.math.BigInteger;
 @FeignClient(name = "ckeeper", configuration = FeignClientConfig.class)
 public interface CKeeperClient {
 
+    @Cacheable(value = "secomCertCache", key="#entityName")
     @RequestMapping(method = RequestMethod.GET, value = "/api/signature/certificate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     SignatureCertificateDto getSignatureCertificate(@RequestParam("entityName") String entityName,
                                                     @RequestParam(value = "version", required = false) String version,

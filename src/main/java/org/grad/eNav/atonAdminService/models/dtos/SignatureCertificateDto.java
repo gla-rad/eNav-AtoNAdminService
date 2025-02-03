@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.dtos;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
@@ -23,7 +24,7 @@ import java.math.BigInteger;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SignatureCertificateDto {
+public class SignatureCertificateDto implements Serializable {
 
     // Class Variables
     private BigInteger certificateId;
