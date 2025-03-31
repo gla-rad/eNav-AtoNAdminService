@@ -40,7 +40,9 @@ function formatXml(xml) {
     var reg = new RegExp("(>)(<)(\/*)", "g");
     xml = xml != undefined ? xml.replace(reg, '$1\r\n$2$3') : '';
     var pad = 0;
-    jQuery.each(xml.split('\r\n'), (index, node) => {
+    var xmlArray = xml.split('\r\n');
+    jQuery.each(xmlArray, (index, node) => {
+        var last = index === xmlArray.length - 1;
         var indent = 0;
         if (node.match( /.+<\/\w[^>]*>$/ )) {
             indent = 0;
@@ -59,7 +61,7 @@ function formatXml(xml) {
             padding += '  ';
         }
 
-        formatted += padding + node + '\r\n';
+        formatted += padding + node + (last ? '' : '\r\n');
         pad += indent;
     });
 
