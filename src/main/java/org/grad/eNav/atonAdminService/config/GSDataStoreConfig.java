@@ -69,7 +69,6 @@ public class GSDataStoreConfig {
         // The the connection parameters
         Map<String, String> params = new HashMap<>();
         params.put("kafka.brokers", kafkaBrokers);
-        params.put("kafka.zookeepers", kafkaZookeepers);
         params.put("kafka.consumer.config", String.format("%s=%d", ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 10485760));
         params.put("kafka.consumer.count", Objects.toString(noKafkaConsumers));
 
