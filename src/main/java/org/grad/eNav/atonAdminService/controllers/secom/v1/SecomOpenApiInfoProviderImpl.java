@@ -37,7 +37,11 @@ public class SecomOpenApiInfoProviderImpl implements SecomOpenApiInfoProvider {
                         .version("v0.0.1")
                         .contact(new Contact().email("Nikolaos.Vastardis@gla-rad.org"))
                         .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
-                .servers(Arrays.asList(new Server().url("/api/secom")))
+                .servers(Arrays.asList(new Server[]{
+                        new Server().url("."),
+                        new Server().url(".."),
+                        new Server().url("/api/secom")
+                }))
                 .externalDocs(new ExternalDocumentation()
                         .description("SpringShop Wiki Documentation")
                         .url("https://springshop.wiki.github.org/docs"));
