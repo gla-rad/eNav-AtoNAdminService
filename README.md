@@ -231,7 +231,6 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     service.variable.keycloak.server.realm=<keycloak.realm>
     service.variable.kafka.server.name=<kafka.server.name>
     service.variable.kafka.server.broker.port=<kafka.server.port>
-    service.variable.kafka.server.zookeeper.port=<zookeeper.server.port>
     service.variable.database.server.name=<database.server.name>
     service.variable.database.server.port=<database.server.port>
     service.variable.mcp.service-registry.endpoint=<mcp.service-registry.endpoint>
@@ -325,7 +324,7 @@ server like keycloak, logging configuration, the eureka client connection etc.:
     
     # Kafka Configuration
     kafka.brokers=${service.variable.kafka.server.name}:${service.variable.kafka.server.broker.port}
-    kafka.zookeepers=${service.variable.kafka.server.name}:${service.variable.kafka.server.zookeeper.port}
+
     kafka.consumer.count=1
     
     # Web Socket Configuration

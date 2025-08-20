@@ -37,14 +37,8 @@ import java.util.Objects;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-@ConditionalOnProperty({"kafka.zookeepers", "kafka.brokers"})
+@ConditionalOnProperty({"kafka.brokers"})
 public class GSDataStoreConfig {
-
-    /**
-     * The Kafka Zookeepers addresses.
-     */
-    @Value("${kafka.zookeepers:localhost:2181}" )
-    private String kafkaZookeepers;
 
     /**
      * The Kafka Brokers addresses.
