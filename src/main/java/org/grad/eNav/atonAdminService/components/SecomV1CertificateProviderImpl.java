@@ -41,7 +41,7 @@ import java.security.cert.CertificateException;
  */
 @Component
 @Slf4j
-public class SecomCertificateProviderImpl implements SecomCertificateProvider {
+public class SecomV1CertificateProviderImpl implements SecomCertificateProvider {
 
     /**
      * The Service Information Config.

@@ -16,10 +16,10 @@
 
 package org.grad.eNav.atonAdminService.services.secom;
 
-import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.ResponseSearchObject;
-import org.grad.secom.core.models.SearchObjectResult;
-import org.grad.secom.springboot3.components.SecomClient;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.ResponseSearchObject;
+import org.grad.secomv2.core.models.SearchObjectResult;
+import org.grad.secomv2.springboot3.components.SecomClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +28,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -124,13 +126,28 @@ class SecomServiceTest {
     }
 
     /**
+     * Test that the SECOM service can also create SECOM clients based on the
+     * provided URL without contacting the SECOM discovery service. This is
+     * the preferred way of operation for SECOM v2.0.
+     */
+    @Test
+    void testGetClientByUrl() throws MalformedURLException {
+        // Perform the service call
+        SecomClient result = this.secomService.getClient(URI.create("http://localhost").toURL());
+
+        // Make sure the client seems OK
+        assertNotNull(result);
+    }
+
+
+    /**
      * Test that the SECOM service will contact the SECOM discovery service
      * allocated to it, to discover the requested clients based on their MRNs.
      * If the discovered URL does not seem valid, a SecomValidationException
      * will be thrown.
      */
     @Test
-    void testGetClientBrokenUrl() {
+    void testGetClientWithBrokenUrl() {
         // Break the URL of the latest instance
         this.responseSearchObject.getSearchServiceResult().get(1).setEndpointUri("a broken URL");
 

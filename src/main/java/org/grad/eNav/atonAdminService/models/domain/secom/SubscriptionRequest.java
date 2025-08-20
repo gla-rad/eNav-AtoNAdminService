@@ -22,8 +22,8 @@ import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.eNav.atonAdminService.utils.GeometryBinder;
 import org.grad.eNav.atonAdminService.utils.GeometryUtils;
 import org.grad.eNav.atonAdminService.utils.NullValueIndexerBridge;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -42,6 +42,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -119,6 +120,12 @@ public class SubscriptionRequest {
     @KeywordField(sortable = Sortable.YES,
                   valueBridge = @ValueBridgeRef(type = NullValueIndexerBridge.class))
     private String clientMrn;
+
+    @KeywordField(sortable = Sortable.YES,
+            valueBridge = @ValueBridgeRef(type = NullValueIndexerBridge.class))
+    private URL callbackEndpoint;
+
+    private Boolean pushAll;
 
     /**
      * Gets uuid.
@@ -352,6 +359,42 @@ public class SubscriptionRequest {
      */
     public void setClientMrn(String clientMrn) {
         this.clientMrn = clientMrn;
+    }
+
+    /**
+     * Gets callback endpoint.
+     *
+     * @return the callback endpoint
+     */
+    public URL getCallbackEndpoint() {
+        return callbackEndpoint;
+    }
+
+    /**
+     * Sets callback endpoint.
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(URL callbackEndpoint) {
+        this.callbackEndpoint = callbackEndpoint;
+    }
+
+    /**
+     * Gets push all.
+     *
+     * @return the push all
+     */
+    public Boolean getPushAll() {
+        return pushAll;
+    }
+
+    /**
+     * Sets push all.
+     *
+     * @param pushAll the push all
+     */
+    public void setPushAll(Boolean pushAll) {
+        this.pushAll = pushAll;
     }
 
     /**
