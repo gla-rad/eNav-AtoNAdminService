@@ -38,8 +38,8 @@ public class SecomV2OpenApiInfoProviderImpl implements SecomV2OpenApiInfoProvide
                         .contact(new Contact().email("Nikolaos.Vastardis@gla-rad.org"))
                         .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
                 .servers(Arrays.asList(new Server[]{
-                        new Server().url("."),
                         new Server().url(".."),
+                        new Server().url("."),
                         new Server().url("/api/secom")
                 }))
                 .externalDocs(new ExternalDocumentation()
