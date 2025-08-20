@@ -38,15 +38,15 @@ import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.repos.SecomSubscriptionRepo;
 import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
-import org.grad.secom.core.exceptions.SecomNotFoundException;
-import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.EnvelopeUploadObject;
-import org.grad.secom.core.models.UploadObject;
-import org.grad.secom.core.models.enums.AckRequestEnum;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
-import org.grad.secom.core.models.enums.SubscriptionEventEnum;
-import org.grad.secom.springboot3.components.SecomClient;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.EnvelopeUploadObject;
+import org.grad.secomv2.core.models.UploadObject;
+import org.grad.secomv2.core.models.enums.AckRequestEnum;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
+import org.grad.secomv2.springboot3.components.SecomClient;
 import org.hibernate.search.backend.lucene.LuceneExtension;
 import org.hibernate.search.backend.lucene.search.sort.dsl.LuceneSearchSortFactory;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
@@ -345,9 +345,29 @@ public class SecomSubscriptionService implements MessageHandler {
         final SubscriptionRequest result = this.secomSubscriptionRepo.save(subscriptionRequest);
 
         // Inform to the subscription client (identify through MRN) - asynchronous
-        this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
-                result.getUuid(),
-                SubscriptionEventEnum.SUBSCRIPTION_CREATED);
+        if(Objects.isNull(subscriptionRequest.getCallbackEndpoint())) {
+            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
+                            result.getUuid(),
+                            SubscriptionEventEnum.SUBSCRIPTION_CREATED)
+                    .whenCompleteAsync((snr, ex) -> {
+                        if (ex != null) {
+                            log.error("Notification to client {} failed with message {}", mrn, ex.getMessage());
+                        } else {
+                            log.debug("Sent notification to client {} for subscription {}", mrn, result.getUuid());
+                        }
+                    });
+        } else {
+            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getCallbackEndpoint(),
+                            result.getUuid(),
+                            SubscriptionEventEnum.SUBSCRIPTION_CREATED)
+                    .whenCompleteAsync((snr, ex) -> {
+                        if (ex != null) {
+                            log.error("Notification to client {} with URL {} failed with message {}", mrn, subscriptionRequest.getCallbackEndpoint(), ex.getMessage());
+                        } else {
+                            log.debug("Sent notification to client {} with URL {} for subscription {}", mrn, subscriptionRequest.getCallbackEndpoint(), result.getUuid());
+                        }
+                    });
+        }
 
         // Now save for each type
         return result;
@@ -372,9 +392,29 @@ public class SecomSubscriptionService implements MessageHandler {
         this.secomSubscriptionRepo.delete(subscriptionRequest);
 
         // Inform to the subscription client (identify through MRN) - asynchronous
-        this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
-                subscriptionRequest.getUuid(),
-                SubscriptionEventEnum.SUBSCRIPTION_REMOVED);
+        if(Objects.isNull(subscriptionRequest.getCallbackEndpoint())) {
+            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
+                            subscriptionRequest.getUuid(),
+                            SubscriptionEventEnum.SUBSCRIPTION_REMOVED)
+                    .whenCompleteAsync((snr, ex) -> {
+                        if (ex != null) {
+                            log.error("Notification to client {} failed with message {}", subscriptionRequest.getClientMrn(), ex.getMessage());
+                        } else {
+                            log.debug("Sent notification to client {} for subscription {}", subscriptionRequest.getClientMrn(), subscriptionRequest.getUuid());
+                        }
+                    });
+        } else {
+            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getCallbackEndpoint(),
+                            subscriptionRequest.getUuid(),
+                            SubscriptionEventEnum.SUBSCRIPTION_REMOVED)
+                    .whenCompleteAsync((snr, ex) -> {
+                        if (ex != null) {
+                            log.error("Notification to client {} with URL {} failed with message {}", subscriptionRequest.getClientMrn(), subscriptionRequest.getCallbackEndpoint(), ex.getMessage());
+                        } else {
+                            log.debug("Sent notification to client {} with URL for subscription {}", subscriptionRequest.getClientMrn(), subscriptionRequest.getCallbackEndpoint(), subscriptionRequest.getUuid());
+                        }
+                    });
+        }
 
         // If all OK, then return the subscription UUID
         return subscriptionRequest.getUuid();
@@ -399,7 +439,9 @@ public class SecomSubscriptionService implements MessageHandler {
         }
 
         // Identify the subscription client if possible through the client MRN
-        final SecomClient secomClient = this.secomService.getClient(subscriptionRequest.getClientMrn());
+        final SecomClient secomClient = Objects.isNull(subscriptionRequest.getCallbackEndpoint()) ?
+                this.secomService.getClient(subscriptionRequest.getClientMrn()) :
+                this.secomService.getClient(subscriptionRequest.getCallbackEndpoint());
 
         // Build the data envelope
         EnvelopeUploadObject envelopeUploadObject = new EnvelopeUploadObject();

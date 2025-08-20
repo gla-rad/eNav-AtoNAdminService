@@ -12,7 +12,7 @@
 
 	<groupId>org.grad</groupId>
 	<artifactId>aton-admin-service</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>AtoN Administration Service</name>
 	<description>GRAD e-Navigation AtoN Administration Microservice</description>
 
@@ -28,7 +28,8 @@
 		<zookeeper.version>3.9.2</zookeeper.version>
 		<kafka.version>3.7.0</kafka.version>
 		<pact-version>4.6.3</pact-version>
-		<secomlib-version>0.0.51-SNAPSHOT</secomlib-version>
+		<secomlib-version>0.0.53-SNAPSHOT</secomlib-version>
+		<secomv2lib-version>0.0.1-SNAPSHOT</secomv2lib-version>
 		<hibernate.search-orm.version>7.1.1.Final</hibernate.search-orm.version>
 		<hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
 		<lucene.spatial.version>9.8.0</lucene.spatial.version>
@@ -63,15 +64,15 @@
 					<executable>true</executable>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>io.github.git-commit-id</groupId>-->
-<!--				<artifactId>git-commit-id-maven-plugin</artifactId>-->
-<!--				<version>7.0.0</version>-->
-<!--			</plugin>-->
+			<plugin>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
+				<version>7.0.0</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.5.3</version>
 				<configuration>
 					<systemPropertyVariables>
 						<pactbroker.url>${pact_broker_url}</pactbroker.url>
@@ -350,6 +351,18 @@
 			<groupId>org.grad.secom</groupId>
 			<artifactId>secom-springboot3</artifactId>
 			<version>${secomlib-version}</version>
+		</dependency>
+
+		<!-- SECOM v2 -->
+		<dependency>
+			<groupId>org.grad.secom</groupId>
+			<artifactId>secom-v2-core-jakarta</artifactId>
+			<version>${secomv2lib-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.grad.secom</groupId>
+			<artifactId>secom-v2-springboot3</artifactId>
+			<version>${secomv2lib-version}</version>
 		</dependency>
 
 		<!-- Swagger -->

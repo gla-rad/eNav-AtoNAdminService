@@ -16,16 +16,17 @@
 
 package org.grad.eNav.atonAdminService.services.secom;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.grad.secom.core.exceptions.SecomNotFoundException;
-import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.ResponseSearchObject;
-import org.grad.secom.core.models.SearchFilterObject;
-import org.grad.secom.core.models.SearchObjectResult;
-import org.grad.secom.core.models.SearchParameters;
-import org.grad.secom.springboot3.components.SecomClient;
-import org.grad.secom.springboot3.components.SecomConfigProperties;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.ResponseSearchObject;
+import org.grad.secomv2.core.models.SearchFilterObject;
+import org.grad.secomv2.core.models.SearchObjectResult;
+import org.grad.secomv2.core.models.SearchParameters;
+import org.grad.secomv2.springboot3.components.SecomClient;
+import org.grad.secomv2.springboot3.components.SecomConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -146,6 +147,29 @@ public class SecomService {
         // Now construct and return a SECOM client for the discovered URI
         try {
             return new SecomClient(new URL(instance.getEndpointUri()), this.secomConfigProperties);
+        } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new SecomValidationException(ex.getMessage());
+        }
+    }
+
+    /**
+     * This function allows the definition of SECOM clients without accessing
+     * the SECOM Service Registry. By simply providing the callback URL of the
+     * client, along with the standard SECOM configuration properties, we can
+     * construct a valid SECOM client.
+     *
+     * @param url the URL of the SECOM client
+     * @return the constucted SECOM client for the provided URL
+     */
+    public SecomClient getClient(@NotNull URL url) {
+        // Validate the MRN
+        Optional.ofNullable(url)
+                .orElseThrow(() -> new SecomValidationException("Cannot request SECOM client for an empty/invalid URL"));
+
+        // Now construct and return a SECOM client for the discovered URI
+        try {
+            return new SecomClient(url, this.secomConfigProperties);
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | UnrecoverableKeyException ex) {
             log.error(ex.getMessage(), ex);
             throw new SecomValidationException(ex.getMessage());

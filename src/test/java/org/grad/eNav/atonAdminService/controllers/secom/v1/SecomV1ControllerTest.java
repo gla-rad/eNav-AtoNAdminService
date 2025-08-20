@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package org.grad.eNav.atonAdminService.controllers.secom;
+package org.grad.eNav.atonAdminService.controllers.secom.v1;
 
 import _int.iho.s201.gml.cs0._1.Dataset;
 import jakarta.xml.bind.DatatypeConverter;
 import jakarta.xml.bind.JAXBException;
 import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
-import org.grad.eNav.atonAdminService.components.SecomCertificateProviderImpl;
-import org.grad.eNav.atonAdminService.components.SecomSignatureProviderImpl;
+import org.grad.eNav.atonAdminService.components.SecomV1CertificateProviderImpl;
+import org.grad.eNav.atonAdminService.components.SecomV1SignatureProviderImpl;
+import org.grad.eNav.atonAdminService.controllers.secom.SecomRequestHeaders;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContent;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
@@ -31,6 +32,7 @@ import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
 import org.grad.eNav.atonAdminService.utils.S201DatasetBuilder;
+import org.grad.eNav.atonAdminService.utils.SecomUtils;
 import org.grad.eNav.s201.utils.S201Utils;
 import org.grad.secom.core.base.DigitalSignatureCertificate;
 import org.grad.secom.core.base.SecomConstants;
@@ -50,13 +52,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -90,7 +92,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
-class SecomControllerTest {
+class SecomV1ControllerTest {
 
     /**
      * The Reactive Web Test Client.
@@ -107,38 +109,38 @@ class SecomControllerTest {
     /**
      * The Dataset Service mock.
      */
-    @MockBean
+    @MockitoBean
     DatasetService datasetService;
 
     /**
      * The SECOM Exchange Set Service.
      */
-    @MockBean
+    @MockitoBean
     S100ExchangeSetService s100ExchangeSetService;
 
     /**
      * The UN/LOCODE Service mock.
      */
-    @MockBean
+    @MockitoBean
     UnLoCodeService unLoCodeService;
 
     /**
      * The SECOM Subscription Service mock.
      */
-    @MockBean
+    @MockitoBean
     SecomSubscriptionService secomSubscriptionService;
 
     /**
      * The Secom Certificate Provider mock.
      */
-    @MockBean
-    SecomCertificateProviderImpl secomCertificateProvider;
+    @MockitoBean
+    SecomV1CertificateProviderImpl secomCertificateProvider;
 
     /**
      * The Secom Signature Provider mock.
      */
-    @MockBean
-    SecomSignatureProviderImpl secomSignatureProvider;
+    @MockitoBean
+    SecomV1SignatureProviderImpl secomSignatureProvider;
 
     /**
      * The Secom Signature Filter mock.
@@ -147,7 +149,7 @@ class SecomControllerTest {
      * allow out test messages to go through the signature filter without valid
      * signatures.
      */
-    @MockBean
+    @MockitoBean
     SecomSignatureFilter secomSignatureFilter;
 
     // Test Variables
@@ -164,7 +166,7 @@ class SecomControllerTest {
     private S201Dataset s201DataSet;
     private String s201DataSetAsXml;
     private DatasetContent datasetContent;
-    private SubscriptionRequest subscriptionRequest;
+    private SubscriptionRequestObject subscriptionRequest;
     private SubscriptionRequest savedSubscriptionRequest;
     private RemoveSubscriptionObject removeSubscriptionObject;
     private AcknowledgementObject acknowledgementObject;
@@ -217,13 +219,13 @@ class SecomControllerTest {
         this.s201DataSet.setDatasetContent(this.datasetContent);
 
         // Setup the subscription requests and responses
-        this.subscriptionRequest = new SubscriptionRequest();
+        this.subscriptionRequest = new SubscriptionRequestObject();
         this.subscriptionRequest.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.subscriptionRequest.setDataProductType(SECOM_DataProductType.S201);
         this.savedSubscriptionRequest = new SubscriptionRequest();
         this.savedSubscriptionRequest.setUuid(UUID.randomUUID());
-        this.savedSubscriptionRequest.setContainerType(ContainerTypeEnum.S100_DataSet);
-        this.savedSubscriptionRequest.setDataProductType(SECOM_DataProductType.S201);
+        this.savedSubscriptionRequest.setContainerType(SecomUtils.translateSecomContainerTypeEnum(ContainerTypeEnum.S100_DataSet));
+        this.savedSubscriptionRequest.setDataProductType(SecomUtils.translateSecomDataProductTypeEnum(SECOM_DataProductType.S201));
         this.removeSubscriptionObject = new RemoveSubscriptionObject();
         this.removeSubscriptionObject.setSubscriptionIdentifier(UUID.randomUUID());
 
@@ -600,7 +602,7 @@ class SecomControllerTest {
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
                 .header(SecomRequestHeaders.MRN_HEADER, "mrn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(Mono.just(subscriptionRequest), SubscriptionRequest.class))
+                .body(BodyInserters.fromPublisher(Mono.just(subscriptionRequest), SubscriptionRequestObject.class))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(SubscriptionResponseObject.class)
@@ -624,7 +626,7 @@ class SecomControllerTest {
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
                 .header(SecomRequestHeaders.MRN_HEADER, "mrn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(Mono.just(subscriptionRequest), SubscriptionRequest.class))
+                .body(BodyInserters.fromPublisher(Mono.just(subscriptionRequest), SubscriptionRequestObject.class))
                 .exchange()
                 .expectStatus().isBadRequest();
     }

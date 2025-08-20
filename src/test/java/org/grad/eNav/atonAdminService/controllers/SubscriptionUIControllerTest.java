@@ -24,6 +24,7 @@ import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.*;
 import org.grad.eNav.atonAdminService.models.dtos.secom.SubscriptionRequestDto;
 import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.utils.SecomUtils;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,13 +35,13 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -56,9 +57,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = SubscriptionController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
+@WebMvcTest(controllers = SubscriptionUIController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
-class SubscriptionControllerTest {
+class SubscriptionUIControllerTest {
 
     /**
      * The Mock MVC.
@@ -75,7 +76,7 @@ class SubscriptionControllerTest {
     /**
      * The Dataset Service mock.
      */
-    @MockBean
+    @MockitoBean
     SecomSubscriptionService secomSubscriptionService;
 
     // Test Variables
@@ -96,8 +97,8 @@ class SubscriptionControllerTest {
         for(long i=0; i<10; i++) {
             SubscriptionRequest subscription = new SubscriptionRequest();
             subscription.setUuid(UUID.randomUUID());
-            subscription.setContainerType(ContainerTypeEnum.S100_DataSet);
-            subscription.setDataProductType(SECOM_DataProductType.S201);
+            subscription.setContainerType(SecomUtils.translateSecomContainerTypeEnum(ContainerTypeEnum.S100_DataSet));
+            subscription.setDataProductType(SecomUtils.translateSecomDataProductTypeEnum(SECOM_DataProductType.S201));
             subscription.setProductVersion("0.0.1");
             subscription.setDataReference(UUID.randomUUID());
             subscription.setGeometry(this.factory.createEmpty(0));

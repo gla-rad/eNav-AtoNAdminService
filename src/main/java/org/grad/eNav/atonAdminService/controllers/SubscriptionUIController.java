@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/subscriptions")
 @Slf4j
-public class SubscriptionController {
+public class SubscriptionUIController {
 
     /**
      * The Dataset Service.

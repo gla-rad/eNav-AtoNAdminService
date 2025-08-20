@@ -37,9 +37,9 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -85,7 +85,7 @@ public class BasicSecomProviderContractTest implements
      * This will basically disable the certificate and signature checking on
      * SECOM requests and will allow testing pacts, without security on.
      */
-    @MockBean
+    @MockitoBean
     SecomSignatureFilter secomSignatureFilter;
 
     /**
@@ -96,25 +96,25 @@ public class BasicSecomProviderContractTest implements
     /**
      * The CKeeper Client mock.
      */
-    @MockBean
+    @MockitoBean
     CKeeperClient cKeeperClient;
 
     /**
      * The Dataset Service mock.
      */
-    @MockBean
+    @MockitoBean
     DatasetService datasetService;
 
     /**
      * The UnLoCodeService Service mock.
      */
-    @MockBean
+    @MockitoBean
     UnLoCodeService unLoCodeService;
 
     /**
      * The SecomSubscriptionService Service mock.
      */
-    @MockBean
+    @MockitoBean
     SecomSubscriptionService secomSubscriptionService;
 
     /**

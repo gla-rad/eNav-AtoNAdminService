@@ -39,7 +39,6 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
 import org.springframework.cloud.openfeign.support.SortJacksonModule;
 import org.springframework.context.annotation.Import;
@@ -48,6 +47,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -83,13 +83,13 @@ class AidsToNavigationControllerTest {
     /**
      * The Aids To Navigation Service mock.
      */
-    @MockBean
+    @MockitoBean
     AidsToNavigationService aidsToNavigationService;
 
     /**
      * The Dataset Service mock.
      */
-    @MockBean
+    @MockitoBean
     DatasetService datasetService;
 
     // Test Variables

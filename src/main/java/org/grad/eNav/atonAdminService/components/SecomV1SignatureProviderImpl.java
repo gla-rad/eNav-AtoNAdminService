@@ -53,7 +53,7 @@ import java.util.Optional;
  */
 @Component
 @Slf4j
-public class SecomSignatureProviderImpl implements SecomSignatureProvider {
+public class SecomV1SignatureProviderImpl implements SecomSignatureProvider {
 
     /**
      * The cKeeper Feign Client.

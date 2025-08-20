@@ -28,10 +28,7 @@ import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.models.dtos.s201.AidsToNavigationDto;
 import org.grad.eNav.atonAdminService.models.enums.ReferenceTypeRole;
-import org.grad.eNav.atonAdminService.utils.GeometryS201Converter;
-import org.grad.eNav.atonAdminService.utils.ReferenceTypeS201Converter;
-import org.grad.eNav.atonAdminService.utils.S201DatasetBuilder;
-import org.grad.eNav.atonAdminService.utils.WKTUtils;
+import org.grad.eNav.atonAdminService.utils.*;
 import org.grad.eNav.s201.utils.S201Utils;
 import org.grad.secom.core.models.SubscriptionRequestObject;
 import org.locationtech.jts.io.ParseException;
@@ -265,22 +262,44 @@ public class GlobalConfig {
                     .includeBase(AidsToNavigation.class, AidsToNavigationDto.class);
         }
 
-        // Now map the SECOM Subscription Requests
-        modelMapper.createTypeMap(SubscriptionRequestObject.class, SubscriptionRequest.class)
+        // Now map the SECOM v1.0 Subscription Requests
+        modelMapper.createTypeMap(org.grad.secom.core.models.SubscriptionRequestObject.class, SubscriptionRequest.class)
+                .implicitMappings()
+                .addMappings(mapper -> {
+                    mapper.using(ctx -> SecomUtils.translateSecomContainerTypeEnum((org.grad.secom.core.models.enums.ContainerTypeEnum)ctx.getSource()))
+                            .map(src -> src.getContainerType(), SubscriptionRequest::setContainerType);
+                    mapper.using(ctx -> SecomUtils.translateSecomDataProductTypeEnum((org.grad.secom.core.models.enums.SECOM_DataProductType)ctx.getSource()))
+                            .map(src -> src.getDataProductType(), SubscriptionRequest::setDataProductType);
+                    mapper.using(ctx -> Optional.of(ctx)
+                                    .map(MappingContext::getSource)
+                                    .map(String.class::cast)
+                                    .map(g -> {
+                                        try {
+                                            return WKTUtils.convertWKTtoGeometry(g);
+                                        } catch (ParseException ex) {
+                                            throw new ValidationException(Collections.singletonList(new ErrorMessage(ex.getMessage())));
+                                        }
+                                    })
+                                    .orElse(null))
+                            .map(src -> src.getGeometry(), SubscriptionRequest::setGeometry);
+                });
+
+        // Now map the SECOM v2.0 Subscription Requests - Use the envelope
+        modelMapper.createTypeMap(org.grad.secomv2.core.models.EnvelopeSubscriptionObject.class, SubscriptionRequest.class)
                 .implicitMappings()
                 .addMappings(mapper -> {
                     mapper.using(ctx -> Optional.of(ctx)
-                            .map(MappingContext::getSource)
-                            .map(String.class::cast)
-                            .map(g -> {
-                                try {
-                                    return WKTUtils.convertWKTtoGeometry(g);
-                                } catch (ParseException ex) {
-                                    throw new ValidationException(Collections.singletonList(new ErrorMessage(ex.getMessage())));
-                                }
-                            })
-                            .orElse(null))
-                            .map(SubscriptionRequestObject::getGeometry, SubscriptionRequest::setGeometry);
+                                    .map(MappingContext::getSource)
+                                    .map(String.class::cast)
+                                    .map(g -> {
+                                        try {
+                                            return WKTUtils.convertWKTtoGeometry(g);
+                                        } catch (ParseException ex) {
+                                            throw new ValidationException(Collections.singletonList(new ErrorMessage(ex.getMessage())));
+                                        }
+                                    })
+                                    .orElse(null))
+                            .map(src -> src.getGeometry(), SubscriptionRequest::setGeometry);
                 });
         // ================================================================== //
 

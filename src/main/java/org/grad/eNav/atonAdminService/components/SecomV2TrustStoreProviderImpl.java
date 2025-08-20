@@ -17,9 +17,9 @@
 package org.grad.eNav.atonAdminService.components;
 
 import lombok.extern.slf4j.Slf4j;
-import org.grad.secom.core.base.SecomTrustStoreProvider;
-import org.grad.secom.core.utils.KeyStoreUtils;
-import org.grad.secom.springboot3.components.SecomConfigProperties;
+import org.grad.secomv2.core.base.SecomTrustStoreProvider;
+import org.grad.secomv2.core.utils.KeyStoreUtils;
+import org.grad.secomv2.springboot3.components.SecomConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,9 +31,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 /**
- * The SECOM Trust Store Provider Implementation.
+ * The SECOM v2.0 Trust Store Provider Implementation.
  *
- * This class contains the implementation of the SECOM trust store provider.
+ * This class contains the implementation of the SECOM v2.0 trust store provider.
  * This is required for the SECOM library to be able to automatically pick up
  * the keystore that contains the trusted SECOM CA certificate chain.
  *
@@ -41,7 +41,7 @@ import java.security.cert.CertificateException;
  */
 @Component
 @Slf4j
-public class SecomTrustStoreProviderImpl implements SecomTrustStoreProvider {
+public class SecomV2TrustStoreProviderImpl implements SecomTrustStoreProvider {
 
     /**
      * The X.509 Root Certificate Alias.
