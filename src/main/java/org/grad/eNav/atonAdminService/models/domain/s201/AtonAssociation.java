@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfAssociationType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfAssociationType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -28,15 +28,15 @@ import java.util.*;
 /**
  * The S-201 Association Entity Class
  * <p/>
- * This class implements the {@link _int.iho.s201.gml.cs0._1.Association}
+ * This class implements the {@link _int.iho.s_201.gml.cs0._2.AtonAggregation}
  * objects of the S-201 data product. These can be used to group multiple
  * Aids to Navigation into a single association with a give type.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.Association
+ * @see _int.iho.s_201.gml.cs0._2.AtonAggregation
  */
 @Entity
-public class Association implements Serializable {
+public class AtonAssociation implements Serializable {
 
     // Class Variables
     @Id
@@ -45,7 +45,16 @@ public class Association implements Serializable {
     private BigInteger id;
 
     @Enumerated(EnumType.STRING)
-    private CategoryOfAssociationType associationType;
+    private CategoryOfAssociationType categoryOfAssociation;
+
+    @JsonBackReference
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "dangerous_feature_association_join_table",
+            joinColumns = { @JoinColumn(name = "association_id") },
+            inverseJoinColumns = { @JoinColumn(name = "dangerous_feature_id") }
+    )
+    final private Set<DangerousFeature> dangers = new HashSet<>();
 
     @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -75,21 +84,42 @@ public class Association implements Serializable {
     }
 
     /**
-     * Gets association type.
+     * Gets category of association.
      *
-     * @return the association type
+     * @return the category of association
      */
-    public CategoryOfAssociationType getAssociationType() {
-        return associationType;
+    public CategoryOfAssociationType getCategoryOfAssociation() {
+        return categoryOfAssociation;
     }
 
     /**
-     * Sets association type.
+     * Sets category of association.
      *
-     * @param associationType the association type
+     * @param categoryOfAssociation the category of association
      */
-    public void setAssociationType(CategoryOfAssociationType associationType) {
-        this.associationType = associationType;
+    public void setCategoryOfAssociation(CategoryOfAssociationType categoryOfAssociation) {
+        this.categoryOfAssociation = categoryOfAssociation;
+    }
+
+    /**
+     * Gets dangers.
+     *
+     * @return the dangers
+     */
+    public Set<DangerousFeature> getDangers() {
+        return dangers;
+    }
+
+    /**
+     * Sets dangers.
+     *
+     * @param dangers the dangers
+     */
+    public void setDangers(Set<DangerousFeature> dangers) {
+        this.dangers.clear();
+        if (dangers!= null) {
+            this.getDangers().addAll(dangers);
+        }
     }
 
     /**
@@ -122,10 +152,12 @@ public class Association implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Association that)) return false;
-        return associationType == that.associationType
+        if (!(o instanceof AtonAssociation that)) return false;
+        return categoryOfAssociation == that.categoryOfAssociation
                 && Objects.equals(this.getPeers().size(), that.getPeers().size())
-                && new HashSet<>(this.getPeerIdCodes()).containsAll(that.getPeerIdCodes());
+                && new HashSet<>(this.getPeerIdCodes()).containsAll(that.getPeerIdCodes())
+                && Objects.equals(this.getDangers().size(), that.getDangers().size())
+                && new HashSet<>(this.getDangerIds()).containsAll(that.getDangerIds());
     }
 
     /**
@@ -136,7 +168,8 @@ public class Association implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(
-                associationType,
+                categoryOfAssociation,
+                Arrays.hashCode(this.getDangerIds().toArray()),
                 Arrays.hashCode(this.getPeerIdCodes().toArray())
         );
     }
@@ -151,6 +184,20 @@ public class Association implements Serializable {
         return this.getPeers()
                 .stream()
                 .map(AidsToNavigation::getIdCode)
+                .sorted()
+                .toList();
+    }
+
+    /**
+     * Returns a list of all the dangerous feature IDs included in the association.
+     *
+     * @return a list of all the dangerous feature IDs included in the association
+     */
+    @JsonIgnore
+    public List<BigInteger> getDangerIds() {
+        return this.getDangers()
+                .stream()
+                .map(DangerousFeature::getId)
                 .sorted()
                 .toList();
     }

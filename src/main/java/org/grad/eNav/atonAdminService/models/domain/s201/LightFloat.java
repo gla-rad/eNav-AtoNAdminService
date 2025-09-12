@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.*;
+import _int.iho.s_201.gml.cs0._2.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,7 +33,7 @@ import java.util.List;
  * super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.LightFloat
+ * @see _int.iho.s_201.gml.cs0._2.LightFloat
  */
 @Entity
 public class LightFloat extends StructureObject {
@@ -51,8 +51,7 @@ public class LightFloat extends StructureObject {
     @ElementCollection(targetClass = NatureOfConstructionType.class)
     private List<NatureOfConstructionType> natureOfConstructions;
 
-    @Enumerated(EnumType.STRING)
-    private RadarConspicuousType radarConspicuous;
+    private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
     private VisualProminenceType visualProminence;
@@ -132,7 +131,7 @@ public class LightFloat extends StructureObject {
      *
      * @return the radar conspicuous
      */
-    public RadarConspicuousType getRadarConspicuous() {
+    public Boolean getRadarConspicuous() {
         return radarConspicuous;
     }
 
@@ -141,7 +140,7 @@ public class LightFloat extends StructureObject {
      *
      * @param radarConspicuous the radar conspicuous
      */
-    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
+    public void setRadarConspicuous(Boolean radarConspicuous) {
         this.radarConspicuous = radarConspicuous;
     }
 

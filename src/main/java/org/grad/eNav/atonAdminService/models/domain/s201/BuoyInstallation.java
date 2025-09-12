@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfInstallationBuoyType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfInstallationBuoyType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,7 +29,7 @@ import jakarta.persistence.Enumerated;
  * {@link GenericBuoy} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.BuoyInstallation
+ * @see _int.iho.s_201.gml.cs0._2.BuoyInstallation
  */
 @Entity
 public class BuoyInstallation extends GenericBuoy {

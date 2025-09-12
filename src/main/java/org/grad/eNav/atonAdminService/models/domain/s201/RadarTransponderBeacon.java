@@ -16,8 +16,8 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfRadarTransponderBeaconType;
-import _int.iho.s201.gml.cs0._1.StatusType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfRadarTransponderBeaconType;
+import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,7 +34,7 @@ import java.util.List;
  * {@link Equipment} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.RadarTransponderBeacon
+ * @see _int.iho.s_201.gml.cs0._2.RadarTransponderBeacon
  */
 @Entity
 public class RadarTransponderBeacon extends Equipment {

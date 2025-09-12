@@ -16,14 +16,8 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.StatusType;
-import jakarta.persistence.ElementCollection;
+import _int.iho.s_201.gml.cs0._2.CategoryOfPhysicalAISAidToNavigationType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.List;
 
 /**
  * The S-201 Physical AIS Aids to Navigation Entity Class.
@@ -33,74 +27,29 @@ import java.util.List;
  * {@link AISAidToNavigation} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.PhysicalAISAidToNavigation
+ * @see _int.iho.s_201.gml.cs0._2.PhysicalAISAidToNavigation
  */
 @Entity
-public class PhysicalAISAidToNavigation extends AISAidToNavigation {
+public class PhysicalAISAidToNavigation extends ElectronicAton {
 
     // Class Variables
-    private BigDecimal estimatedRangeOfTransmission;
+    private CategoryOfPhysicalAISAidToNavigationType categoryOfPhysicalAISAidToNavigationType;
 
     /**
-     * The Mmsi code.
-     */
-    protected BigInteger mmsiCode;
-
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
-
-    /**
-     * Gets estimated range of transmission.
+     * Gets category of physical ais aid to navigation type.
      *
-     * @return the estimated range of transmission
+     * @return the category of physical ais aid to navigation type
      */
-    public BigDecimal getEstimatedRangeOfTransmission() {
-        return estimatedRangeOfTransmission;
+    public CategoryOfPhysicalAISAidToNavigationType getCategoryOfPhysicalAISAidToNavigationType() {
+        return categoryOfPhysicalAISAidToNavigationType;
     }
 
     /**
-     * Sets estimated range of transmission.
+     * Sets category of physical ais aid to navigation type.
      *
-     * @param estimatedRangeOfTransmission the estimated range of transmission
+     * @param categoryOfPhysicalAISAidToNavigationType the category of physical ais aid to navigation type
      */
-    public void setEstimatedRangeOfTransmission(BigDecimal estimatedRangeOfTransmission) {
-        this.estimatedRangeOfTransmission = estimatedRangeOfTransmission;
-    }
-
-    /**
-     * Gets mmsi code.
-     *
-     * @return the mmsi code
-     */
-    public BigInteger getMmsiCode() {
-        return mmsiCode;
-    }
-
-    /**
-     * Sets mmsi code.
-     *
-     * @param mmsiCode the mmsi code
-     */
-    public void setMmsiCode(BigInteger mmsiCode) {
-        this.mmsiCode = mmsiCode;
-    }
-
-    /**
-     * Gets statuses.
-     *
-     * @return the statuses
-     */
-    public List<StatusType> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * Sets statuses.
-     *
-     * @param statuses the statuses
-     */
-    public void setStatuses(List<StatusType> statuses) {
-        this.statuses = statuses;
+    public void setCategoryOfPhysicalAISAidToNavigationType(CategoryOfPhysicalAISAidToNavigationType categoryOfPhysicalAISAidToNavigationType) {
+        this.categoryOfPhysicalAISAidToNavigationType = categoryOfPhysicalAISAidToNavigationType;
     }
 }

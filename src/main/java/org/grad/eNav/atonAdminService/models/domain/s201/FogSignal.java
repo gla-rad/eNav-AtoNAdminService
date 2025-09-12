@@ -16,9 +16,9 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfFogSignalType;
-import _int.iho.s201.gml.cs0._1.SignalGenerationType;
-import _int.iho.s201.gml.cs0._1.StatusType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfFogSignalType;
+import _int.iho.s_201.gml.cs0._2.SignalGenerationType;
+import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,7 +36,7 @@ import java.util.List;
  * class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.FogSignalsType
+ * @see _int.iho.s_201.gml.cs0._2.FogSignalsType
  */
 @Entity
 public class FogSignal extends Equipment {

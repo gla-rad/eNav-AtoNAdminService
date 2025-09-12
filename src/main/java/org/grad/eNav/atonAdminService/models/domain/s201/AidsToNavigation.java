@@ -48,7 +48,7 @@ import java.util.Set;
  * abstract so that we can extend this for each Aids to Navigation type.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.AidsToNavigationType
+ * @see _int.iho.s_201.gml.cs0._2.AidsToNavigationType
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -118,11 +118,11 @@ public abstract class AidsToNavigation implements Serializable {
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "peers")
-    final private Set<Aggregation> aggregations = new HashSet<>();
+    final private Set<AtonAggregation> aggregations = new HashSet<>();
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "peers")
-    final private Set<Association> associations = new HashSet<>();
+    final private Set<AtonAssociation> associations = new HashSet<>();
 
     @ElementCollection
     private List<String> seasonalActionRequireds;
@@ -454,7 +454,7 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @return the aggregations
      */
-    public Set<Aggregation> getAggregations() {
+    public Set<AtonAggregation> getAggregations() {
         return aggregations;
     }
 
@@ -463,7 +463,7 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @param aggregations the aggregations
      */
-    public void setAggregations(Set<Aggregation> aggregations) {
+    public void setAggregations(Set<AtonAggregation> aggregations) {
         this.aggregations.clear();
         if (aggregations != null) {
             // Set the parent correctly
@@ -478,7 +478,7 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @return the associations
      */
-    public Set<Association> getAssociations() {
+    public Set<AtonAssociation> getAssociations() {
         return associations;
     }
 
@@ -487,7 +487,7 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @param associations the associations
      */
-    public void setAssociations(Set<Association> associations) {
+    public void setAssociations(Set<AtonAssociation> associations) {
         this.associations.clear();
         if (associations != null) {
             // Set the parent correctly

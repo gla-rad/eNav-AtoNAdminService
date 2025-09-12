@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.repos;
 
-import org.grad.eNav.atonAdminService.models.domain.s201.Association;
+import org.grad.eNav.atonAdminService.models.domain.s201.AtonAssociation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -28,7 +28,7 @@ import java.util.Set;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AssociationRepo extends JpaRepository<Association, BigInteger>  {
+public interface AtonAssociationRepo extends JpaRepository<AtonAssociation, BigInteger>  {
 
     /**
      * Retrieves all the associations that include the ID Code of the AtoN
@@ -37,7 +37,7 @@ public interface AssociationRepo extends JpaRepository<Association, BigInteger> 
      * @param idCode The AtoN ID code to find the corresponding associations
      * @return the associations that include the specified AtoN number
      */
-    @Query("SELECT a FROM Association a JOIN a.peers p WHERE p.idCode = :idCode")
-    Set<Association> findByIncludedIdCode(String idCode);
+    @Query("SELECT a FROM AtonAssociation a JOIN a.peers p WHERE p.idCode = :idCode")
+    Set<AtonAssociation> findByIncludedIdCode(String idCode);
 
 }

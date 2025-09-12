@@ -16,10 +16,10 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.ColourPatternType;
-import _int.iho.s201.gml.cs0._1.ColourType;
-import _int.iho.s201.gml.cs0._1.MarksNavigationalSystemOfType;
-import _int.iho.s201.gml.cs0._1.StatusType;
+import _int.iho.s_201.gml.cs0._2.ColourPatternType;
+import _int.iho.s_201.gml.cs0._2.ColourType;
+import _int.iho.s_201.gml.cs0._2.MarksNavigationalSystemOfType;
+import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,7 +34,7 @@ import java.util.List;
  * class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.Topmark
+ * @see _int.iho.s_201.gml.cs0._2.Topmark
  */
 @Entity
 public class Topmark extends Equipment {

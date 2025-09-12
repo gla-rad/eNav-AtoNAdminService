@@ -26,7 +26,7 @@ import jakarta.persistence.Entity;
  * {@link GenericBuoy} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.BuoyEmergencyWreckMarking
+ * @see _int.iho.s_201.gml.cs0._2.BuoyEmergencyWreckMarking
  */
 @Entity
 public class BuoyEmergencyWreckMarking extends GenericBuoy {

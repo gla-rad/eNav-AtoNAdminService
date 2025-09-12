@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfAssociationType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfAssociationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
@@ -31,11 +31,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AssociationTest {
+class AtonAssociationTest {
 
     // Test Variables
-    private Association association1;
-    private Association association2;
+    private AtonAssociation association1;
+    private AtonAssociation association2;
 
     /**
      * Common setup for all the tests.
@@ -46,12 +46,12 @@ class AssociationTest {
         GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
 
         // Construct the aggregations
-        this.association1 = new Association();
+        this.association1 = new AtonAssociation();
         this.association1.setId(BigInteger.ONE);
-        this.association1.setAssociationType(CategoryOfAssociationType.DANGER_MARKINGS);
-        this.association2 = new Association();
+        this.association1.setCategoryOfAssociation(CategoryOfAssociationType.DANGER_MARKINGS);
+        this.association2 = new AtonAssociation();
         this.association2.setId(BigInteger.ONE);
-        this.association2.setAssociationType(CategoryOfAssociationType.DANGER_MARKINGS);
+        this.association2.setCategoryOfAssociation(CategoryOfAssociationType.DANGER_MARKINGS);
 
         // Initialise the AtoN messages list
         List<AidsToNavigation> aidsToNavigationList = new ArrayList<>();

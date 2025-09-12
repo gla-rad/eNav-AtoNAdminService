@@ -15,13 +15,13 @@
  */
 
 package org.grad.eNav.atonAdminService.components;
-import _int.iho.s201.s100.gml.profiles._5_2.AbstractGMLType;
-import _int.iho.s201.s100.gml.profiles._5_2.ReferenceType;
-import _int.iho.s201.gml.cs0._1.AidsToNavigationType;
-import _int.iho.s201.gml.cs0._1.EquipmentType;
-import _int.iho.s201.gml.cs0._1.StructureObjectType;
-import _int.iho.s201.gml.cs0._1.impl.AggregationImpl;
-import _int.iho.s201.gml.cs0._1.impl.AssociationImpl;
+import _int.iho.s_201.s_100.gml.profiles._5_2.AbstractGMLType;
+import _int.iho.s_201.s_100.gml.profiles._5_2.ReferenceType;
+import _int.iho.s_201.gml.cs0._2.AidsToNavigationType;
+import _int.iho.s_201.gml.cs0._2.EquipmentType;
+import _int.iho.s_201.gml.cs0._2.StructureObjectType;
+import _int.iho.s_201.gml.cs0._2.impl.AtonAggregationImpl;
+import _int.iho.s_201.gml.cs0._2.impl.AtonAssociationImpl;
 import jakarta.annotation.PreDestroy;
 import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
@@ -302,14 +302,14 @@ public class S201GDSListener implements FeatureListener {
         combinedAidsToNavigationMap.putAll(otherAidsToNavigationMap);
 
         // Now start building the links to the remaining objects (e.g. aggregations/associations)
-        final Map<String, Aggregation> aggregationsMap = members.stream()
-                .filter(AggregationImpl.class::isInstance)
-                .map(AggregationImpl.class::cast)
+        final Map<String, AtonAggregation> aggregationsMap = members.stream()
+                .filter(AtonAggregationImpl.class::isInstance)
+                .map(AtonAggregationImpl.class::cast)
                 .collect(Collectors.toMap(
-                        AggregationImpl::getId,
+                        AtonAggregationImpl::getId,
                         aggr -> {
-                            Aggregation result = this.modelMapper.map(aggr, Aggregation.class);
-                            result.setPeers(aggr.getPeers()
+                            AtonAggregation result = this.modelMapper.map(aggr, AtonAggregation.class);
+                            result.setPeers(aggr.getAtonAggregationBies()
                                     .stream()
                                     .map(this::getInternalReference)
                                     .filter(combinedAidsToNavigationMap::containsKey)
@@ -318,14 +318,14 @@ public class S201GDSListener implements FeatureListener {
                             return result;
                         }
                 ));
-        final Map<String, Association> associationsMap = members.stream()
-                .filter(AssociationImpl.class::isInstance)
-                .map(AssociationImpl.class::cast)
+        final Map<String, AtonAssociation> associationsMap = members.stream()
+                .filter(AtonAssociationImpl.class::isInstance)
+                .map(AtonAssociationImpl.class::cast)
                 .collect(Collectors.toMap(
-                        AssociationImpl::getId,
+                        AtonAssociationImpl::getId,
                         asso -> {
-                            Association result = this.modelMapper.map(asso, Association.class);
-                            result.setPeers(asso.getPeers()
+                            AtonAssociation result = this.modelMapper.map(asso, AtonAssociation.class);
+                            result.setPeers(asso.getAtonAssociationBies()
                                     .stream()
                                     .map(this::getInternalReference)
                                     .filter(combinedAidsToNavigationMap::containsKey)
@@ -364,8 +364,8 @@ public class S201GDSListener implements FeatureListener {
                             .ifPresent(l -> l.add(equipmentTypeMap.get(equipment.getId())));
                 }
                 // Handle aggregation members
-                if (member instanceof AggregationImpl aggregation) {
-                    aggregation.getPeers()
+                if (member instanceof AtonAggregationImpl aggregation) {
+                    aggregation.getAtonAggregationBies()
                             .stream()
                             .map(this::getInternalReference)
                             .filter(combinedAidsToNavigationMap::containsKey)
@@ -374,8 +374,8 @@ public class S201GDSListener implements FeatureListener {
                             .forEach(aggregations -> aggregations.add(aggregationsMap.get(aggregation.getId())));
                 }
                 // Handle association members
-                if (member instanceof AssociationImpl association) {
-                    association.getPeers()
+                if (member instanceof AtonAssociationImpl association) {
+                    association.getAtonAssociationBies()
                             .stream()
                             .map(this::getInternalReference)
                             .filter(combinedAidsToNavigationMap::containsKey)

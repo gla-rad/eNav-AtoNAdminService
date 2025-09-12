@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.AidAvailabilityCategoryType;
+import _int.iho.s_201.gml.cs0._2.AidAvailabilityCategoryType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -33,7 +33,7 @@ import java.util.Set;
  * Each structure contains a list of equipment objects that is hosts.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.StructureObjectType
+ * @see _int.iho.s_201.gml.cs0._2.StructureObjectType
  */
 @Entity
 public abstract class StructureObject extends AidsToNavigation {

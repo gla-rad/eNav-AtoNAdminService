@@ -17,7 +17,7 @@
 package org.grad.eNav.atonAdminService.services;
 
 
-import _int.iho.s201.s100.gml.base._5_2.MDTopicCategoryCode;
+import _int.iho.s_201.s_100.gml.base._5_2.MDTopicCategoryCode;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;

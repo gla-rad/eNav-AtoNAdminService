@@ -16,10 +16,10 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.AidsToNavigationType;
-import _int.iho.s201.gml.cs0._1.EquipmentType;
-import _int.iho.s201.gml.cs0._1.StructureObjectType;
-import _int.iho.s201.gml.cs0._1.impl.*;
+import _int.iho.s_201.gml.cs0._2.AidsToNavigationType;
+import _int.iho.s_201.gml.cs0._2.EquipmentType;
+import _int.iho.s_201.gml.cs0._2.StructureObjectType;
+import _int.iho.s_201.gml.cs0._2.impl.*;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -36,22 +36,27 @@ import java.util.Optional;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public enum S201AtonTypes {
-    CARDINAL_BEACON("Cardinal Beacon", BeaconCardinalImpl.class,  BeaconCardinal.class),
-    LATERAL_BEACON("Lateral Beacon", BeaconLateralImpl.class, BeaconLateral.class),
-    ISOLATED_DANGER_BEACON("Isolated Danger Beacon", BeaconIsolatedDangerImpl.class, BeaconIsolatedDanger.class),
-    SAFE_WATER_BEACON("Safe Water Beacon", BeaconSafeWaterImpl.class, BeaconSafeWater.class),
-    SPECIAL_PURPOSE_BEACON("Special Purpose Beacon", BeaconSpecialPurposeGeneralImpl.class, BeaconSpecialPurpose.class),
-    CARDINAL_BUOY("Cardinal Buoy", BuoyCardinalImpl.class, BuoyCardinal.class),
-    LATERAL_BUOY("Lateral Buoy", BuoyLateralImpl.class, BuoyLateral.class),
-    INSTALLATION_BUOY("Installation Buoy", BuoyInstallationImpl.class, BuoyInstallation.class),
-    ISOLATED_DANGER_BUOY("Isolated Danger Buoy", BuoyIsolatedDangerImpl.class, BuoyIsolatedDanger.class),
-    SAFE_WATER_BUOY("Safe Water Buoy", BuoySafeWaterImpl.class, BuoySafeWater.class),
-    SPECIAL_PURPOSE_BUOY("Special Purpose Buoy", BuoySpecialPurposeGeneralImpl.class, BuoySpecialPurpose.class),
-    EMERGENCY_WRECK_MARKING_BUOY("Emergency Wreck Marking Buoy", BuoyEmergencyWreckMarkingImpl.class, BuoyEmergencyWreckMarking.class),
+    CARDINAL_BEACON("Cardinal Beacon", CardinalBeaconImpl.class,  BeaconCardinal.class),
+    LATERAL_BEACON("Lateral Beacon", LateralBeaconImpl.class, BeaconLateral.class),
+    ISOLATED_DANGER_BEACON("Isolated Danger Beacon", IsolatedDangerBeaconImpl.class, BeaconIsolatedDanger.class),
+    SAFE_WATER_BEACON("Safe Water Beacon", SafeWaterBeaconImpl.class, BeaconSafeWater.class),
+    SPECIAL_PURPOSE_BEACON("Special Purpose Beacon", SpecialPurposeGeneralBeaconImpl.class, BeaconSpecialPurpose.class),
+    CARDINAL_BUOY("Cardinal Buoy", CardinalBuoyImpl.class, BuoyCardinal.class),
+    LATERAL_BUOY("Lateral Buoy", LateralBuoyImpl.class, BuoyLateral.class),
+    INSTALLATION_BUOY("Installation Buoy", InstallationBuoyImpl.class, BuoyInstallation.class),
+    ISOLATED_DANGER_BUOY("Isolated Danger Buoy", IsolatedDangerBuoyImpl.class, BuoyIsolatedDanger.class),
+    SAFE_WATER_BUOY("Safe Water Buoy", SafeWaterBuoyImpl.class, BuoySafeWater.class),
+    SPECIAL_PURPOSE_BUOY("Special Purpose Buoy", SpecialPurposeGeneralBuoyImpl.class, BuoySpecialPurpose.class),
+    EMERGENCY_WRECK_MARKING_BUOY("Emergency Wreck Marking Buoy", EmergencyWreckMarkingBuoyImpl.class, BuoyEmergencyWreckMarking.class),
     DAYMARK("Daymark", DaymarkImpl.class, Daymark.class),
+    BUILDING("Building", BuildingImpl.class, Building.class),
+    BRIDGE("Bridge", BridgeImpl.class, Bridge.class),
     ENVIRONMENT_OBSERVATION_EQUIPMENT("Environment Observation Equipment", EnvironmentObservationEquipmentImpl.class, EnvironmentObservationEquipment.class),
     FOG_SIGNAL("Fog Signal", FogSignalImpl.class, FogSignal.class),
-    LIGHT("Light", LightImpl.class, Light.class),
+    LIGHT_ALL_AROUND("Light All Around", LightAllAroundImpl.class, LightAllAround.class),
+    LIGHT_AIR_OBSTRUCTION("Light All Around", LightAirObstructionImpl.class, LightAirObstruction.class),
+    LIGHT_FOG_DETECTOR("Light Fog Detector", LightFogDetectorImpl.class, LightFogDetector.class),
+    LIGHT_SECTORED("Light Sectored", LightSectoredImpl.class, LightSectored.class),
     LIGHT_FLOAT("Light Float", LightFloatImpl.class, LightFloat.class),
     LANDMARK("Cardinal Beacon", LandmarkTypeImpl.class, Landmark.class),
     LIGHTHOUSE("Lighthouse", LighthouseImpl.class, Lighthouse.class),
@@ -65,7 +70,7 @@ public enum S201AtonTypes {
     RADAR_TRANSPONDER_BEACON("Radar Transponder Beacon", RadarTransponderBeaconImpl.class, RadarTransponderBeacon.class),
     RADIO_STATION("Radio Station", RadioStationImpl.class, RadioStation.class),
     RECOMMENDED_TRACK("Recommended Track", RecommendedTrackImpl.class, RecommendedTrack.class),
-    RETRO_REFLECTOR("Retro Reflector", RetroReflectorImpl.class, RetroReflector.class),
+    RETRO_REFLECTOR("Retro Reflector", RetroreflectorImpl.class, RetroReflector.class),
     SILO_TANK("Silo Tank", SiloTankImpl.class, SiloTank.class),
     SYNTHETIC_AIS_ATON("Virtual AtoN", SyntheticAISAidToNavigationImpl.class, SyntheticAISAidToNavigation.class),
     TOPMARK("Topmark", TopmarkImpl.class, Topmark.class),

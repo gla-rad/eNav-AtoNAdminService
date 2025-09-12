@@ -322,12 +322,12 @@ class S201GDSListenerTest {
         assertNotNull(aidsToNavigation.getFirst().getAggregations());
         assertFalse(aidsToNavigation.getFirst().getAggregations().isEmpty());
         assertEquals(1, aidsToNavigation.getFirst().getAggregations().size());
-        assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(Aggregation::getPeers).orElse(null));
-        assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(Aggregation::getPeers).stream().count());
+        assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).orElse(null));
+        assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).stream().count());
         assertNotNull(aidsToNavigation.getFirst().getAssociations());
         assertFalse(aidsToNavigation.getFirst().getAggregations().isEmpty());
         assertEquals(1, aidsToNavigation.getFirst().getAggregations().size());
-        assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(Aggregation::getPeers).orElse(null));
-        assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(Aggregation::getPeers).stream().count());
+        assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).orElse(null));
+        assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).stream().count());
     }
 }

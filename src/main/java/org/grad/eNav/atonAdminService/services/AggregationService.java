@@ -20,9 +20,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.shaded.com.google.common.collect.Sets;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
-import org.grad.eNav.atonAdminService.models.domain.s201.Aggregation;
+import org.grad.eNav.atonAdminService.models.domain.s201.AtonAggregation;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
-import org.grad.eNav.atonAdminService.repos.AggregationRepo;
+import org.grad.eNav.atonAdminService.repos.AtonAggregationRepo;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class AggregationService {
      * The Aggregation Repo.
      */
     @Autowired
-    AggregationRepo aggregationRepo;
+    AtonAggregationRepo atonAggregationRepo;
 
     /**
      * The Aids to Navigation Repo.
@@ -64,11 +64,11 @@ public class AggregationService {
      * @return the persisted aggregation entity
      */
     @Transactional
-    public Aggregation save(Aggregation aggregation) {
+    public AtonAggregation save(AtonAggregation aggregation) {
         log.debug("Request to save aggregation : {}", aggregation);
 
         // Now save for each type
-        return this.aggregationRepo.save(aggregation);
+        return this.atonAggregationRepo.save(aggregation);
     }
 
     /**
@@ -77,15 +77,15 @@ public class AggregationService {
      * @param id the ID of the Aggregation
      */
     @Transactional
-    public Aggregation delete(BigInteger id) {
+    public AtonAggregation delete(BigInteger id) {
         log.debug("Request to delete aggregation with ID : {}", id);
 
         // Make sure the station node exists
-        final Aggregation aggregation = this.aggregationRepo.findById(id)
+        final AtonAggregation aggregation = this.atonAggregationRepo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(String.format("No aggregation found for the provided ID: %d", id)));
 
         // Now delete the aggregation
-        this.aggregationRepo.delete(aggregation);
+        this.atonAggregationRepo.delete(aggregation);
 
         // And return the object for AOP
         return aggregation;
@@ -108,22 +108,22 @@ public class AggregationService {
      * @return the update Aids to Navigation
      */
     @Transactional
-    public Set<Aggregation> updateAidsToNavigationAggregations(@NotNull String idCode, @NotNull Set<Aggregation> newAggregations) {
+    public Set<AtonAggregation> updateAidsToNavigationAggregations(@NotNull String idCode, @NotNull Set<AtonAggregation> newAggregations) {
         // Find the matching new aggregations
-        final Set<Aggregation> oldAggregations = this.aggregationRepo.findByIncludedIdCode(idCode);
+        final Set<AtonAggregation> oldAggregations = this.atonAggregationRepo.findByIncludedIdCode(idCode);
 
         // Perform the set operations - find the existing ones to be retained
-        final Set<Aggregation> existingAggregations = Sets.intersection(oldAggregations, newAggregations);
+        final Set<AtonAggregation> existingAggregations = Sets.intersection(oldAggregations, newAggregations);
 
         // Delete the obsolete aggregations
-        final Set<Aggregation> deletedAggregations = Sets.difference(oldAggregations, existingAggregations)
+        final Set<AtonAggregation> deletedAggregations = Sets.difference(oldAggregations, existingAggregations)
                 .stream()
-                .map(Aggregation::getId)
+                .map(AtonAggregation::getId)
                 .map(this::delete)
                 .collect(Collectors.toSet());
 
         // Create the new aggregations
-        final Set<Aggregation> createdAggregations = Sets.difference(newAggregations, existingAggregations)
+        final Set<AtonAggregation> createdAggregations = Sets.difference(newAggregations, existingAggregations)
                 .stream()
                 // We need to make sure that we have the correct objects to persist
                 .peek(aggregation -> aggregation.setPeers(aggregation.getPeers()

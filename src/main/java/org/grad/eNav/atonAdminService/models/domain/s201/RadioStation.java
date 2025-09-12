@@ -16,8 +16,8 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfRadioStationType;
-import _int.iho.s201.gml.cs0._1.StatusType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfRadioStationType;
+import _int.iho.s_201.gml.cs0._2.StatusType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.RadioStation
+ * @see _int.iho.s_201.gml.cs0._2.RadioStation
  */
 @Entity
 public class RadioStation extends Equipment {

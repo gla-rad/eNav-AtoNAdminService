@@ -16,8 +16,8 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfNavigationLineType;
-import _int.iho.s201.gml.cs0._1.StatusType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfNavigationLineType;
+import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
  * super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.NavigationLine
+ * @see _int.iho.s_201.gml.cs0._2.NavigationLine
  */
 @Entity
 public class NavigationLine extends AidsToNavigation {

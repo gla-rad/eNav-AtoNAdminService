@@ -16,10 +16,12 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.*;
+import _int.iho.s_201.gml.cs0._2.*;
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The S-201 Recommended Track Entity Class.
@@ -29,81 +31,67 @@ import java.util.List;
  * {@link AidsToNavigation} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.RecommendedTrack
+ * @see _int.iho.s_201.gml.cs0._2.RecommendedTrack
  */
 @Entity
 public class RecommendedTrack extends AidsToNavigation {
 
     // Class Variables
-    @Enumerated(EnumType.STRING)
-    private CategoryOfRecommendedTrackType categoryOfRecommendedTrack;
-
-    private BigDecimal depthRangeMaximumValue;
+    private Boolean basedOnFixedMarks;
 
     private BigDecimal depthRangeMinimumValue;
 
-    private BigDecimal orientation;
-
-    private QualityOfVerticalMeasurementType qualityOfVerticalMeasurement;
-
-    private BigDecimal soundingAccuracy;
+    private BigDecimal maximumPermittedDraught;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private VerticalDatumType verticalDatum;
+
+    private Orientation orientation;
+
+    private VerticalUncertainty verticalUncertainty;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = TechniqueOfSoundingMeasurementType.class)
-    private List<TechniqueOfSoundingMeasurementType> techniqueOfSoundingMeasurements;
+    @ElementCollection(targetClass = QualityOfVerticalMeasurementType.class)
+    private Set<QualityOfVerticalMeasurementType> qualityOfVerticalMeasurement;
+
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = TechniqueOfVerticalMeasurementType.class)
+    private Set<TechniqueOfVerticalMeasurementType> techniqueOfVerticalMeasurements;
 
     @Enumerated(EnumType.STRING)
     private TrafficFlowType trafficFlow;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = StatusType.class)
+    private Set<StatusType> statuses;
+
+    /**
+     * The Navigation lines.
+     */
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "recommended_track_nav_lines",
-            joinColumns = { @JoinColumn(name = "recommended_track_id") },
-            inverseJoinColumns = { @JoinColumn(name = "navigation_line_id") }
+            joinColumns = {@JoinColumn(name = "recommended_track_id")},
+            inverseJoinColumns = {@JoinColumn(name = "navigation_line_id")}
     )
-    private List<NavigationLine> navigationLines;
-
-    @Enumerated(EnumType.STRING)
-    protected VerticalDatumType verticalDatum;
+    private final Set<NavigationLine> navigationLines = new HashSet<>();
 
     /**
-     * Gets category of recommended track.
+     * Gets based on fixed marks.
      *
-     * @return the category of recommended track
+     * @return the based on fixed marks
      */
-    public CategoryOfRecommendedTrackType getCategoryOfRecommendedTrack() {
-        return categoryOfRecommendedTrack;
+    public Boolean getBasedOnFixedMarks() {
+        return basedOnFixedMarks;
     }
 
     /**
-     * Sets category of recommended track.
+     * Sets based on fixed marks.
      *
-     * @param categoryOfRecommendedTrack the category of recommended track
+     * @param basedOnFixedMarks the based on fixed marks
      */
-    public void setCategoryOfRecommendedTrack(CategoryOfRecommendedTrackType categoryOfRecommendedTrack) {
-        this.categoryOfRecommendedTrack = categoryOfRecommendedTrack;
-    }
-
-    /**
-     * Gets depth range maximum value.
-     *
-     * @return the depth range maximum value
-     */
-    public BigDecimal getDepthRangeMaximumValue() {
-        return depthRangeMaximumValue;
-    }
-
-    /**
-     * Sets depth range maximum value.
-     *
-     * @param depthRangeMaximumValue the depth range maximum value
-     */
-    public void setDepthRangeMaximumValue(BigDecimal depthRangeMaximumValue) {
-        this.depthRangeMaximumValue = depthRangeMaximumValue;
+    public void setBasedOnFixedMarks(Boolean basedOnFixedMarks) {
+        this.basedOnFixedMarks = basedOnFixedMarks;
     }
 
     /**
@@ -125,11 +113,47 @@ public class RecommendedTrack extends AidsToNavigation {
     }
 
     /**
+     * Gets maximum permitted draught.
+     *
+     * @return the maximum permitted draught
+     */
+    public BigDecimal getMaximumPermittedDraught() {
+        return maximumPermittedDraught;
+    }
+
+    /**
+     * Sets maximum permitted draught.
+     *
+     * @param maximumPermittedDraught the maximum permitted draught
+     */
+    public void setMaximumPermittedDraught(BigDecimal maximumPermittedDraught) {
+        this.maximumPermittedDraught = maximumPermittedDraught;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
      * Gets orientation.
      *
      * @return the orientation
      */
-    public BigDecimal getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
@@ -138,8 +162,26 @@ public class RecommendedTrack extends AidsToNavigation {
      *
      * @param orientation the orientation
      */
-    public void setOrientation(BigDecimal orientation) {
+    public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
+    }
+
+    /**
+     * Gets vertical uncertainty.
+     *
+     * @return the vertical uncertainty
+     */
+    public VerticalUncertainty getVerticalUncertainty() {
+        return verticalUncertainty;
+    }
+
+    /**
+     * Sets vertical uncertainty.
+     *
+     * @param verticalUncertainty the vertical uncertainty
+     */
+    public void setVerticalUncertainty(VerticalUncertainty verticalUncertainty) {
+        this.verticalUncertainty = verticalUncertainty;
     }
 
     /**
@@ -147,7 +189,7 @@ public class RecommendedTrack extends AidsToNavigation {
      *
      * @return the quality of vertical measurement
      */
-    public QualityOfVerticalMeasurementType getQualityOfVerticalMeasurement() {
+    public Set<QualityOfVerticalMeasurementType> getQualityOfVerticalMeasurement() {
         return qualityOfVerticalMeasurement;
     }
 
@@ -156,62 +198,26 @@ public class RecommendedTrack extends AidsToNavigation {
      *
      * @param qualityOfVerticalMeasurement the quality of vertical measurement
      */
-    public void setQualityOfVerticalMeasurement(QualityOfVerticalMeasurementType qualityOfVerticalMeasurement) {
+    public void setQualityOfVerticalMeasurement(Set<QualityOfVerticalMeasurementType> qualityOfVerticalMeasurement) {
         this.qualityOfVerticalMeasurement = qualityOfVerticalMeasurement;
     }
 
     /**
-     * Gets sounding accuracy.
+     * Gets technique of vertical measurements.
      *
-     * @return the sounding accuracy
+     * @return the technique of vertical measurements
      */
-    public BigDecimal getSoundingAccuracy() {
-        return soundingAccuracy;
+    public Set<TechniqueOfVerticalMeasurementType> getTechniqueOfVerticalMeasurements() {
+        return techniqueOfVerticalMeasurements;
     }
 
     /**
-     * Sets sounding accuracy.
+     * Sets technique of vertical measurements.
      *
-     * @param soundingAccuracy the sounding accuracy
+     * @param techniqueOfVerticalMeasurements the technique of vertical measurements
      */
-    public void setSoundingAccuracy(BigDecimal soundingAccuracy) {
-        this.soundingAccuracy = soundingAccuracy;
-    }
-
-    /**
-     * Gets statuses.
-     *
-     * @return the statuses
-     */
-    public List<StatusType> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * Sets statuses.
-     *
-     * @param statuses the statuses
-     */
-    public void setStatuses(List<StatusType> statuses) {
-        this.statuses = statuses;
-    }
-
-    /**
-     * Gets technique of sounding measurements.
-     *
-     * @return the technique of sounding measurements
-     */
-    public List<TechniqueOfSoundingMeasurementType> getTechniqueOfSoundingMeasurements() {
-        return techniqueOfSoundingMeasurements;
-    }
-
-    /**
-     * Sets technique of sounding measurements.
-     *
-     * @param techniqueOfSoundingMeasurements the technique of sounding measurements
-     */
-    public void setTechniqueOfSoundingMeasurements(List<TechniqueOfSoundingMeasurementType> techniqueOfSoundingMeasurements) {
-        this.techniqueOfSoundingMeasurements = techniqueOfSoundingMeasurements;
+    public void setTechniqueOfVerticalMeasurements(Set<TechniqueOfVerticalMeasurementType> techniqueOfVerticalMeasurements) {
+        this.techniqueOfVerticalMeasurements = techniqueOfVerticalMeasurements;
     }
 
     /**
@@ -233,11 +239,29 @@ public class RecommendedTrack extends AidsToNavigation {
     }
 
     /**
+     * Gets statuses.
+     *
+     * @return the statuses
+     */
+    public Set<StatusType> getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * Sets statuses.
+     *
+     * @param statuses the statuses
+     */
+    public void setStatuses(Set<StatusType> statuses) {
+        this.statuses = statuses;
+    }
+
+    /**
      * Gets navigation lines.
      *
      * @return the navigation lines
      */
-    public List<NavigationLine> getNavigationLines() {
+    public Set<NavigationLine> getNavigationLines() {
         return navigationLines;
     }
 
@@ -246,25 +270,13 @@ public class RecommendedTrack extends AidsToNavigation {
      *
      * @param navigationLines the navigation lines
      */
-    public void setNavigationLines(List<NavigationLine> navigationLines) {
-        this.navigationLines = navigationLines;
-    }
-
-    /**
-     * Gets vertical datum.
-     *
-     * @return the vertical datum
-     */
-    public VerticalDatumType getVerticalDatum() {
-        return verticalDatum;
-    }
-
-    /**
-     * Sets vertical datum.
-     *
-     * @param verticalDatum the vertical datum
-     */
-    public void setVerticalDatum(VerticalDatumType verticalDatum) {
-        this.verticalDatum = verticalDatum;
+    public void setNavigationLines(Set<NavigationLine> navigationLines) {
+        this.navigationLines.clear();
+        if (navigationLines != null) {
+            // Set the parent correctly
+            navigationLines.forEach(fn -> fn.getNavigableTracks().add(this));
+            // And update the associations
+            this.navigationLines.addAll(navigationLines);
+        }
     }
 }

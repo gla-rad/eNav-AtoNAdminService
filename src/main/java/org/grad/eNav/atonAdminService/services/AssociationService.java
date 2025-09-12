@@ -21,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.shaded.com.google.common.collect.Sets;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
-import org.grad.eNav.atonAdminService.models.domain.s201.Association;
+import org.grad.eNav.atonAdminService.models.domain.s201.AtonAssociation;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
-import org.grad.eNav.atonAdminService.repos.AssociationRepo;
+import org.grad.eNav.atonAdminService.repos.AtonAssociationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +48,7 @@ public class AssociationService {
      * The Association Repo.
      */
     @Autowired
-    AssociationRepo associationRepo;
+    AtonAssociationRepo atonAssociationRepo;
 
     /**
      * The Aids to Navigation Repo.
@@ -64,11 +64,11 @@ public class AssociationService {
      * @return the persisted association entity
      */
     @Transactional
-    public Association save(Association association) {
+    public AtonAssociation save(AtonAssociation association) {
         log.debug("Request to save Aggregation : {}", association);
 
         // Now save for each type
-        return this.associationRepo.save(association);
+        return this.atonAssociationRepo.save(association);
     }
 
     /**
@@ -77,15 +77,15 @@ public class AssociationService {
      * @param id the ID of the Association
      */
     @Transactional
-    public Association delete(BigInteger id) {
+    public AtonAssociation delete(BigInteger id) {
         log.debug("Request to delete association with ID : {}", id);
 
         // Make sure the station node exists
-        final Association association = this.associationRepo.findById(id)
+        final AtonAssociation association = this.atonAssociationRepo.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(String.format("No association found for the provided ID: %d", id)));
 
         // Now delete the association
-        this.associationRepo.delete(association);
+        this.atonAssociationRepo.delete(association);
 
         // And return the object for AOP
         return association;
@@ -108,22 +108,22 @@ public class AssociationService {
      * @return the update Aids to Navigation
      */
     @Transactional
-    public Set<Association> updateAidsToNavigationAssociations(@NotNull String idCode, @NotNull Set<Association> newAssociations) {
+    public Set<AtonAssociation> updateAidsToNavigationAssociations(@NotNull String idCode, @NotNull Set<AtonAssociation> newAssociations) {
         // Find the matching new aggregations
-        final Set<Association> oldAssociations = this.associationRepo.findByIncludedIdCode(idCode);
+        final Set<AtonAssociation> oldAssociations = this.atonAssociationRepo.findByIncludedIdCode(idCode);
 
         // Perform the set operations - find the existing ones to be retained
-        final Set<Association> existingAssociations = Sets.intersection(oldAssociations, newAssociations);
+        final Set<AtonAssociation> existingAssociations = Sets.intersection(oldAssociations, newAssociations);
 
         // Delete the obsolete aggregations
-        final Set<Association> deletedAssociations = Sets.difference(oldAssociations, existingAssociations)
+        final Set<AtonAssociation> deletedAssociations = Sets.difference(oldAssociations, existingAssociations)
                 .stream()
-                .map(Association::getId)
+                .map(AtonAssociation::getId)
                 .map(this::delete)
                 .collect(Collectors.toSet());
 
         // Create the new aggregations
-        final Set<Association> createdAssociations = Sets.difference(newAssociations, existingAssociations)
+        final Set<AtonAssociation> createdAssociations = Sets.difference(newAssociations, existingAssociations)
                 .stream()
                 // We need to make sure that we have the correct objects to persist
                 .peek(association -> association.setPeers(association.getPeers()

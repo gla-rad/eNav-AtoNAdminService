@@ -16,11 +16,11 @@
 
 package org.grad.eNav.atonAdminService.services;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfAggregationType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfAssociationType;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
-import org.grad.eNav.atonAdminService.repos.AggregationRepo;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
+import org.grad.eNav.atonAdminService.repos.AtonAssociationRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,20 +43,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AggregationServiceTest {
+class AtonAssociationServiceTest {
 
     /**
      * The Tested Service.
      */
     @InjectMocks
     @Spy
-    AggregationService aggregationService;
+    AssociationService associationService;
 
     /**
-     * The Aggregation Repo mock.
+     * The Association Repo mock.
      */
     @Mock
-    AggregationRepo aggregationRepo;
+    AtonAssociationRepo atonAssociationRepo;
 
     /**
      * The Aids to Navigation Repo mock.
@@ -65,7 +65,7 @@ class AggregationServiceTest {
     AidsToNavigationRepo aidsToNavigationRepo;
 
     // Test Variables
-    private Aggregation aggregation;
+    private AtonAssociation association;
 
     /**
      * Common setup for all the tests.
@@ -75,9 +75,9 @@ class AggregationServiceTest {
         // Create a temp geometry factory to get a test geometries
         GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
 
-        this.aggregation = new Aggregation();
-        this.aggregation.setId(BigInteger.ONE);
-        this.aggregation.setAggregationType(CategoryOfAggregationType.BUOY_MOORING);
+        this.association = new AtonAssociation();
+        this.association.setId(BigInteger.ONE);
+        this.association.setCategoryOfAssociation(CategoryOfAssociationType.DANGER_MARKINGS);
 
         // Initialise the AtoN messages list
         for(long i=0; i<5; i++) {
@@ -93,68 +93,68 @@ class AggregationServiceTest {
             Information information = new Information();
             information.setText("Description of AtoN No" + i);
             aidsToNavigation.setInformations(Collections.singleton(information));
-            this.aggregation.getPeers().add(aidsToNavigation);
+            this.association.getPeers().add(aidsToNavigation);
         }
     }
 
     /**
-     * Test that we can save correctly a new or existing aggregation entry if
+     * Test that we can save correctly a new or existing association entry if
      * all the validation checks are successful.
      */
     @Test
     void testSave() {
-        doReturn(this.aggregation).when(this.aggregationRepo).save(any());
+        doReturn(this.association).when(this.atonAssociationRepo).save(any());
 
         // Perform the service call
-        Aggregation result = this.aggregationService.save(this.aggregation);
+        AtonAssociation result = this.associationService.save(this.association);
 
         // Test the result
         assertNotNull(result);
-        assertEquals(this.aggregation.getId(), result.getId());
-        assertEquals(this.aggregation.getAggregationType(), result.getAggregationType());
+        assertEquals(this.association.getId(), result.getId());
+        assertEquals(this.association.getCategoryOfAssociation(), result.getCategoryOfAssociation());
         assertNotNull(result.getPeers());
-        assertEquals(this.aggregation.getPeers().size(), result.getPeers().size());
-        assertTrue(result.getPeers().containsAll(this.aggregation.getPeers()));
+        assertEquals(this.association.getPeers().size(), result.getPeers().size());
+        assertTrue(result.getPeers().containsAll(this.association.getPeers()));
 
         // Also, that a saving call took place in the repository
-        verify(this.aggregationRepo, times(1)).save(this.aggregation);
+        verify(this.atonAssociationRepo, times(1)).save(this.association);
     }
 
     /**
-     * Test that we can successfully delete an existing aggregation entry.
+     * Test that we can successfully delete an existing association entry.
      */
     @Test
     void testDelete() throws DataNotFoundException {
-        doReturn(Optional.of(this.aggregation)).when(this.aggregationRepo).findById(this.aggregation.getId());
-        doNothing().when(this.aggregationRepo).delete(this.aggregation);
+        doReturn(Optional.of(this.association)).when(this.atonAssociationRepo).findById(this.association.getId());
+        doNothing().when(this.atonAssociationRepo).delete(this.association);
 
         // Perform the service call
-        this.aggregationService.delete(this.aggregation.getId());
+        this.associationService.delete(this.association.getId());
 
         // Verify that a deletion call took place in the repository
-        verify(this.aggregationRepo, times(1)).delete(this.aggregation);
+        verify(this.atonAssociationRepo, times(1)).delete(this.association);
     }
 
     /**
-     * Test that we can update all the relevant aggregations of an AtoN based
-     * on it's number. Because aggregations have an issue with the IDs coming
+     * Test that we can update all the relevant associations of an AtoN based
+     * on it's number. Because associations have an issue with the IDs coming
      * from the S-201 datasets, i.e. we cannot deterministically identify
      * which is which, we will keep the unchanged ones, but changes will already
-     * create a new aggregation and delete any old versions.
+     * create a new association and delete any old versions.
      */
     @Test
-    void testUpdateAidsToNavigationAggregations() {
-        doReturn(Collections.emptySet()).when(this.aggregationRepo).findByIncludedIdCode(any());
+    void testUpdateAidsToNavigationAssociations() {
+        doReturn(Collections.emptySet()).when(this.atonAssociationRepo).findByIncludedIdCode(any());
         doAnswer((inv) ->
-                this.aggregation.getPeers()
+                this.association.getPeers()
                         .stream()
                         .filter(aton -> Objects.equals(aton.getIdCode(), inv.getArgument(0)))
                         .findFirst()
         ).when(this.aidsToNavigationRepo).findByIdCode(any());
-        doAnswer((inv) -> inv.getArgument(0)).when(this.aggregationService).save(any());
+        doAnswer((inv) -> inv.getArgument(0)).when(this.associationService).save(any());
 
         // Perform the service  call
-        final Set<Aggregation> result = this.aggregationService.updateAidsToNavigationAggregations("aton-number", Collections.singleton(this.aggregation));
+        final Set<AtonAssociation> result = this.associationService.updateAidsToNavigationAssociations("aton-number", Collections.singleton(this.association));
 
         // Now make sure the response is as expected
         assertNotNull(result);
@@ -162,14 +162,14 @@ class AggregationServiceTest {
         assertEquals(1, result.size());
 
         // Inspect the included aggregation
-        final Aggregation resultAggregation = result.stream().findFirst().orElse(null);
-        assertNotNull(resultAggregation);
-        assertEquals(this.aggregation.getId(), resultAggregation.getId());
-        assertEquals(this.aggregation.getAggregationType(), resultAggregation.getAggregationType());
-        assertNotNull(resultAggregation.getPeers());
-        assertFalse(resultAggregation.getPeers().isEmpty());
-        assertEquals(this.aggregation.getPeers().size(), resultAggregation.getPeers().size());
-        assertTrue(this.aggregation.getPeers().containsAll(resultAggregation.getPeers()));
+        final AtonAssociation resultAssociation = result.stream().findFirst().orElse(null);
+        assertNotNull(resultAssociation);
+        assertEquals(this.association.getId(), resultAssociation.getId());
+        assertEquals(this.association.getCategoryOfAssociation(), resultAssociation.getCategoryOfAssociation());
+        assertNotNull(resultAssociation.getPeers());
+        assertFalse(resultAssociation.getPeers().isEmpty());
+        assertEquals(this.association.getPeers().size(), resultAssociation.getPeers().size());
+        assertTrue(this.association.getPeers().containsAll(resultAssociation.getPeers()));
     }
 
 }

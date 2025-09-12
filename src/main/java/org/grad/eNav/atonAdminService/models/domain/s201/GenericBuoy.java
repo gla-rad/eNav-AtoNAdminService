@@ -17,7 +17,7 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 
-import _int.iho.s201.gml.cs0._1.*;
+import _int.iho.s_201.gml.cs0._2.*;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
  * that we can extend this for each Buoy type.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.GenericBuoyType
+ * @see _int.iho.s_201.gml.cs0._2.GenericBuoyType
  */
 @Entity
 public abstract class GenericBuoy extends StructureObject {
@@ -47,8 +47,7 @@ public abstract class GenericBuoy extends StructureObject {
     @ElementCollection(targetClass = ColourPatternType.class)
     private List<ColourPatternType> colourPatterns;
 
-    @Enumerated(EnumType.STRING)
-    private RadarConspicuousType radarConspicuous;
+    private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
     private MarksNavigationalSystemOfType marksNavigationalSystemOf;
@@ -126,7 +125,7 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @return the radar conspicuous
      */
-    public RadarConspicuousType getRadarConspicuous() {
+    public Boolean getRadarConspicuous() {
         return radarConspicuous;
     }
 
@@ -135,7 +134,7 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @param radarConspicuous the radar conspicuous
      */
-    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
+    public void setRadarConspicuous(Boolean radarConspicuous) {
         this.radarConspicuous = radarConspicuous;
     }
 

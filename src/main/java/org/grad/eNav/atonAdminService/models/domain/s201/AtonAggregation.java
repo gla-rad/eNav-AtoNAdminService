@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.CategoryOfAggregationType;
+import _int.iho.s_201.gml.cs0._2.CategoryOfAggregationType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -28,15 +28,15 @@ import java.util.*;
 /**
  * The S-201 Aggregation Entity Class
  * <p/>
- * This class implements the {@link _int.iho.s201.gml.cs0._1.Aggregation}
+ * This class implements the {@link _int.iho.s_201.gml.cs0._2.AtonAggregation}
  * objects of the S-201 data product. These can be used to group multiple
  * Aids to Navigation into a single aggregation with a give type.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see  _int.iho.s201.gml.cs0._1.Aggregation
+ * @see _int.iho.s_201.gml.cs0._2.AtonAggregation
  */
 @Entity
-public class Aggregation implements Serializable {
+public class AtonAggregation implements Serializable {
 
     // Class Variables
     @Id
@@ -45,7 +45,7 @@ public class Aggregation implements Serializable {
     private BigInteger id;
 
     @Enumerated(EnumType.STRING)
-    private CategoryOfAggregationType aggregationType;
+    private CategoryOfAggregationType categoryOfAggregationType;
 
     @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -75,21 +75,21 @@ public class Aggregation implements Serializable {
     }
 
     /**
-     * Gets aggregation type.
+     * Gets category of aggregation type.
      *
-     * @return the aggregation type
+     * @return the category of aggregation type
      */
-    public CategoryOfAggregationType getAggregationType() {
-        return aggregationType;
+    public CategoryOfAggregationType getCategoryOfAggregationType() {
+        return categoryOfAggregationType;
     }
 
     /**
-     * Sets aggregation type.
+     * Sets category of aggregation type.
      *
-     * @param aggregationType the aggregation type
+     * @param categoryOfAggregationType the category of aggregation type
      */
-    public void setAggregationType(CategoryOfAggregationType aggregationType) {
-        this.aggregationType = aggregationType;
+    public void setCategoryOfAggregationType(CategoryOfAggregationType categoryOfAggregationType) {
+        this.categoryOfAggregationType = categoryOfAggregationType;
     }
 
     /**
@@ -122,8 +122,8 @@ public class Aggregation implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Aggregation that)) return false;
-        return aggregationType == that.aggregationType
+        if (!(o instanceof AtonAggregation that)) return false;
+        return categoryOfAggregationType == that.categoryOfAggregationType
                 && Objects.equals(this.getPeers().size(), that.getPeers().size())
                 && new HashSet<>(this.getPeerIDCodes()).containsAll(that.getPeerIDCodes());
     }
@@ -136,7 +136,7 @@ public class Aggregation implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(
-                aggregationType,
+                categoryOfAggregationType,
                 Arrays.hashCode(this.getPeerIDCodes().toArray())
         );
     }

@@ -63,7 +63,7 @@ import static org.mockito.Mockito.*;
 class DatasetContentServiceTest {
 
     // Regular expression to look for member tags
-    final Pattern DATASET_MEMBER_PATTERN = Pattern.compile("<(/)?[\\s\\S][\\s\\S]\\d:BeaconCardinal");
+    final Pattern DATASET_MEMBER_PATTERN = Pattern.compile("<(/)?[\\s\\S][\\s\\S]\\d:CardinalBeacon");
 
     /**
      * The Tested Service.

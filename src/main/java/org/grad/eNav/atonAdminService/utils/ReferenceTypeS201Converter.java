@@ -16,8 +16,8 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
-import _int.iho.s201.s100.gml.profiles._5_2.ReferenceType;
-import _int.iho.s201.s100.gml.profiles._5_2.impl.ReferenceTypeImpl;
+import _int.iho.s_201.s_100.gml.profiles._5_2.ReferenceType;
+import _int.iho.s_201.s_100.gml.profiles._5_2.impl.ReferenceTypeImpl;
 import org.grad.eNav.atonAdminService.models.enums.ReferenceTypeRole;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
 

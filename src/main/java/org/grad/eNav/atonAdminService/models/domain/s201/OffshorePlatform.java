@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s201.gml.cs0._1.*;
+import _int.iho.s_201.gml.cs0._2.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,7 +31,7 @@ import java.util.List;
  * {@link StructureObject} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s201.gml.cs0._1.OffshorePlatform
+ * @see _int.iho.s_201.gml.cs0._2.OffshorePlatform
  */
 @Entity
 public class OffshorePlatform extends StructureObject {
@@ -52,8 +52,7 @@ public class OffshorePlatform extends StructureObject {
     @Enumerated(EnumType.STRING)
     private ConditionType condition;
 
-    @Enumerated(EnumType.STRING)
-    private RadarConspicuousType radarConspicuous;
+    private Boolean radarConspicuous;
 
     private VisualProminenceType visualProminence;
 
@@ -142,7 +141,7 @@ public class OffshorePlatform extends StructureObject {
      *
      * @return the radar conspicuous
      */
-    public RadarConspicuousType getRadarConspicuous() {
+    public Boolean getRadarConspicuous() {
         return radarConspicuous;
     }
 
@@ -151,7 +150,7 @@ public class OffshorePlatform extends StructureObject {
      *
      * @param radarConspicuous the radar conspicuous
      */
-    public void setRadarConspicuous(RadarConspicuousType radarConspicuous) {
+    public void setRadarConspicuous(Boolean radarConspicuous) {
         this.radarConspicuous = radarConspicuous;
     }
 

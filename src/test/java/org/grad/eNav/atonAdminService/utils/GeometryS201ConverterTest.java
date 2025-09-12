@@ -17,14 +17,14 @@
 package org.grad.eNav.atonAdminService.utils;
 
 
-import _int.iho.s201.s100.gml.base._5_2.CurveProperty;
-import _int.iho.s201.s100.gml.base._5_2.PointProperty;
-import _int.iho.s201.s100.gml.base._5_2.S100SpatialAttributeType;
-import _int.iho.s201.s100.gml.base._5_2.SurfaceProperty;
-import _int.iho.s201.s100.gml.profiles._5_2.*;
-import _int.iho.s201.s100.gml.profiles._5_2.impl.PosListImpl;
-import _int.iho.s201.gml.cs0._1.Dataset;
-import _int.iho.s201.gml.cs0._1.impl.VirtualAISAidToNavigationImpl;
+import _int.iho.s_201.s_100.gml.base._5_2.CurveProperty;
+import _int.iho.s_201.s_100.gml.base._5_2.PointProperty;
+import _int.iho.s_201.s_100.gml.base._5_2.S100SpatialAttributeType;
+import _int.iho.s_201.s_100.gml.base._5_2.SurfaceProperty;
+import _int.iho.s_201.s_100.gml.profiles._5_2.*;
+import _int.iho.s_201.s_100.gml.profiles._5_2.impl.PosListImpl;
+import _int.iho.s_201.gml.cs0._2.Dataset;
+import _int.iho.s_201.gml.cs0._2.impl.VirtualAISAidToNavigationImpl;
 import jakarta.xml.bind.JAXBException;
 import org.apache.commons.io.IOUtils;
 import org.grad.eNav.atonAdminService.models.domain.s201.VirtualAISAidToNavigation;
@@ -90,8 +90,8 @@ class GeometryS201ConverterTest {
         // Make sure the result looks OK
         assertNotNull(result);
         assertEquals(Point.class, result.getClass());
-        assertEquals(1.4233333, ((Point)result).getX());
-        assertEquals(51.8916667, ((Point)result).getY());
+        assertEquals(51.8916667, ((Point)result).getX());
+        assertEquals(1.4233333, ((Point)result).getY());
     }
 
     /**

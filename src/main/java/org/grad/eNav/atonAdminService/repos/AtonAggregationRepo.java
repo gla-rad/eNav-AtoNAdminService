@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.repos;
 
-import org.grad.eNav.atonAdminService.models.domain.s201.Aggregation;
+import org.grad.eNav.atonAdminService.models.domain.s201.AtonAggregation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,11 +24,11 @@ import java.math.BigInteger;
 import java.util.Set;
 
 /**
- * Spring Data JPA repository for the Aggregation entities.
+ * Spring Data JPA repository for the AtoN Aggregation entities.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AggregationRepo extends JpaRepository<Aggregation, BigInteger>  {
+public interface AtonAggregationRepo extends JpaRepository<AtonAggregation, BigInteger>  {
 
     /**
      * Retrieves all the aggregations that include the ID Code of the AtoN
@@ -37,7 +37,7 @@ public interface AggregationRepo extends JpaRepository<Aggregation, BigInteger> 
      * @param idCode The AtoN ID Code to find the corresponding aggregations
      * @return the aggregations that include the specified AtoN number
      */
-    @Query("SELECT a FROM Aggregation a JOIN a.peers p WHERE p.idCode = :idCode")
-    Set<Aggregation> findByIncludedIdCode(String idCode);
+    @Query("SELECT a FROM AtonAggregation a JOIN a.peers p WHERE p.idCode = :idCode")
+    Set<AtonAggregation> findByIncludedIdCode(String idCode);
 
 }
