@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package org.grad.eNav.atonAdminService.pacts;
+package org.grad.eNav.atonAdminService.pacts.secomV2;
 
 import au.com.dius.pact.provider.junitsupport.State;
-import org.locationtech.jts.geom.GeometryFactory;
 
 import java.util.Map;
 

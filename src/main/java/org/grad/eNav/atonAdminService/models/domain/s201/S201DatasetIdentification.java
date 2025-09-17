@@ -113,6 +113,7 @@ public class S201DatasetIdentification {
         this.datasetFileIdentifier = datasetFileIdentifier;
         this.datasetTitle = "GRAD e-Navigation S-201 Dataset";
         this.datasetReferenceDate = LocalDate.now();
+        this.datasetAbstract = "";
         this.datasetLanguage = Locale.getDefault().getISO3Language();
 
         // Also se the dataset category topics by default to OCEANS
