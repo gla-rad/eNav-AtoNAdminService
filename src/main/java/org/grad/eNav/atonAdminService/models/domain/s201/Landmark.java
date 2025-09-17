@@ -22,7 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Landmark Entity Class.
@@ -40,15 +40,15 @@ public class Landmark extends StructureObject {
     // Class Variables
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = CategoryOfLandmarkType.class)
-    private List<CategoryOfLandmarkType> categoryOfLandmarks;
+    private Set<CategoryOfLandmarkType> categoryOfLandmarks;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
+    private Set<ColourPatternType> colourPatterns;
 
     private Boolean radarConspicuous;
 
@@ -57,20 +57,20 @@ public class Landmark extends StructureObject {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = FunctionType.class)
-    private List<FunctionType> functions;
+    private Set<FunctionType> functions;
 
     private BigDecimal height;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfConstructions;
+    private Set<NatureOfConstructionType> natureOfConstructions;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     @Enumerated(EnumType.STRING)
-    protected VerticalDatumType verticalDatum;
+    private VerticalDatumType verticalDatum;
 
     private BigDecimal elevation;
 
@@ -85,7 +85,7 @@ public class Landmark extends StructureObject {
      *
      * @return the category of landmarks
      */
-    public List<CategoryOfLandmarkType> getCategoryOfLandmarks() {
+    public Set<CategoryOfLandmarkType> getCategoryOfLandmarks() {
         return categoryOfLandmarks;
     }
 
@@ -94,7 +94,7 @@ public class Landmark extends StructureObject {
      *
      * @param categoryOfLandmarks the category of landmarks
      */
-    public void setCategoryOfLandmarks(List<CategoryOfLandmarkType> categoryOfLandmarks) {
+    public void setCategoryOfLandmarks(Set<CategoryOfLandmarkType> categoryOfLandmarks) {
         this.categoryOfLandmarks = categoryOfLandmarks;
     }
 
@@ -103,7 +103,7 @@ public class Landmark extends StructureObject {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -112,7 +112,7 @@ public class Landmark extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -121,7 +121,7 @@ public class Landmark extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -130,7 +130,7 @@ public class Landmark extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
     }
 
@@ -175,7 +175,7 @@ public class Landmark extends StructureObject {
      *
      * @return the functions
      */
-    public List<FunctionType> getFunctions() {
+    public Set<FunctionType> getFunctions() {
         return functions;
     }
 
@@ -184,7 +184,7 @@ public class Landmark extends StructureObject {
      *
      * @param functions the functions
      */
-    public void setFunctions(List<FunctionType> functions) {
+    public void setFunctions(Set<FunctionType> functions) {
         this.functions = functions;
     }
 
@@ -211,7 +211,7 @@ public class Landmark extends StructureObject {
      *
      * @return the nature of constructions
      */
-    public List<NatureOfConstructionType> getNatureOfConstructions() {
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
         return natureOfConstructions;
     }
 
@@ -220,7 +220,7 @@ public class Landmark extends StructureObject {
      *
      * @param natureOfConstructions the nature of constructions
      */
-    public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
         this.natureOfConstructions = natureOfConstructions;
     }
 
@@ -229,7 +229,7 @@ public class Landmark extends StructureObject {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -238,7 +238,7 @@ public class Landmark extends StructureObject {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 

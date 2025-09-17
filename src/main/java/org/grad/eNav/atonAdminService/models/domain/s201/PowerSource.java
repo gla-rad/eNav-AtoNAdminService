@@ -22,7 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 PowerSource Entity Class.
@@ -43,7 +43,7 @@ public class PowerSource extends Equipment {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     private String manufacturer;
 
@@ -70,7 +70,7 @@ public class PowerSource extends Equipment {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -79,7 +79,7 @@ public class PowerSource extends Equipment {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 

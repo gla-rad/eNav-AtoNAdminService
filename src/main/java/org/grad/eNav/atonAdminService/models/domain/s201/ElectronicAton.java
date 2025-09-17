@@ -40,8 +40,8 @@ import java.util.Set;
 @Entity
 public abstract class ElectronicAton extends AidsToNavigation {
 
-    @KeywordField(sortable = Sortable.YES)
-    private String atoNNumber;
+    @KeywordField(name="aton_number", sortable = Sortable.YES)
+    private String atonNumber;
 
     @KeywordField(sortable = Sortable.YES)
     private String mmsiCode;
@@ -64,17 +64,17 @@ public abstract class ElectronicAton extends AidsToNavigation {
      *
      * @return the ato n number
      */
-    public String getAtoNNumber() {
-        return atoNNumber;
+    public String getAtonNumber() {
+        return atonNumber;
     }
 
     /**
      * Sets ato n number.
      *
-     * @param atoNNumber the ato n number
+     * @param atonNumber the ato n number
      */
-    public void setAtoNNumber(String atoNNumber) {
-        this.atoNNumber = atoNNumber;
+    public void setAtonNumber(String atonNumber) {
+        this.atonNumber = atonNumber;
     }
 
     /**

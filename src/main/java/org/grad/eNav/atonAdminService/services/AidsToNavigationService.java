@@ -211,29 +211,29 @@ public class AidsToNavigationService {
         log.debug("Request to save Aid to Navigation : {}", aidsToNavigation);
 
         // Update the entity ID if the Code ID was found
-        this.aidsToNavigationRepo.findByIdCode(aidsToNavigation.getIdCode())
-                .ifPresent(aton -> {
-                    // Re-use the object ID
-                    aidsToNavigation.setId(aton.getId());
-                    // Re-use the existing feature name IDs
-                    final AtomicInteger featureNameCounter = new AtomicInteger();
-                    final List<BigInteger> featureNameIds = aton.getFeatureNames()
-                            .stream().map(FeatureName::getId)
-                            .toList();
-                    aidsToNavigation.getFeatureNames()
-                            .stream()
-                            .filter(fn -> featureNameCounter.get() < featureNameIds.size())
-                            .forEach(fn -> fn.setId(featureNameIds.get(featureNameCounter.getAndIncrement())));
-                    // Re-use the existing information IDs
-                    final AtomicInteger informationCounter = new AtomicInteger();
-                    final List<BigInteger> informationIds = aton.getFeatureNames()
-                            .stream().map(FeatureName::getId)
-                            .toList();
-                    aidsToNavigation.getInformations()
-                            .stream()
-                            .filter(inf -> informationCounter.get() < informationIds.size())
-                            .forEach(inf -> inf.setId(informationIds.get(informationCounter.getAndIncrement())));
-                });
+//        this.aidsToNavigationRepo.findByIdCode(aidsToNavigation.getIdCode())
+//                .ifPresent(aton -> {
+//                    // Re-use the object ID
+//                    aidsToNavigation.setId(aton.getId());
+//                    // Re-use the existing feature name IDs
+//                    final AtomicInteger featureNameCounter = new AtomicInteger();
+//                    final List<BigInteger> featureNameIds = aton.getFeatureNames()
+//                            .stream().map(FeatureName::getId)
+//                            .toList();
+//                    aidsToNavigation.getFeatureNames()
+//                            .stream()
+//                            .filter(fn -> featureNameCounter.get() < featureNameIds.size())
+//                            .forEach(fn -> fn.setId(featureNameIds.get(featureNameCounter.getAndIncrement())));
+//                    // Re-use the existing information IDs
+//                    final AtomicInteger informationCounter = new AtomicInteger();
+//                    final List<BigInteger> informationIds = aton.getFeatureNames()
+//                            .stream().map(FeatureName::getId)
+//                            .toList();
+//                    aidsToNavigation.getInformations()
+//                            .stream()
+//                            .filter(inf -> informationCounter.get() < informationIds.size())
+//                            .forEach(inf -> inf.setId(informationIds.get(informationCounter.getAndIncrement())));
+//                });
 
         // Now save for each type
         final AidsToNavigation saved = this.aidsToNavigationRepo.save(aidsToNavigation);

@@ -22,7 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Pile Entity Class.
@@ -43,23 +43,23 @@ public class Pile extends StructureObject {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
-
-    @Enumerated(EnumType.STRING)
-    private VisualProminenceType visualProminence;
-
-    @Enumerated(EnumType.STRING)
-    protected VerticalDatumType verticalDatum;
+    private Set<ColourPatternType> colourPatterns;
 
     private BigDecimal height;
 
-    private BigDecimal verticalAccuracy;
+    @Enumerated(EnumType.STRING)
+    private VerticalDatumType verticalDatum;
 
     private BigDecimal verticalLength;
+
+    private BigDecimal verticalAccuracy;
+
+    @Enumerated(EnumType.STRING)
+    private VisualProminenceType visualProminence;
 
     /**
      * Gets category of pile.
@@ -84,7 +84,7 @@ public class Pile extends StructureObject {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -93,7 +93,7 @@ public class Pile extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -102,7 +102,7 @@ public class Pile extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -111,44 +111,8 @@ public class Pile extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
-    }
-
-    /**
-     * Gets visual prominence.
-     *
-     * @return the visual prominence
-     */
-    public VisualProminenceType getVisualProminence() {
-        return visualProminence;
-    }
-
-    /**
-     * Sets visual prominence.
-     *
-     * @param visualProminence the visual prominence
-     */
-    public void setVisualProminence(VisualProminenceType visualProminence) {
-        this.visualProminence = visualProminence;
-    }
-
-    /**
-     * Gets vertical datum.
-     *
-     * @return the vertical datum
-     */
-    public VerticalDatumType getVerticalDatum() {
-        return verticalDatum;
-    }
-
-    /**
-     * Sets vertical datum.
-     *
-     * @param verticalDatum the vertical datum
-     */
-    public void setVerticalDatum(VerticalDatumType verticalDatum) {
-        this.verticalDatum = verticalDatum;
     }
 
     /**
@@ -170,21 +134,21 @@ public class Pile extends StructureObject {
     }
 
     /**
-     * Gets vertical accuracy.
+     * Gets vertical datum.
      *
-     * @return the vertical accuracy
+     * @return the vertical datum
      */
-    public BigDecimal getVerticalAccuracy() {
-        return verticalAccuracy;
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
     }
 
     /**
-     * Sets vertical accuracy.
+     * Sets vertical datum.
      *
-     * @param verticalAccuracy the vertical accuracy
+     * @param verticalDatum the vertical datum
      */
-    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
-        this.verticalAccuracy = verticalAccuracy;
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
     }
 
     /**
@@ -203,5 +167,41 @@ public class Pile extends StructureObject {
      */
     public void setVerticalLength(BigDecimal verticalLength) {
         this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets vertical accuracy.
+     *
+     * @return the vertical accuracy
+     */
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
+    }
+
+    /**
+     * Sets vertical accuracy.
+     *
+     * @param verticalAccuracy the vertical accuracy
+     */
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
+    }
+
+    /**
+     * Gets visual prominence.
+     *
+     * @return the visual prominence
+     */
+    public VisualProminenceType getVisualProminence() {
+        return visualProminence;
+    }
+
+    /**
+     * Sets visual prominence.
+     *
+     * @param visualProminence the visual prominence
+     */
+    public void setVisualProminence(VisualProminenceType visualProminence) {
+        this.visualProminence = visualProminence;
     }
 }

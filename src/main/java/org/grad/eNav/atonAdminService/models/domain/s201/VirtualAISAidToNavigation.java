@@ -26,7 +26,7 @@ import jakarta.persistence.Enumerated;
  * <p>
  * This is the basic class for implementing the S-201-compatible Virtual AIS
  * Aids to Navigation type. It is modelled as an entity that extends the
- * {@link AISAidToNavigation} super class.
+ * {@link ElectronicAton} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  * @see _int.iho.s_201.gml.cs0._2.VirtualAISAidToNavigation

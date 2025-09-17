@@ -16,12 +16,10 @@
 
 package org.grad.eNav.atonAdminService.services;
 
+import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
 import jakarta.persistence.EntityManager;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
-import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
-import org.grad.eNav.atonAdminService.models.domain.s201.BeaconCardinal;
-import org.grad.eNav.atonAdminService.models.domain.s201.FeatureName;
-import org.grad.eNav.atonAdminService.models.domain.s201.Information;
+import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.*;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
 import org.hibernate.search.engine.search.query.SearchQuery;
@@ -112,8 +110,9 @@ class AidsToNavigationServiceTest {
             featureName.setName("Aton No" + i);
             aidsToNavigation.setFeatureNames(Collections.singleton(featureName));
             // Add the information entries
-            Information information = new Information();
+            AtonStatusInformation information = new AtonStatusInformation();
             information.setText("Description of AtoN No" + i);
+            information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             aidsToNavigation.setInformations(Collections.singleton(information));
             this.aidsToNavigationList.add(aidsToNavigation);
         }
@@ -127,13 +126,12 @@ class AidsToNavigationServiceTest {
         this.newAidsToNavigation.setGeometry(factory.createPoint(new Coordinate(1, 1)));
         // Add the feature name entries
         FeatureName newFeatureName = new FeatureName();
-        newFeatureName.setId(BigInteger.ONE);
         newFeatureName.setName("Aton No 1");
         newAidsToNavigation.setFeatureNames(Collections.singleton(newFeatureName));
         // Add the information entries
-        Information newInformation = new Information();
-        newInformation.setId(BigInteger.ONE);
+        AtonStatusInformation newInformation = new AtonStatusInformation();
         newInformation.setText("Description of AtoN No 1");
+        newInformation.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
         newAidsToNavigation.setInformations(Collections.singleton(newInformation));
 
         // Create an existing AtoN message with ID
@@ -143,13 +141,12 @@ class AidsToNavigationServiceTest {
         this.existingAidsToNavigation.setGeometry(factory.createPoint(new Coordinate(10, 10)));
         // Add the feature name entries
         FeatureName existingFeatureName = new FeatureName();
-        existingFeatureName.setId(BigInteger.ONE);
         existingFeatureName.setName("Aton No 10");
         existingAidsToNavigation.setFeatureNames(Collections.singleton(existingFeatureName));
         // Add the information entries
-        Information existingInformation = new Information();
-        existingInformation.setId(BigInteger.ONE);
+        AtonStatusInformation existingInformation = new AtonStatusInformation();
         existingInformation.setText("Description of AtoN No 10");
+        existingInformation.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
         existingAidsToNavigation.setInformations(Collections.singleton(existingInformation));
     }
 

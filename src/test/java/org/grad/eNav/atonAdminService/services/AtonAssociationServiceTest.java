@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.services;
 
 import _int.iho.s_201.gml.cs0._2.CategoryOfAssociationType;
+import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
@@ -90,8 +91,9 @@ class AtonAssociationServiceTest {
             featureName.setName("Aton No" + i);
             aidsToNavigation.setFeatureNames(Collections.singleton(featureName));
             // Add the information entries
-            Information information = new Information();
+            AtonStatusInformation information = new AtonStatusInformation();
             information.setText("Description of AtoN No" + i);
+            information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             aidsToNavigation.setInformations(Collections.singleton(information));
             this.association.getPeers().add(aidsToNavigation);
         }

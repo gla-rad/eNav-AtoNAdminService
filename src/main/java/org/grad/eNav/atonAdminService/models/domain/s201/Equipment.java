@@ -21,7 +21,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Equipment Entity Class.
@@ -39,7 +39,7 @@ import java.util.List;
 public abstract class Equipment extends AidsToNavigation {
 
     @ElementCollection
-    private List<String> remoteMonitoringSystems;
+    private Set<String> remoteMonitoringSystems;
 
     // Class Variables
     @JsonBackReference
@@ -51,7 +51,7 @@ public abstract class Equipment extends AidsToNavigation {
      *
      * @return the remote monitoring systems
      */
-    public List<String> getRemoteMonitoringSystems() {
+    public Set<String> getRemoteMonitoringSystems() {
         return remoteMonitoringSystems;
     }
 
@@ -60,7 +60,7 @@ public abstract class Equipment extends AidsToNavigation {
      *
      * @param remoteMonitoringSystems the remote monitoring systems
      */
-    public void setRemoteMonitoringSystems(List<String> remoteMonitoringSystems) {
+    public void setRemoteMonitoringSystems(Set<String> remoteMonitoringSystems) {
         this.remoteMonitoringSystems = remoteMonitoringSystems;
     }
 

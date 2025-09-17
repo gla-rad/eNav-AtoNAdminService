@@ -24,6 +24,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The S-201 Aggregation Entity Class
@@ -142,16 +143,15 @@ public class AtonAggregation implements Serializable {
     }
 
     /**
-     * Returns a list of all the peer AtoN ID Codes included in the aggregation.
+     * Returns a set of all the peer AtoN ID Codes included in the aggregation.
      *
-     * @return a list of all the peer AtoN ID Codes included in the aggregation
+     * @return a set of all the peer AtoN ID Codes included in the aggregation
      */
     @JsonIgnore
-    public List<String> getPeerIDCodes() {
+    public Set<String> getPeerIDCodes() {
         return this.getPeers()
                 .stream()
                 .map(AidsToNavigation::getIdCode)
-                .sorted()
-                .toList();
+                .collect(Collectors.toSet());
     }
 }

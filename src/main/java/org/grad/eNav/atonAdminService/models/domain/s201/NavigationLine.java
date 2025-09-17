@@ -20,7 +20,7 @@ import _int.iho.s_201.gml.cs0._2.CategoryOfNavigationLineType;
 import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Navigation Line Entity Class.
@@ -43,10 +43,10 @@ public class NavigationLine extends AidsToNavigation {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     @ManyToMany(mappedBy = "navigationLines")
-    private List<RecommendedTrack> navigableTracks;
+    private Set<RecommendedTrack> navigableTracks;
 
     /**
      * Gets category of navigation line.
@@ -89,7 +89,7 @@ public class NavigationLine extends AidsToNavigation {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -98,7 +98,7 @@ public class NavigationLine extends AidsToNavigation {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 
@@ -107,7 +107,7 @@ public class NavigationLine extends AidsToNavigation {
      *
      * @return the navigable tracks
      */
-    public List<RecommendedTrack> getNavigableTracks() {
+    public Set<RecommendedTrack> getNavigableTracks() {
         return navigableTracks;
     }
 
@@ -116,7 +116,7 @@ public class NavigationLine extends AidsToNavigation {
      *
      * @param navigableTracks the navigable tracks
      */
-    public void setNavigableTracks(List<RecommendedTrack> navigableTracks) {
+    public void setNavigableTracks(Set<RecommendedTrack> navigableTracks) {
         this.navigableTracks = navigableTracks;
     }
 }

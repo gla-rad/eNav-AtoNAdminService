@@ -24,6 +24,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Set;
 
 /**
@@ -41,99 +42,37 @@ public class LightAirObstruction extends GenericLight {
 
     // Class Variables
     @Enumerated(EnumType.STRING)
-    private ExhibitionConditionOfLightType exhibitionConditionOfLight;
-
-    /**
-     * The Value of geographic range.
-     */
-    private BigDecimal valueOfGeographicRange;
-
-    /**
-     * The Value of luminous range.
-     */
-    private BigDecimal valueOfLuminousRange;
-
-    /**
-     * The Value of nominal range.
-     */
-    private BigDecimal valueOfNominalRange;
+    @ElementCollection(targetClass = ExhibitionConditionOfLightType.class)
+    private Set<ExhibitionConditionOfLightType> exhibitionConditionOfLights;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = LightVisibilityType.class)
     private Set<LightVisibilityType> lightVisibilities;
 
-    private MultiplicityOfFeatures multiplicity;
+    private BigDecimal valueOfNominalRange;
+
+    private MultiplicityOfFeatures multiplicityOfFeatures;
+
+    private RhythmOfLight rhythmOfLight;
+
+    private BigInteger flareBearing;
 
     /**
-     * Gets exhibition condition of light.
+     * Gets exhibition condition of lights.
      *
-     * @return the exhibition condition of light
+     * @return the exhibition condition of lights
      */
-    public ExhibitionConditionOfLightType getExhibitionConditionOfLight() {
-        return exhibitionConditionOfLight;
+    public Set<ExhibitionConditionOfLightType> getExhibitionConditionOfLights() {
+        return exhibitionConditionOfLights;
     }
 
     /**
-     * Sets exhibition condition of light.
+     * Sets exhibition condition of lights.
      *
-     * @param exhibitionConditionOfLight the exhibition condition of light
+     * @param exhibitionConditionOfLights the exhibition condition of lights
      */
-    public void setExhibitionConditionOfLight(ExhibitionConditionOfLightType exhibitionConditionOfLight) {
-        this.exhibitionConditionOfLight = exhibitionConditionOfLight;
-    }
-
-    /**
-     * Gets value of geographic range.
-     *
-     * @return the value of geographic range
-     */
-    public BigDecimal getValueOfGeographicRange() {
-        return valueOfGeographicRange;
-    }
-
-    /**
-     * Sets value of geographic range.
-     *
-     * @param valueOfGeographicRange the value of geographic range
-     */
-    public void setValueOfGeographicRange(BigDecimal valueOfGeographicRange) {
-        this.valueOfGeographicRange = valueOfGeographicRange;
-    }
-
-    /**
-     * Gets value of luminous range.
-     *
-     * @return the value of luminous range
-     */
-    public BigDecimal getValueOfLuminousRange() {
-        return valueOfLuminousRange;
-    }
-
-    /**
-     * Sets value of luminous range.
-     *
-     * @param valueOfLuminousRange the value of luminous range
-     */
-    public void setValueOfLuminousRange(BigDecimal valueOfLuminousRange) {
-        this.valueOfLuminousRange = valueOfLuminousRange;
-    }
-
-    /**
-     * Gets value of nominal range.
-     *
-     * @return the value of nominal range
-     */
-    public BigDecimal getValueOfNominalRange() {
-        return valueOfNominalRange;
-    }
-
-    /**
-     * Sets value of nominal range.
-     *
-     * @param valueOfNominalRange the value of nominal range
-     */
-    public void setValueOfNominalRange(BigDecimal valueOfNominalRange) {
-        this.valueOfNominalRange = valueOfNominalRange;
+    public void setExhibitionConditionOfLights(Set<ExhibitionConditionOfLightType> exhibitionConditionOfLights) {
+        this.exhibitionConditionOfLights = exhibitionConditionOfLights;
     }
 
     /**
@@ -155,20 +94,74 @@ public class LightAirObstruction extends GenericLight {
     }
 
     /**
-     * Gets multiplicity.
+     * Gets value of nominal range.
      *
-     * @return the multiplicity
+     * @return the value of nominal range
      */
-    public MultiplicityOfFeatures getMultiplicity() {
-        return multiplicity;
+    public BigDecimal getValueOfNominalRange() {
+        return valueOfNominalRange;
     }
 
     /**
-     * Sets multiplicity.
+     * Sets value of nominal range.
      *
-     * @param multiplicity the multiplicity
+     * @param valueOfNominalRange the value of nominal range
      */
-    public void setMultiplicity(MultiplicityOfFeatures multiplicity) {
-        this.multiplicity = multiplicity;
+    public void setValueOfNominalRange(BigDecimal valueOfNominalRange) {
+        this.valueOfNominalRange = valueOfNominalRange;
+    }
+
+    /**
+     * Gets multiplicity of features.
+     *
+     * @return the multiplicity of features
+     */
+    public MultiplicityOfFeatures getMultiplicityOfFeatures() {
+        return multiplicityOfFeatures;
+    }
+
+    /**
+     * Sets multiplicity of features.
+     *
+     * @param multiplicityOfFeatures the multiplicity of features
+     */
+    public void setMultiplicityOfFeatures(MultiplicityOfFeatures multiplicityOfFeatures) {
+        this.multiplicityOfFeatures = multiplicityOfFeatures;
+    }
+
+    /**
+     * Gets rhythm of light.
+     *
+     * @return the rhythm of light
+     */
+    public RhythmOfLight getRhythmOfLight() {
+        return rhythmOfLight;
+    }
+
+    /**
+     * Sets rhythm of light.
+     *
+     * @param rhythmOfLight the rhythm of light
+     */
+    public void setRhythmOfLight(RhythmOfLight rhythmOfLight) {
+        this.rhythmOfLight = rhythmOfLight;
+    }
+
+    /**
+     * Gets flare bearing.
+     *
+     * @return the flare bearing
+     */
+    public BigInteger getFlareBearing() {
+        return flareBearing;
+    }
+
+    /**
+     * Sets flare bearing.
+     *
+     * @param flareBearing the flare bearing
+     */
+    public void setFlareBearing(BigInteger flareBearing) {
+        this.flareBearing = flareBearing;
     }
 }

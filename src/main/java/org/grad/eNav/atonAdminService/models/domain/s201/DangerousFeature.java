@@ -29,6 +29,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 import org.locationtech.jts.geom.Geometry;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +44,7 @@ import java.util.Set;
  * @see _int.iho.s_201.gml.cs0._2.DangerousFeature
  */
 @Entity
-public class DangerousFeature {
+public class DangerousFeature implements Serializable {
 
     // Class Variables
     @Id

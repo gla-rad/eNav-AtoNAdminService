@@ -37,7 +37,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -84,8 +83,8 @@ public abstract class AidsToNavigation implements Serializable {
     @GenericField(indexNullAs = "1970-01-01")
     private LocalDate sourceDate;
 
-    @KeywordField(name="source_indication", sortable = Sortable.YES)
-    private String sourceIndication;
+    @KeywordField(name="source", sortable = Sortable.YES)
+    private String source;
 
     private String pictorialRepresentation;
 
@@ -108,13 +107,10 @@ public abstract class AidsToNavigation implements Serializable {
     @NonStandardField(name="geometry", valueBinder = @ValueBinderRef(type = GeometryBinder.class))
     private Geometry geometry;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
-    final private Set<Information> informations = new HashSet<>();
+    private Set<FeatureName> featureNames = new HashSet<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
-    final private Set<FeatureName> featureNames = new HashSet<>();
+    final private Set<Information> informations = new HashSet<>();
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "peers")
@@ -125,7 +121,7 @@ public abstract class AidsToNavigation implements Serializable {
     final private Set<AtonAssociation> associations = new HashSet<>();
 
     @ElementCollection
-    private List<String> seasonalActionRequireds;
+    private Set<String> seasonalActionRequireds;
 
     @GenericField()
     @LastModifiedDate
@@ -258,21 +254,21 @@ public abstract class AidsToNavigation implements Serializable {
     }
 
     /**
-     * Gets source indication.
+     * Gets source.
      *
-     * @return the source indication
+     * @return the source
      */
-    public String getSourceIndication() {
-        return sourceIndication;
+    public String getSource() {
+        return source;
     }
 
     /**
-     * Sets source indication.
+     * Sets source.
      *
-     * @param sourceIndication the source indication
+     * @param source the source
      */
-    public void setSourceIndication(String sourceIndication) {
-        this.sourceIndication = sourceIndication;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     /**
@@ -402,30 +398,6 @@ public abstract class AidsToNavigation implements Serializable {
     }
 
     /**
-     * Gets informations.
-     *
-     * @return the informations
-     */
-    public Set<Information> getInformations() {
-        return informations;
-    }
-
-    /**
-     * Sets informations.
-     *
-     * @param informations the informations
-     */
-    public void setInformations(Set<Information> informations) {
-        this.informations.clear();
-        if (informations != null) {
-            // Set the parent correctly
-            informations.forEach(fn -> fn.setFeature(this));
-            // And update the informations
-            this.informations.addAll(informations);
-        }
-    }
-
-    /**
      * Gets feature names.
      *
      * @return the feature names
@@ -440,13 +412,29 @@ public abstract class AidsToNavigation implements Serializable {
      * @param featureNames the feature names
      */
     public void setFeatureNames(Set<FeatureName> featureNames) {
-        this.featureNames.clear();
-        if (featureNames != null) {
-            // Set the parent correctly
-            featureNames.forEach(fn -> fn.setFeature(this));
-            // And update the feature names
-            this.featureNames.addAll(featureNames);
+        this.featureNames = featureNames;
+    }
+
+    /**
+     * Gets informations.
+     *
+     * @return the informations
+     */
+    public Set<Information> getInformations() {
+        return informations;
+    }
+
+    /**
+     * Sets informations.
+     *
+     * @param informations the informations
+     */
+    public void setInformations(Set<Information> informations) {
+        if(informations != null) {
+            informations.forEach(information -> information.setFeature(this));
         }
+        this.informations.clear();
+        this.informations.addAll(informations);
     }
 
     /**
@@ -464,13 +452,11 @@ public abstract class AidsToNavigation implements Serializable {
      * @param aggregations the aggregations
      */
     public void setAggregations(Set<AtonAggregation> aggregations) {
-        this.aggregations.clear();
-        if (aggregations != null) {
-            // Set the parent correctly
-            aggregations.forEach(fn -> fn.getPeers().add(this));
-            // And update the aggregations
-            this.aggregations.addAll(aggregations);
+        if(aggregations != null) {
+            aggregations.forEach(aggregation -> aggregation.getPeers().add(this));
         }
+        this.aggregations.clear();
+        this.aggregations.addAll(aggregations);
     }
 
     /**
@@ -488,13 +474,11 @@ public abstract class AidsToNavigation implements Serializable {
      * @param associations the associations
      */
     public void setAssociations(Set<AtonAssociation> associations) {
-        this.associations.clear();
-        if (associations != null) {
-            // Set the parent correctly
-            associations.forEach(fn -> fn.getPeers().add(this));
-            // And update the associations
-            this.associations.addAll(associations);
+        if(associations != null) {
+            associations.forEach(association -> association.getPeers().add(this));
         }
+        this.associations.clear();
+        this.associations.addAll(associations);
     }
 
     /**
@@ -502,7 +486,7 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @return the seasonal action requireds
      */
-    public List<String> getSeasonalActionRequireds() {
+    public Set<String> getSeasonalActionRequireds() {
         return seasonalActionRequireds;
     }
 
@@ -511,7 +495,7 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @param seasonalActionRequireds the seasonal action requireds
      */
-    public void setSeasonalActionRequireds(List<String> seasonalActionRequireds) {
+    public void setSeasonalActionRequireds(Set<String> seasonalActionRequireds) {
         this.seasonalActionRequireds = seasonalActionRequireds;
     }
 

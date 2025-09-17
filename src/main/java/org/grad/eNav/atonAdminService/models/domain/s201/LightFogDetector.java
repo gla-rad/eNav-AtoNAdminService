@@ -38,6 +38,8 @@ public class LightFogDetector extends GenericLight {
     @Enumerated(EnumType.STRING)
     private SignalGenerationType signalGeneration;
 
+    private RhythmOfLight rhythmOfLight;
+
     /**
      * Gets signal generation.
      *
@@ -54,5 +56,23 @@ public class LightFogDetector extends GenericLight {
      */
     public void setSignalGeneration(SignalGenerationType signalGeneration) {
         this.signalGeneration = signalGeneration;
+    }
+
+    /**
+     * Gets rhythm of light.
+     *
+     * @return the rhythm of light
+     */
+    public RhythmOfLight getRhythmOfLight() {
+        return rhythmOfLight;
+    }
+
+    /**
+     * Sets rhythm of light.
+     *
+     * @param rhythmOfLight the rhythm of light
+     */
+    public void setRhythmOfLight(RhythmOfLight rhythmOfLight) {
+        this.rhythmOfLight = rhythmOfLight;
     }
 }

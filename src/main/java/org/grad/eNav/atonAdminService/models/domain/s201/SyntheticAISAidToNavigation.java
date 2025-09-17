@@ -25,13 +25,13 @@ import jakarta.persistence.Entity;
  * <p>
  * This is the basic class for implementing the S-201-compatible Synthetic AIS
  * Aids to Navigation type. It is modelled as an entity that extends the
- * {@link AISAidToNavigation} super class.
+ * {@link ElectronicAton} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  * @see _int.iho.s_201.gml.cs0._2.SyntheticAISAidToNavigation
  */
 @Entity
-public class SyntheticAISAidToNavigation extends AISAidToNavigation {
+public class SyntheticAISAidToNavigation extends ElectronicAton {
 
     // Class Variables
     private CategoryOfSyntheticAISAidtoNavigationType categoryOfSyntheticAISAidtoNavigation;

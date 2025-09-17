@@ -18,8 +18,9 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Contact Address Entity Class.
@@ -30,61 +31,36 @@ import java.util.List;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  * @see _int.iho.s_201.gml.cs0._2.ContactAddressType
  */
-@Entity
-public class ContactAddress {
+@Embeddable
+public class ContactAddress implements Serializable {
 
     // Class Variables
-    // Class Variables
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_address_generator")
-    @SequenceGenerator(name="contact_address_generator", sequenceName = "contact_address_seq", allocationSize=1)
-    private BigInteger id;
-
-    private String administrativeDivision;
+    private String deliveryPoint;
 
     private String cityName;
 
-    private String country;
+    private String administrativeDivision;
 
-    @ElementCollection
-    private List<String> deliveryPoints;
+    private String country;
 
     private String postalCode;
 
     /**
-     * Gets id.
+     * Gets delivery point.
      *
-     * @return the id
+     * @return the delivery point
      */
-    public BigInteger getId() {
-        return id;
+    public String getDeliveryPoint() {
+        return deliveryPoint;
     }
 
     /**
-     * Sets id.
+     * Sets delivery point.
      *
-     * @param id the id
+     * @param deliveryPoint the delivery point
      */
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets administrative division.
-     *
-     * @return the administrative division
-     */
-    public String getAdministrativeDivision() {
-        return administrativeDivision;
-    }
-
-    /**
-     * Sets administrative division.
-     *
-     * @param administrativeDivision the administrative division
-     */
-    public void setAdministrativeDivision(String administrativeDivision) {
-        this.administrativeDivision = administrativeDivision;
+    public void setDeliveryPoint(String deliveryPoint) {
+        this.deliveryPoint = deliveryPoint;
     }
 
     /**
@@ -106,6 +82,24 @@ public class ContactAddress {
     }
 
     /**
+     * Gets administrative division.
+     *
+     * @return the administrative division
+     */
+    public String getAdministrativeDivision() {
+        return administrativeDivision;
+    }
+
+    /**
+     * Sets administrative division.
+     *
+     * @param administrativeDivision the administrative division
+     */
+    public void setAdministrativeDivision(String administrativeDivision) {
+        this.administrativeDivision = administrativeDivision;
+    }
+
+    /**
      * Gets country.
      *
      * @return the country
@@ -121,24 +115,6 @@ public class ContactAddress {
      */
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    /**
-     * Gets delivery points.
-     *
-     * @return the delivery points
-     */
-    public List<String> getDeliveryPoints() {
-        return deliveryPoints;
-    }
-
-    /**
-     * Sets delivery points.
-     *
-     * @param deliveryPoints the delivery points
-     */
-    public void setDeliveryPoints(List<String> deliveryPoints) {
-        this.deliveryPoints = deliveryPoints;
     }
 
     /**

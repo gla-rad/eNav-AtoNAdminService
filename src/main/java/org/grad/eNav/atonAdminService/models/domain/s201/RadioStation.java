@@ -21,7 +21,8 @@ import _int.iho.s_201.gml.cs0._2.StatusType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * The S-201 Radio Station Entity Class.
@@ -40,12 +41,14 @@ public class RadioStation extends Equipment {
     @Enumerated(EnumType.STRING)
     private CategoryOfRadioStationType categoryOfRadioStation;
 
+    private BigDecimal estimatedRangeOfTransmission;
+
     @Enumerated(EnumType.STRING)
     private StatusType status;
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "broadcastBy")
-    private List<AISAidToNavigation> broadcasts;
+    private Set<ElectronicAton> broadcasts;
 
     /**
      * Gets category of radio station.
@@ -63,6 +66,24 @@ public class RadioStation extends Equipment {
      */
     public void setCategoryOfRadioStation(CategoryOfRadioStationType categoryOfRadioStation) {
         this.categoryOfRadioStation = categoryOfRadioStation;
+    }
+
+    /**
+     * Gets estimated range of transmission.
+     *
+     * @return the estimated range of transmission
+     */
+    public BigDecimal getEstimatedRangeOfTransmission() {
+        return estimatedRangeOfTransmission;
+    }
+
+    /**
+     * Sets estimated range of transmission.
+     *
+     * @param estimatedRangeOfTransmission the estimated range of transmission
+     */
+    public void setEstimatedRangeOfTransmission(BigDecimal estimatedRangeOfTransmission) {
+        this.estimatedRangeOfTransmission = estimatedRangeOfTransmission;
     }
 
     /**
@@ -88,7 +109,7 @@ public class RadioStation extends Equipment {
      *
      * @return the broadcasts
      */
-    public List<AISAidToNavigation> getBroadcasts() {
+    public Set<ElectronicAton> getBroadcasts() {
         return broadcasts;
     }
 
@@ -97,7 +118,7 @@ public class RadioStation extends Equipment {
      *
      * @param broadcasts the broadcasts
      */
-    public void setBroadcasts(List<AISAidToNavigation> broadcasts) {
+    public void setBroadcasts(Set<ElectronicAton> broadcasts) {
         this.broadcasts = broadcasts;
     }
 }

@@ -22,7 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Silo Tank Entity Class.
@@ -46,38 +46,35 @@ public class SiloTank extends StructureObject {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
-
-    @Enumerated(EnumType.STRING)
-    private ConditionType conditionType;
+    private Set<ColourPatternType> colourPatterns;
 
     private BigDecimal elevation;
 
     private BigDecimal height;
 
-    private BigDecimal verticalAccuracy;
-
-    private BigDecimal verticalLength;
-
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfConstructions;
-
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
+    private Set<NatureOfConstructionType> natureOfConstructions;
 
     private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
-    private VisualProminenceType visualProminence;
+    @ElementCollection(targetClass = StatusType.class)
+    private Set<StatusType> statuses;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private VerticalDatumType verticalDatum;
+
+    private BigDecimal verticalLength;
+
+    @Enumerated(EnumType.STRING)
+    private VisualProminenceType visualProminence;
+
+    private BigDecimal verticalAccuracy;
 
     /**
      * Gets building shape.
@@ -120,7 +117,7 @@ public class SiloTank extends StructureObject {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -129,7 +126,7 @@ public class SiloTank extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -138,7 +135,7 @@ public class SiloTank extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -147,26 +144,8 @@ public class SiloTank extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
-    }
-
-    /**
-     * Gets condition type.
-     *
-     * @return the condition type
-     */
-    public ConditionType getConditionType() {
-        return conditionType;
-    }
-
-    /**
-     * Sets condition type.
-     *
-     * @param conditionType the condition type
-     */
-    public void setConditionType(ConditionType conditionType) {
-        this.conditionType = conditionType;
     }
 
     /**
@@ -206,47 +185,11 @@ public class SiloTank extends StructureObject {
     }
 
     /**
-     * Gets vertical accuracy.
-     *
-     * @return the vertical accuracy
-     */
-    public BigDecimal getVerticalAccuracy() {
-        return verticalAccuracy;
-    }
-
-    /**
-     * Sets vertical accuracy.
-     *
-     * @param verticalAccuracy the vertical accuracy
-     */
-    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
-        this.verticalAccuracy = verticalAccuracy;
-    }
-
-    /**
-     * Gets vertical length.
-     *
-     * @return the vertical length
-     */
-    public BigDecimal getVerticalLength() {
-        return verticalLength;
-    }
-
-    /**
-     * Sets vertical length.
-     *
-     * @param verticalLength the vertical length
-     */
-    public void setVerticalLength(BigDecimal verticalLength) {
-        this.verticalLength = verticalLength;
-    }
-
-    /**
      * Gets nature of constructions.
      *
      * @return the nature of constructions
      */
-    public List<NatureOfConstructionType> getNatureOfConstructions() {
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
         return natureOfConstructions;
     }
 
@@ -255,26 +198,8 @@ public class SiloTank extends StructureObject {
      *
      * @param natureOfConstructions the nature of constructions
      */
-    public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
         this.natureOfConstructions = natureOfConstructions;
-    }
-
-    /**
-     * Gets product type.
-     *
-     * @return the product type
-     */
-    public ProductType getProductType() {
-        return productType;
-    }
-
-    /**
-     * Sets product type.
-     *
-     * @param productType the product type
-     */
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
     }
 
     /**
@@ -296,6 +221,60 @@ public class SiloTank extends StructureObject {
     }
 
     /**
+     * Gets statuses.
+     *
+     * @return the statuses
+     */
+    public Set<StatusType> getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * Sets statuses.
+     *
+     * @param statuses the statuses
+     */
+    public void setStatuses(Set<StatusType> statuses) {
+        this.statuses = statuses;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
      * Gets visual prominence.
      *
      * @return the visual prominence
@@ -314,20 +293,20 @@ public class SiloTank extends StructureObject {
     }
 
     /**
-     * Gets statuses.
+     * Gets vertical accuracy.
      *
-     * @return the statuses
+     * @return the vertical accuracy
      */
-    public List<StatusType> getStatuses() {
-        return statuses;
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
     }
 
     /**
-     * Sets statuses.
+     * Sets vertical accuracy.
      *
-     * @param statuses the statuses
+     * @param verticalAccuracy the vertical accuracy
      */
-    public void setStatuses(List<StatusType> statuses) {
-        this.statuses = statuses;
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
     }
 }

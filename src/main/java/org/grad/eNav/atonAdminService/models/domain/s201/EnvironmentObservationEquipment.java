@@ -16,10 +16,13 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
+import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Environment Observation Equipment Entity Class.
@@ -37,7 +40,11 @@ public class EnvironmentObservationEquipment extends Equipment {
     private BigDecimal height;
 
     @ElementCollection
-    private List<String> typeOfEnvironmentObservationEquipments;
+    private Set<String> typeOfEnvironmentObservationEquipments;
+
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = StatusType.class)
+    private Set<StatusType> statuses;
 
     /**
      * Gets height.
@@ -62,7 +69,7 @@ public class EnvironmentObservationEquipment extends Equipment {
      *
      * @return the type of environment observation equipments
      */
-    public List<String> getTypeOfEnvironmentObservationEquipments() {
+    public Set<String> getTypeOfEnvironmentObservationEquipments() {
         return typeOfEnvironmentObservationEquipments;
     }
 
@@ -71,7 +78,25 @@ public class EnvironmentObservationEquipment extends Equipment {
      *
      * @param typeOfEnvironmentObservationEquipments the type of environment observation equipments
      */
-    public void setTypeOfEnvironmentObservationEquipments(List<String> typeOfEnvironmentObservationEquipments) {
+    public void setTypeOfEnvironmentObservationEquipments(Set<String> typeOfEnvironmentObservationEquipments) {
         this.typeOfEnvironmentObservationEquipments = typeOfEnvironmentObservationEquipments;
+    }
+
+    /**
+     * Gets statuses.
+     *
+     * @return the statuses
+     */
+    public Set<StatusType> getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * Sets statuses.
+     *
+     * @param statuses the statuses
+     */
+    public void setStatuses(Set<StatusType> statuses) {
+        this.statuses = statuses;
     }
 }

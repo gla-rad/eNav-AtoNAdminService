@@ -26,7 +26,7 @@ import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Fog Signal Entity Class.
@@ -36,7 +36,7 @@ import java.util.List;
  * class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s_201.gml.cs0._2.FogSignalsType
+ * @see _int.iho.s_201.gml.cs0._2.FogSignal
  */
 @Entity
 public class FogSignal extends Equipment {
@@ -53,15 +53,15 @@ public class FogSignal extends Equipment {
 
     private BigDecimal signalPeriod;
 
-    private String signalSequence;
+    private SignalSequence signalSequence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
-    protected BigDecimal valueOfMaximumRange;
+    private BigDecimal valueOfMaximumRange;
 
-    protected Double signalOutput;
+    private Double signalOutput;
 
     /**
      * Gets category of fog signal.
@@ -158,7 +158,7 @@ public class FogSignal extends Equipment {
      *
      * @return the signal sequence
      */
-    public String getSignalSequence() {
+    public SignalSequence getSignalSequence() {
         return signalSequence;
     }
 
@@ -167,7 +167,7 @@ public class FogSignal extends Equipment {
      *
      * @param signalSequence the signal sequence
      */
-    public void setSignalSequence(String signalSequence) {
+    public void setSignalSequence(SignalSequence signalSequence) {
         this.signalSequence = signalSequence;
     }
 
@@ -176,7 +176,7 @@ public class FogSignal extends Equipment {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -185,7 +185,7 @@ public class FogSignal extends Equipment {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 

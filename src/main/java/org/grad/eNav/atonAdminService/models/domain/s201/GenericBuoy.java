@@ -18,9 +18,11 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 
 import _int.iho.s_201.gml.cs0._2.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The S-201 Generic Buoy Entity Class.
@@ -41,30 +43,46 @@ public abstract class GenericBuoy extends StructureObject {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
-
-    private Boolean radarConspicuous;
+    private Set<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
     private MarksNavigationalSystemOfType marksNavigationalSystemOf;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfconstuctions;
+    private Set<NatureOfConstructionType> natureOfConstructions;
+
+    private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
+
+    private String typeOfBuoy;
 
     private BigDecimal verticalLength;
 
     private BigDecimal verticalAccuracy;
 
-    private String typeOfBuoy;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "buoyPart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final Set<Topmark> topmarkParts = new HashSet<>();
+
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL)
+    private MooringShackle shackleToBuoyConnected;
+
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL)
+    private Bridle buoyHangs;
+
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL)
+    private CounterWeight buoyAttached;
 
     /**
      * Gets buoy shape.
@@ -89,7 +107,7 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -98,7 +116,7 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -107,7 +125,7 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -116,26 +134,8 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
-    }
-
-    /**
-     * Gets radar conspicuous.
-     *
-     * @return the radar conspicuous
-     */
-    public Boolean getRadarConspicuous() {
-        return radarConspicuous;
-    }
-
-    /**
-     * Sets radar conspicuous.
-     *
-     * @param radarConspicuous the radar conspicuous
-     */
-    public void setRadarConspicuous(Boolean radarConspicuous) {
-        this.radarConspicuous = radarConspicuous;
     }
 
     /**
@@ -157,21 +157,39 @@ public abstract class GenericBuoy extends StructureObject {
     }
 
     /**
-     * Gets nature ofconstuctions.
+     * Gets nature of Constructions.
      *
-     * @return the nature ofconstuctions
+     * @return the nature of Constructions
      */
-    public List<NatureOfConstructionType> getNatureOfconstuctions() {
-        return natureOfconstuctions;
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
+        return natureOfConstructions;
     }
 
     /**
-     * Sets nature ofconstuctions.
+     * Sets nature of Constructions.
      *
-     * @param natureOfconstuctions the nature ofconstuctions
+     * @param natureOfConstructions the nature of Constructions
      */
-    public void setNatureOfconstuctions(List<NatureOfConstructionType> natureOfconstuctions) {
-        this.natureOfconstuctions = natureOfconstuctions;
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
+        this.natureOfConstructions = natureOfConstructions;
+    }
+
+    /**
+     * Gets radar conspicuous.
+     *
+     * @return the radar conspicuous
+     */
+    public Boolean getRadarConspicuous() {
+        return radarConspicuous;
+    }
+
+    /**
+     * Sets radar conspicuous.
+     *
+     * @param radarConspicuous the radar conspicuous
+     */
+    public void setRadarConspicuous(Boolean radarConspicuous) {
+        this.radarConspicuous = radarConspicuous;
     }
 
     /**
@@ -179,7 +197,7 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -188,8 +206,26 @@ public abstract class GenericBuoy extends StructureObject {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
+    }
+
+    /**
+     * Gets type of buoy.
+     *
+     * @return the type of buoy
+     */
+    public String getTypeOfBuoy() {
+        return typeOfBuoy;
+    }
+
+    /**
+     * Sets type of buoy.
+     *
+     * @param typeOfBuoy the type of buoy
+     */
+    public void setTypeOfBuoy(String typeOfBuoy) {
+        this.typeOfBuoy = typeOfBuoy;
     }
 
     /**
@@ -229,20 +265,78 @@ public abstract class GenericBuoy extends StructureObject {
     }
 
     /**
-     * Gets type of buoy.
+     * Gets topmark parts.
      *
-     * @return the type of buoy
+     * @return the topmark parts
      */
-    public String getTypeOfBuoy() {
-        return typeOfBuoy;
+    public Set<Topmark> getTopmarkParts() {
+        return topmarkParts;
     }
 
     /**
-     * Sets type of buoy.
+     * Sets topmark parts.
      *
-     * @param typeOfBuoy the type of buoy
+     * @param topmarkParts the topmark parts
      */
-    public void setTypeOfBuoy(String typeOfBuoy) {
-        this.typeOfBuoy = typeOfBuoy;
+    public void setTopmarkParts(Set<Topmark> topmarkParts) {
+        if(topmarkParts != null) {
+            topmarkParts.forEach(topmark -> topmark.setBuoyPart(this));
+        }
+        this.topmarkParts.clear();
+        this.topmarkParts.addAll(topmarkParts);
+    }
+
+    /**
+     * Gets shackle to buoy connected.
+     *
+     * @return the shackle to buoy connected
+     */
+    public MooringShackle getShackleToBuoyConnected() {
+        return shackleToBuoyConnected;
+    }
+
+    /**
+     * Sets shackle to buoy connected.
+     *
+     * @param shackleToBuoyConnected the shackle to buoy connected
+     */
+    public void setShackleToBuoyConnected(MooringShackle shackleToBuoyConnected) {
+        this.shackleToBuoyConnected = shackleToBuoyConnected;
+    }
+
+    /**
+     * Gets buoy hangs.
+     *
+     * @return the buoy hangs
+     */
+    public Bridle getBuoyHangs() {
+        return buoyHangs;
+    }
+
+    /**
+     * Sets buoy hangs.
+     *
+     * @param buoyHangs the buoy hangs
+     */
+    public void setBuoyHangs(Bridle buoyHangs) {
+        this.buoyHangs = buoyHangs;
+    }
+
+    /**
+     * Gets buoy attached.
+     *
+     * @return the buoy attached
+     */
+    public CounterWeight getBuoyAttached() {
+        return buoyAttached;
+    }
+
+    /**
+     * Sets buoy attached.
+     *
+     * @param buoyAttached the buoy attached
+     */
+    public void setBuoyAttached(CounterWeight buoyAttached) {
+        this.buoyAttached = buoyAttached;
     }
 }

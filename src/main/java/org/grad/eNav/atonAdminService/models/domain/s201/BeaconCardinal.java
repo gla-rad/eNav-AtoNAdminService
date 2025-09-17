@@ -29,7 +29,7 @@ import jakarta.persistence.Enumerated;
  * super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s_201.gml.cs0._2.BeaconCardinal
+ * @see _int.iho.s_201.gml.cs0._2.CardinalBeacon
  */
 @Entity
 public class BeaconCardinal extends GenericBeacon {

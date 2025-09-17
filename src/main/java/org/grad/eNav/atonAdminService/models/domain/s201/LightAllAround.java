@@ -23,6 +23,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Set;
 
 /**
@@ -39,6 +40,10 @@ import java.util.Set;
 public class LightAllAround extends GenericLight {
 
     // Class Variables
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = ColourType.class)
+    private Set<ColourType> colours;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = CategoryOfLightType.class)
     private Set<CategoryOfLightType> categoryOfLights;
@@ -63,7 +68,29 @@ public class LightAllAround extends GenericLight {
 
     private BigDecimal valueOfNominalRange;
 
-    private MultiplicityOfFeatures multiplicity;
+    private MultiplicityOfFeatures multiplicityOfFeatures;
+
+    private RhythmOfLight rhythmOfLight;
+
+    private BigInteger flareBearing;
+
+    /**
+     * Gets colours.
+     *
+     * @return the colours
+     */
+    public Set<ColourType> getColours() {
+        return colours;
+    }
+
+    /**
+     * Sets colours.
+     *
+     * @param colours the colours
+     */
+    public void setColours(Set<ColourType> colours) {
+        this.colours = colours;
+    }
 
     /**
      * Gets category of lights.
@@ -228,20 +255,56 @@ public class LightAllAround extends GenericLight {
     }
 
     /**
-     * Gets multiplicity.
+     * Gets multiplicity of features.
      *
-     * @return the multiplicity
+     * @return the multiplicity of features
      */
-    public MultiplicityOfFeatures getMultiplicity() {
-        return multiplicity;
+    public MultiplicityOfFeatures getMultiplicityOfFeatures() {
+        return multiplicityOfFeatures;
     }
 
     /**
-     * Sets multiplicity.
+     * Sets multiplicity of features.
      *
-     * @param multiplicity the multiplicity
+     * @param multiplicityOfFeatures the multiplicity of features
      */
-    public void setMultiplicity(MultiplicityOfFeatures multiplicity) {
-        this.multiplicity = multiplicity;
+    public void setMultiplicityOfFeatures(MultiplicityOfFeatures multiplicityOfFeatures) {
+        this.multiplicityOfFeatures = multiplicityOfFeatures;
+    }
+
+    /**
+     * Gets rhythm of light.
+     *
+     * @return the rhythm of light
+     */
+    public RhythmOfLight getRhythmOfLight() {
+        return rhythmOfLight;
+    }
+
+    /**
+     * Sets rhythm of light.
+     *
+     * @param rhythmOfLight the rhythm of light
+     */
+    public void setRhythmOfLight(RhythmOfLight rhythmOfLight) {
+        this.rhythmOfLight = rhythmOfLight;
+    }
+
+    /**
+     * Gets flare bearing.
+     *
+     * @return the flare bearing
+     */
+    public BigInteger getFlareBearing() {
+        return flareBearing;
+    }
+
+    /**
+     * Sets flare bearing.
+     *
+     * @param flareBearing the flare bearing
+     */
+    public void setFlareBearing(BigInteger flareBearing) {
+        this.flareBearing = flareBearing;
     }
 }

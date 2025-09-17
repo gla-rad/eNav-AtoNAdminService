@@ -16,6 +16,8 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
+import _int.iho.s_201.gml.cs0._2.DataCoverage;
+import _int.iho.s_201.gml.cs0._2.impl.DataCoverageImpl;
 import _int.iho.s_201.s_100.gml.base._5_2.CurveProperty;
 import _int.iho.s_201.s_100.gml.base._5_2.MultiPointProperty;
 import _int.iho.s_201.s_100.gml.base._5_2.PointProperty;
@@ -42,6 +44,7 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.modelmapper.ModelMapper;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class S201DatasetBuilder {
@@ -116,6 +119,14 @@ public class S201DatasetBuilder {
                     .filter(Objects::nonNull)
                     .toList()
                 );
+
+        //====================================================================//
+        //                          DATA COVERAGE                             //
+        //====================================================================//
+        DataCoverageImpl dataCoverage = new DataCoverageImpl();
+        dataCoverage.setMaximumDisplayScale(BigInteger.ZERO);
+        dataCoverage.setMaximumDisplayScale(BigInteger.TEN);
+        dataCoverage.setGeometries(new GeometryS201Converter().convertFromGeometry(s201Dataset));
 
         //====================================================================//
         //                      DATASET MEMBERS SECTION                       //

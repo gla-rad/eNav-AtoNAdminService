@@ -20,11 +20,14 @@ import _int.iho.s_201.gml.cs0._2.ColourPatternType;
 import _int.iho.s_201.gml.cs0._2.ColourType;
 import _int.iho.s_201.gml.cs0._2.MarksNavigationalSystemOfType;
 import _int.iho.s_201.gml.cs0._2.StatusType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.util.List;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * The S-201 Topmark Entity Class.
@@ -42,27 +45,29 @@ public class Topmark extends Equipment {
     // Class Variables
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
-
-    @Enumerated(EnumType.STRING)
-    private MarksNavigationalSystemOfType marksNavigationalSystemOf;
+    private Set<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     private String topmarkDaymarkShape;
+
+    private BigDecimal verticalLength;
+
+    @JsonBackReference
+    private GenericBuoy buoyPart;
 
     /**
      * Gets colours.
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -71,7 +76,7 @@ public class Topmark extends Equipment {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -80,7 +85,7 @@ public class Topmark extends Equipment {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -89,26 +94,26 @@ public class Topmark extends Equipment {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
     }
 
     /**
-     * Gets marks navigational system of.
+     * Gets vertical length.
      *
-     * @return the marks navigational system of
+     * @return the vertical length
      */
-    public MarksNavigationalSystemOfType getMarksNavigationalSystemOf() {
-        return marksNavigationalSystemOf;
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
     }
 
     /**
-     * Sets marks navigational system of.
+     * Sets vertical length.
      *
-     * @param marksNavigationalSystemOf the marks navigational system of
+     * @param verticalLength the vertical length
      */
-    public void setMarksNavigationalSystemOf(MarksNavigationalSystemOfType marksNavigationalSystemOf) {
-        this.marksNavigationalSystemOf = marksNavigationalSystemOf;
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
     }
 
     /**
@@ -116,7 +121,7 @@ public class Topmark extends Equipment {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -125,7 +130,7 @@ public class Topmark extends Equipment {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 
@@ -145,5 +150,23 @@ public class Topmark extends Equipment {
      */
     public void setTopmarkDaymarkShape(String topmarkDaymarkShape) {
         this.topmarkDaymarkShape = topmarkDaymarkShape;
+    }
+
+    /**
+     * Gets buoy part.
+     *
+     * @return the buoy part
+     */
+    public GenericBuoy getBuoyPart() {
+        return buoyPart;
+    }
+
+    /**
+     * Sets buoy part.
+     *
+     * @param buoyPart the buoy part
+     */
+    public void setBuoyPart(GenericBuoy buoyPart) {
+        this.buoyPart = buoyPart;
     }
 }

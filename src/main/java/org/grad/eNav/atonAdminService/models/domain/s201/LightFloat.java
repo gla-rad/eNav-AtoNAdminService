@@ -23,7 +23,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Light Float Entity Class.
@@ -41,43 +41,43 @@ public class LightFloat extends StructureObject {
     // Class Variables
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
+    private Set<ColourPatternType> colourPatterns;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfConstructions;
+    private Set<NatureOfConstructionType> natureOfConstructions;
 
     private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
     private VisualProminenceType visualProminence;
 
-    private BigDecimal horizontalAccuracy;
-
     private BigDecimal horizontalLength;
 
     private BigDecimal horizontalWidth;
+
+    private Boolean mannedStructure;
 
     private BigDecimal verticalAccuracy;
 
     private BigDecimal verticalLength;
 
-    private Boolean mannedStructure;
+    private BigDecimal horizontalAccuracy;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    protected List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     /**
      * Gets colours.
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -86,7 +86,7 @@ public class LightFloat extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -95,7 +95,7 @@ public class LightFloat extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -104,7 +104,7 @@ public class LightFloat extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
     }
 
@@ -113,7 +113,7 @@ public class LightFloat extends StructureObject {
      *
      * @return the nature of constructions
      */
-    public List<NatureOfConstructionType> getNatureOfConstructions() {
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
         return natureOfConstructions;
     }
 
@@ -122,7 +122,7 @@ public class LightFloat extends StructureObject {
      *
      * @param natureOfConstructions the nature of constructions
      */
-    public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
         this.natureOfConstructions = natureOfConstructions;
     }
 
@@ -163,24 +163,6 @@ public class LightFloat extends StructureObject {
     }
 
     /**
-     * Gets horizontal accuracy.
-     *
-     * @return the horizontal accuracy
-     */
-    public BigDecimal getHorizontalAccuracy() {
-        return horizontalAccuracy;
-    }
-
-    /**
-     * Sets horizontal accuracy.
-     *
-     * @param horizontalAccuracy the horizontal accuracy
-     */
-    public void setHorizontalAccuracy(BigDecimal horizontalAccuracy) {
-        this.horizontalAccuracy = horizontalAccuracy;
-    }
-
-    /**
      * Gets horizontal length.
      *
      * @return the horizontal length
@@ -214,6 +196,24 @@ public class LightFloat extends StructureObject {
      */
     public void setHorizontalWidth(BigDecimal horizontalWidth) {
         this.horizontalWidth = horizontalWidth;
+    }
+
+    /**
+     * Gets manned structure.
+     *
+     * @return the manned structure
+     */
+    public Boolean getMannedStructure() {
+        return mannedStructure;
+    }
+
+    /**
+     * Sets manned structure.
+     *
+     * @param mannedStructure the manned structure
+     */
+    public void setMannedStructure(Boolean mannedStructure) {
+        this.mannedStructure = mannedStructure;
     }
 
     /**
@@ -253,21 +253,21 @@ public class LightFloat extends StructureObject {
     }
 
     /**
-     * Gets manned structure.
+     * Gets horizontal accuracy.
      *
-     * @return the manned structure
+     * @return the horizontal accuracy
      */
-    public Boolean getMannedStructure() {
-        return mannedStructure;
+    public BigDecimal getHorizontalAccuracy() {
+        return horizontalAccuracy;
     }
 
     /**
-     * Sets manned structure.
+     * Sets horizontal accuracy.
      *
-     * @param mannedStructure the manned structure
+     * @param horizontalAccuracy the horizontal accuracy
      */
-    public void setMannedStructure(Boolean mannedStructure) {
-        this.mannedStructure = mannedStructure;
+    public void setHorizontalAccuracy(BigDecimal horizontalAccuracy) {
+        this.horizontalAccuracy = horizontalAccuracy;
     }
 
     /**
@@ -275,7 +275,7 @@ public class LightFloat extends StructureObject {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -284,7 +284,7 @@ public class LightFloat extends StructureObject {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 }

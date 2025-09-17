@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.services;
 
+import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.io.IOUtils;
 import org.grad.eNav.atonAdminService.config.GlobalConfig;
@@ -130,8 +131,9 @@ class DatasetContentServiceTest {
             featureName.setName("Aton No" + i);
             aidsToNavigation.setFeatureNames(Collections.singleton(featureName));
             // Add the information entries
-            Information information = new Information();
+            AtonStatusInformation information = new AtonStatusInformation();
             information.setText("Description of AtoN No" + i);
+            information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             aidsToNavigation.setInformations(Collections.singleton(information));
             this.aidsToNavigationList.add(aidsToNavigation);
         }

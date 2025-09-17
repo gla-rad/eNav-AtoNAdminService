@@ -21,7 +21,9 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.util.List;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * The S-201 Offshore Platform Entity Class.
@@ -39,37 +41,50 @@ public class OffshorePlatform extends StructureObject {
     // Class Variables
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = CategoryOfOffshorePlatformType.class)
-    private List<CategoryOfOffshorePlatformType> categoryOfOffshorePlatforms;
+    private Set<CategoryOfOffshorePlatformType> categoryOfOffshorePlatforms;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
+    private Set<ColourPatternType> colourPatterns;
 
-    @Enumerated(EnumType.STRING)
-    private ConditionType condition;
+    private BigDecimal height;
 
-    private Boolean radarConspicuous;
-
-    private VisualProminenceType visualProminence;
+    private Boolean mannedStructure;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfConstructions;
+    private Set<NatureOfConstructionType> natureOfConstructions;
+
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = NatureOfConstructionType.class)
+    private Set<ProductType> products;
+
+    private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
+
+    @Enumerated(EnumType.STRING)
+    private VerticalDatumType verticalDatum;
+
+    private BigDecimal verticalLength;
+
+    @Enumerated(EnumType.STRING)
+    private VisualProminenceType visualProminence;
+
+    private BigDecimal verticalAccuracy;
 
     /**
      * Gets category of offshore platforms.
      *
      * @return the category of offshore platforms
      */
-    public List<CategoryOfOffshorePlatformType> getCategoryOfOffshorePlatforms() {
+    public Set<CategoryOfOffshorePlatformType> getCategoryOfOffshorePlatforms() {
         return categoryOfOffshorePlatforms;
     }
 
@@ -78,7 +93,7 @@ public class OffshorePlatform extends StructureObject {
      *
      * @param categoryOfOffshorePlatforms the category of offshore platforms
      */
-    public void setCategoryOfOffshorePlatforms(List<CategoryOfOffshorePlatformType> categoryOfOffshorePlatforms) {
+    public void setCategoryOfOffshorePlatforms(Set<CategoryOfOffshorePlatformType> categoryOfOffshorePlatforms) {
         this.categoryOfOffshorePlatforms = categoryOfOffshorePlatforms;
     }
 
@@ -87,7 +102,7 @@ public class OffshorePlatform extends StructureObject {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -96,7 +111,7 @@ public class OffshorePlatform extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -105,7 +120,7 @@ public class OffshorePlatform extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -114,26 +129,80 @@ public class OffshorePlatform extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
     }
 
     /**
-     * Gets condition.
+     * Gets height.
      *
-     * @return the condition
+     * @return the height
      */
-    public ConditionType getCondition() {
-        return condition;
+    public BigDecimal getHeight() {
+        return height;
     }
 
     /**
-     * Sets condition.
+     * Sets height.
      *
-     * @param condition the condition
+     * @param height the height
      */
-    public void setCondition(ConditionType condition) {
-        this.condition = condition;
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    /**
+     * Gets manned structure.
+     *
+     * @return the manned structure
+     */
+    public Boolean getMannedStructure() {
+        return mannedStructure;
+    }
+
+    /**
+     * Sets manned structure.
+     *
+     * @param mannedStructure the manned structure
+     */
+    public void setMannedStructure(Boolean mannedStructure) {
+        this.mannedStructure = mannedStructure;
+    }
+
+    /**
+     * Gets nature of constructions.
+     *
+     * @return the nature of constructions
+     */
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
+        return natureOfConstructions;
+    }
+
+    /**
+     * Sets nature of constructions.
+     *
+     * @param natureOfConstructions the nature of constructions
+     */
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
+        this.natureOfConstructions = natureOfConstructions;
+    }
+
+    /**
+     * Gets products.
+     *
+     * @return the products
+     */
+    public Set<ProductType> getProducts() {
+        return products;
+    }
+
+    /**
+     * Sets products.
+     *
+     * @param products the products
+     */
+    public void setProducts(Set<ProductType> products) {
+        this.products = products;
     }
 
     /**
@@ -155,6 +224,60 @@ public class OffshorePlatform extends StructureObject {
     }
 
     /**
+     * Gets statuses.
+     *
+     * @return the statuses
+     */
+    public Set<StatusType> getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * Sets statuses.
+     *
+     * @param statuses the statuses
+     */
+    public void setStatuses(Set<StatusType> statuses) {
+        this.statuses = statuses;
+    }
+
+    /**
+     * Gets vertical datum.
+     *
+     * @return the vertical datum
+     */
+    public VerticalDatumType getVerticalDatum() {
+        return verticalDatum;
+    }
+
+    /**
+     * Sets vertical datum.
+     *
+     * @param verticalDatum the vertical datum
+     */
+    public void setVerticalDatum(VerticalDatumType verticalDatum) {
+        this.verticalDatum = verticalDatum;
+    }
+
+    /**
+     * Gets vertical length.
+     *
+     * @return the vertical length
+     */
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
+    }
+
+    /**
+     * Sets vertical length.
+     *
+     * @param verticalLength the vertical length
+     */
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
      * Gets visual prominence.
      *
      * @return the visual prominence
@@ -173,38 +296,20 @@ public class OffshorePlatform extends StructureObject {
     }
 
     /**
-     * Gets nature of constructions.
+     * Gets vertical accuracy.
      *
-     * @return the nature of constructions
+     * @return the vertical accuracy
      */
-    public List<NatureOfConstructionType> getNatureOfConstructions() {
-        return natureOfConstructions;
+    public BigDecimal getVerticalAccuracy() {
+        return verticalAccuracy;
     }
 
     /**
-     * Sets nature of constructions.
+     * Sets vertical accuracy.
      *
-     * @param natureOfConstructions the nature of constructions
+     * @param verticalAccuracy the vertical accuracy
      */
-    public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
-        this.natureOfConstructions = natureOfConstructions;
-    }
-
-    /**
-     * Gets statuses.
-     *
-     * @return the statuses
-     */
-    public List<StatusType> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * Sets statuses.
-     *
-     * @param statuses the statuses
-     */
-    public void setStatuses(List<StatusType> statuses) {
-        this.statuses = statuses;
+    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
     }
 }

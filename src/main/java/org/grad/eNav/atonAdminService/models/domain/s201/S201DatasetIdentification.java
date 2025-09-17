@@ -27,7 +27,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Locale;
 
 /**
@@ -89,7 +90,7 @@ public class S201DatasetIdentification {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = MDTopicCategoryCode.class, fetch = FetchType.EAGER)
-    private List<MDTopicCategoryCode> datasetTopicCategories;
+    private Set<MDTopicCategoryCode> datasetTopicCategories;
 
     /**
      * Instantiates a new Data set identification.
@@ -115,7 +116,7 @@ public class S201DatasetIdentification {
         this.datasetLanguage = Locale.getDefault().getISO3Language();
 
         // Also se the dataset category topics by default to OCEANS
-        this.datasetTopicCategories = new ArrayList<>();
+        this.datasetTopicCategories = new HashSet<>();
         this.datasetTopicCategories.add(MDTopicCategoryCode.OCEANS);
     }
 
@@ -340,7 +341,7 @@ public class S201DatasetIdentification {
      *
      * @return the dataset topic categories
      */
-    public List<MDTopicCategoryCode> getDatasetTopicCategories() {
+    public Set<MDTopicCategoryCode> getDatasetTopicCategories() {
         return datasetTopicCategories;
     }
 
@@ -349,7 +350,7 @@ public class S201DatasetIdentification {
      *
      * @param datasetTopicCategories the dataset topic categories
      */
-    public void setDatasetTopicCategories(List<MDTopicCategoryCode> datasetTopicCategories) {
+    public void setDatasetTopicCategories(Set<MDTopicCategoryCode> datasetTopicCategories) {
         this.datasetTopicCategories = datasetTopicCategories;
     }
 
@@ -373,7 +374,7 @@ public class S201DatasetIdentification {
         copy.setDatasetReferenceDate(this.getDatasetReferenceDate());
         copy.setDatasetLanguage(this.getDatasetLanguage());
         copy.setDatasetAbstract(this.getDatasetAbstract());
-        copy.setDatasetTopicCategories(new ArrayList<>(this.getDatasetTopicCategories()));
+        copy.setDatasetTopicCategories(new HashSet<>(this.getDatasetTopicCategories()));
 
         // And return it
         return copy;

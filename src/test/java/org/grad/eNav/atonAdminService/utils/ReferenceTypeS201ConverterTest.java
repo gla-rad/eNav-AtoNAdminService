@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
+import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
 import _int.iho.s_201.s_100.gml.profiles._5_2.ReferenceType;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.models.enums.ReferenceTypeRole;
@@ -57,8 +58,9 @@ class ReferenceTypeS201ConverterTest {
         featureName.setName("Virtual Ato");
         aidToNavigation.setFeatureNames(Collections.singleton(featureName));
         // Add the information entries
-        Information information = new Information();
+        AtonStatusInformation information = new AtonStatusInformation();
         information.setText("Description of Virtual AtoN");
+        information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
         aidToNavigation.setInformations(Collections.singleton(information));
 
         // Initialise the AtoN object list
@@ -73,8 +75,9 @@ class ReferenceTypeS201ConverterTest {
             tempFeatureName.setName("Aton No" + i);
             tempAidToNavigation.setFeatureNames(Collections.singleton(tempFeatureName));
             // Add the information entries
-            Information tempInformation = new Information();
+            AtonStatusInformation tempInformation = new AtonStatusInformation();
             tempInformation.setText("Description of AtoN No" + i);
+            tempInformation.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             tempAidToNavigation.setInformations(Collections.singleton(tempInformation));
             this.aidsToNavigationList.add(tempAidToNavigation);
         }

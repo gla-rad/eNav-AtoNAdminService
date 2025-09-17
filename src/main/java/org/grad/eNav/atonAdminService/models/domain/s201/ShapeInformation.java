@@ -16,19 +16,60 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.Embeddable;
+
+import java.io.Serializable;
 
 /**
- * The S-201 Positioning Shape Entity Class.
+ * The S-201 Positioning Shape Embeddable Class.
  * <p/>
  * This class implements the AtoN Fixing Method type of the S-201
- * Shape Information objects. It is modelled as an entity
- * that extends the {@link Information} super class.
+ * Shape Information objects.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  * @see _int.iho.s_201.gml.cs0._2.ShapeInformationType
  */
-@Entity
-public class ShapeInformation extends Information {
+@Embeddable
+public class ShapeInformation implements Serializable {
 
+    // Class Variables
+    private String language;
+
+    private String text;
+
+    /**
+     * Gets language.
+     *
+     * @return the language
+     */
+    public String getLanguage() {
+        return language;
+    }
+
+    /**
+     * Sets language.
+     *
+     * @param language the language
+     */
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    /**
+     * Gets text.
+     *
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * Sets text.
+     *
+     * @param text the text
+     */
+    public void setText(String text) {
+        this.text = text;
+    }
 }

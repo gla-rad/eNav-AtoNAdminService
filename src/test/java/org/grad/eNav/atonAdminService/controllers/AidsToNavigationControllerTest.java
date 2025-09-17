@@ -16,15 +16,13 @@
 
 package org.grad.eNav.atonAdminService.controllers;
 
+import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
-import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
-import org.grad.eNav.atonAdminService.models.domain.s201.BeaconCardinal;
-import org.grad.eNav.atonAdminService.models.domain.s201.FeatureName;
-import org.grad.eNav.atonAdminService.models.domain.s201.Information;
+import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.*;
 import org.grad.eNav.atonAdminService.models.dtos.s201.AidsToNavigationDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.FeatureNameDto;
@@ -122,8 +120,9 @@ class AidsToNavigationControllerTest {
             featureName.setName("Aton No" + i);
             aidsToNavigation.setFeatureNames(Collections.singleton(featureName));
             // Add the information entries
-            Information information = new Information();
+            AtonStatusInformation information = new AtonStatusInformation();
             information.setText("Description of AtoN No" + i);
+            information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             aidsToNavigation.setInformations(Collections.singleton(information));
             this.aidsToNavigationList.add(aidsToNavigation);
         }
@@ -138,13 +137,12 @@ class AidsToNavigationControllerTest {
         existingAidsToNavigation.setGeometry(factory.createPoint(new Coordinate(1, 1)));
         // Add the feature name entries
         FeatureName featureName = new FeatureName();
-        featureName.setId(BigInteger.ONE);
         featureName.setName("Aton No 1");
         existingAidsToNavigation.setFeatureNames(Collections.singleton(featureName));
         // Add the information entries
-        Information information = new Information();
-        information.setId(BigInteger.ONE);
+        AtonStatusInformation information = new AtonStatusInformation();
         information.setText("Description of AtoN No 1");
+        information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
         existingAidsToNavigation.setInformations(Collections.singleton(information));
     }
 

@@ -75,6 +75,11 @@ public enum S201AtonTypes {
     SYNTHETIC_AIS_ATON("Virtual AtoN", SyntheticAISAidToNavigationImpl.class, SyntheticAISAidToNavigation.class),
     TOPMARK("Topmark", TopmarkImpl.class, Topmark.class),
     VIRTUAL_AIS_ATON("Virtual AtoN", VirtualAISAidToNavigationImpl.class, VirtualAISAidToNavigation.class),
+    MOORING_SHACKLE("Mooring Shackle", MooringShackleImpl.class, MooringShackle.class),
+    BRIDLE("Bridle", BridgeImpl.class, Bridle.class),
+    SWIVEL("Swivel", SwivelImpl.class, Swivel.class),
+    SINKER_ANCHOR("Sinker Anchor", SinkerAnchorImpl.class, SinkerAnchor.class),
+    CABLE_SUBMARINE("Sinker Anchor", CableSubmarineImpl.class, CableSubmarine.class),
     UNKNOWN("Unknown", AidsToNavigationTypeImpl.class, AidsToNavigation.class);
 
     // Enum Variables

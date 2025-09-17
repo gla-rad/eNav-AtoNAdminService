@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * The S-201 Feature Name Entity Class.
+ * The S-201 Feature Name Embeddable Class.
  * <p/>
  * This class implements the FeatureName type of the S-201 Aids to Navigation
  * objects which includes a description of the entity, as well as the language
@@ -32,38 +32,36 @@ import java.math.BigInteger;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  * @see _int.iho.s_201.gml.cs0._2.FeatureNameType
  */
-@Entity
+@Embeddable
 public class FeatureName implements Serializable  {
 
     // Class Variables
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "feature_name_generator")
-    @SequenceGenerator(name="feature_name_generator", sequenceName = "feature_name_seq", allocationSize=1)
-    private BigInteger id;
-    private String name;
-    private String language;
     private Boolean displayName;
+
+    private String name;
+
+    private String language;
 
     @JsonBackReference
     @ManyToOne
     private AidsToNavigation feature;
 
     /**
-     * Gets id.
+     * Gets display name.
      *
-     * @return the id
+     * @return the display name
      */
-    public BigInteger getId() {
-        return id;
+    public Boolean getDisplayName() {
+        return displayName;
     }
 
     /**
-     * Sets id.
+     * Sets display name.
      *
-     * @param id the id
+     * @param displayName the display name
      */
-    public void setId(BigInteger id) {
-        this.id = id;
+    public void setDisplayName(Boolean displayName) {
+        this.displayName = displayName;
     }
 
     /**
@@ -100,24 +98,6 @@ public class FeatureName implements Serializable  {
      */
     public void setLanguage(String language) {
         this.language = language;
-    }
-
-    /**
-     * Gets display name.
-     *
-     * @return the display name
-     */
-    public Boolean getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * Sets display name.
-     *
-     * @param displayName the display name
-     */
-    public void setDisplayName(Boolean displayName) {
-        this.displayName = displayName;
     }
 
     /**

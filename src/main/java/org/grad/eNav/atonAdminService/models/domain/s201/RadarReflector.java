@@ -23,7 +23,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Radar Reflector Entity Class.
@@ -39,16 +39,16 @@ import java.util.List;
 public class RadarReflector extends Equipment {
 
     // Class Variables
-    protected BigDecimal height;
+    private BigDecimal height;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     @Enumerated(EnumType.STRING)
-    protected VerticalDatumType verticalDatum;
+    private VerticalDatumType verticalDatum;
 
-    protected BigDecimal verticalAccuracy;
+    private BigDecimal verticalAccuracy;
 
     /**
      * Gets height.
@@ -73,7 +73,7 @@ public class RadarReflector extends Equipment {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -82,7 +82,7 @@ public class RadarReflector extends Equipment {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 

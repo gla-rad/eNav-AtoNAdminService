@@ -19,10 +19,11 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * The S-201 Information Entity Class.
+ * The S-201 Information Embeddable Class.
  * <p/>
  * This class implements the Information type of the S-201 Aids to Navigation
  * objects which includes textual information like file references, headlines
@@ -32,7 +33,7 @@ import java.math.BigInteger;
  * @see _int.iho.s_201.gml.cs0._2.InformationType
  */
 @Entity
-public class Information {
+public class Information implements Serializable {
 
     // Class Variables
     @Id

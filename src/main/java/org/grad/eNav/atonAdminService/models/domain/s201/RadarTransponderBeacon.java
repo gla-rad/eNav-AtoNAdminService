@@ -18,13 +18,10 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.CategoryOfRadarTransponderBeaconType;
 import _int.iho.s_201.gml.cs0._2.StatusType;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Radar Transponder Beacon Entity Class.
@@ -41,26 +38,47 @@ public class RadarTransponderBeacon extends Equipment {
 
     // Class Variables
     @Enumerated(EnumType.STRING)
-    protected CategoryOfRadarTransponderBeaconType categoryOfRadarTransponderBeaconType;
+    private CategoryOfRadarTransponderBeaconType categoryOfRadarTransponderBeaconType;
 
-    protected String radarWaveLength;
+    private RadarWaveLength radarWaveLength;
 
-    protected BigDecimal sectorLimitOne;
+    private String signalGroup;
 
-    protected BigDecimal sectorLimitTwo;
+    private BigDecimal valueOfNominalRange;
 
-    protected String signalGroup;
+    private String manufacturer;
 
-    protected String signalSequence;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(
+                    name = "sectorBearing",
+                    column = @Column(name = "racon_sector_limit_one_bearing")
+            ),
+            @AttributeOverride(
+                    name = "sectorLineLength",
+                    column = @Column(name = "racon_sector_limit_one_line_length")
+            )
+    })
+    private SectorLimitDetails sectorLimitOne;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(
+                    name = "sectorBearing",
+                    column = @Column(name = "racon_sector_limit_two_bearing")
+            ),
+            @AttributeOverride(
+                    name = "sectorLineLength",
+                    column = @Column(name = "racon_sector_limit_two_line_length")
+            )
+    })
+    private SectorLimitDetails sectorLimitTwo;
+
+    private SignalSequence signalSequence;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
-
-    /**
-     * The Value of nominal range.
-     */
-    protected BigDecimal valueOfNominalRange;
+    private Set<StatusType> statuses;
 
     /**
      * Gets category of radar transponder beacon type.
@@ -85,7 +103,7 @@ public class RadarTransponderBeacon extends Equipment {
      *
      * @return the radar wave length
      */
-    public String getRadarWaveLength() {
+    public RadarWaveLength getRadarWaveLength() {
         return radarWaveLength;
     }
 
@@ -94,44 +112,8 @@ public class RadarTransponderBeacon extends Equipment {
      *
      * @param radarWaveLength the radar wave length
      */
-    public void setRadarWaveLength(String radarWaveLength) {
+    public void setRadarWaveLength(RadarWaveLength radarWaveLength) {
         this.radarWaveLength = radarWaveLength;
-    }
-
-    /**
-     * Gets sector limit one.
-     *
-     * @return the sector limit one
-     */
-    public BigDecimal getSectorLimitOne() {
-        return sectorLimitOne;
-    }
-
-    /**
-     * Sets sector limit one.
-     *
-     * @param sectorLimitOne the sector limit one
-     */
-    public void setSectorLimitOne(BigDecimal sectorLimitOne) {
-        this.sectorLimitOne = sectorLimitOne;
-    }
-
-    /**
-     * Gets sector limit two.
-     *
-     * @return the sector limit two
-     */
-    public BigDecimal getSectorLimitTwo() {
-        return sectorLimitTwo;
-    }
-
-    /**
-     * Sets sector limit two.
-     *
-     * @param sectorLimitTwo the sector limit two
-     */
-    public void setSectorLimitTwo(BigDecimal sectorLimitTwo) {
-        this.sectorLimitTwo = sectorLimitTwo;
     }
 
     /**
@@ -153,42 +135,6 @@ public class RadarTransponderBeacon extends Equipment {
     }
 
     /**
-     * Gets signal sequence.
-     *
-     * @return the signal sequence
-     */
-    public String getSignalSequence() {
-        return signalSequence;
-    }
-
-    /**
-     * Sets signal sequence.
-     *
-     * @param signalSequence the signal sequence
-     */
-    public void setSignalSequence(String signalSequence) {
-        this.signalSequence = signalSequence;
-    }
-
-    /**
-     * Gets statuses.
-     *
-     * @return the statuses
-     */
-    public List<StatusType> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * Sets statuses.
-     *
-     * @param statuses the statuses
-     */
-    public void setStatuses(List<StatusType> statuses) {
-        this.statuses = statuses;
-    }
-
-    /**
      * Gets value of nominal range.
      *
      * @return the value of nominal range
@@ -204,5 +150,95 @@ public class RadarTransponderBeacon extends Equipment {
      */
     public void setValueOfNominalRange(BigDecimal valueOfNominalRange) {
         this.valueOfNominalRange = valueOfNominalRange;
+    }
+
+    /**
+     * Gets manufacturer.
+     *
+     * @return the manufacturer
+     */
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    /**
+     * Sets manufacturer.
+     *
+     * @param manufacturer the manufacturer
+     */
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    /**
+     * Gets sector limit one.
+     *
+     * @return the sector limit one
+     */
+    public SectorLimitDetails getSectorLimitOne() {
+        return sectorLimitOne;
+    }
+
+    /**
+     * Sets sector limit one.
+     *
+     * @param sectorLimitOne the sector limit one
+     */
+    public void setSectorLimitOne(SectorLimitDetails sectorLimitOne) {
+        this.sectorLimitOne = sectorLimitOne;
+    }
+
+    /**
+     * Gets sector limit two.
+     *
+     * @return the sector limit two
+     */
+    public SectorLimitDetails getSectorLimitTwo() {
+        return sectorLimitTwo;
+    }
+
+    /**
+     * Sets sector limit two.
+     *
+     * @param sectorLimitTwo the sector limit two
+     */
+    public void setSectorLimitTwo(SectorLimitDetails sectorLimitTwo) {
+        this.sectorLimitTwo = sectorLimitTwo;
+    }
+
+    /**
+     * Gets signal sequence.
+     *
+     * @return the signal sequence
+     */
+    public SignalSequence getSignalSequence() {
+        return signalSequence;
+    }
+
+    /**
+     * Sets signal sequence.
+     *
+     * @param signalSequence the signal sequence
+     */
+    public void setSignalSequence(SignalSequence signalSequence) {
+        this.signalSequence = signalSequence;
+    }
+
+    /**
+     * Gets statuses.
+     *
+     * @return the statuses
+     */
+    public Set<StatusType> getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * Sets statuses.
+     *
+     * @param statuses the statuses
+     */
+    public void setStatuses(Set<StatusType> statuses) {
+        this.statuses = statuses;
     }
 }

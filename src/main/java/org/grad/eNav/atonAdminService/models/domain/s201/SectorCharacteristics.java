@@ -17,11 +17,14 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.LightCharacteristicType;
+import _int.iho.s_201.gml.cs0._2.StatusType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Set;
 
 /**
  * The S-201 Sector Characteristics Entity Class.
@@ -44,14 +47,17 @@ public class SectorCharacteristics implements Serializable {
     @Enumerated(EnumType.STRING)
     private LightCharacteristicType lightCharacteristic;
 
-    private LightSector lightSector;
+    private Set<LightSector> lightSectors;
 
-    private String signalGroup;
+    private Set<String> signalGroups;
 
     private BigDecimal signalPeriod;
 
-    @Enumerated(EnumType.STRING)
-    private SignalSequence signalSequence;
+    private Set<SignalSequence> signalSequences;
+
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
+    private LightSectored sectorOf;
 
     /**
      * Gets id.
@@ -90,39 +96,39 @@ public class SectorCharacteristics implements Serializable {
     }
 
     /**
-     * Gets light sector.
+     * Gets light sectors.
      *
-     * @return the light sector
+     * @return the light sectors
      */
-    public LightSector getLightSector() {
-        return lightSector;
+    public Set<LightSector> getLightSectors() {
+        return lightSectors;
     }
 
     /**
-     * Sets light sector.
+     * Sets light sectors.
      *
-     * @param lightSector the light sector
+     * @param lightSectors the light sectors
      */
-    public void setLightSector(LightSector lightSector) {
-        this.lightSector = lightSector;
+    public void setLightSectors(Set<LightSector> lightSectors) {
+        this.lightSectors = lightSectors;
     }
 
     /**
-     * Gets signal group.
+     * Gets signal groups.
      *
-     * @return the signal group
+     * @return the signal groups
      */
-    public String getSignalGroup() {
-        return signalGroup;
+    public Set<String> getSignalGroups() {
+        return signalGroups;
     }
 
     /**
-     * Sets signal group.
+     * Sets signal groups.
      *
-     * @param signalGroup the signal group
+     * @param signalGroups the signal groups
      */
-    public void setSignalGroup(String signalGroup) {
-        this.signalGroup = signalGroup;
+    public void setSignalGroups(Set<String> signalGroups) {
+        this.signalGroups = signalGroups;
     }
 
     /**
@@ -144,20 +150,38 @@ public class SectorCharacteristics implements Serializable {
     }
 
     /**
-     * Gets signal sequence.
+     * Gets signal sequences.
      *
-     * @return the signal sequence
+     * @return the signal sequences
      */
-    public SignalSequence getSignalSequence() {
-        return signalSequence;
+    public Set<SignalSequence> getSignalSequences() {
+        return signalSequences;
     }
 
     /**
-     * Sets signal sequence.
+     * Sets signal sequences.
      *
-     * @param signalSequence the signal sequence
+     * @param signalSequences the signal sequences
      */
-    public void setSignalSequence(SignalSequence signalSequence) {
-        this.signalSequence = signalSequence;
+    public void setSignalSequences(Set<SignalSequence> signalSequences) {
+        this.signalSequences = signalSequences;
+    }
+
+    /**
+     * Gets sector of.
+     *
+     * @return the sector of
+     */
+    public LightSectored getSectorOf() {
+        return sectorOf;
+    }
+
+    /**
+     * Sets sector of.
+     *
+     * @param sectorOf the sector of
+     */
+    public void setSectorOf(LightSectored sectorOf) {
+        this.sectorOf = sectorOf;
     }
 }

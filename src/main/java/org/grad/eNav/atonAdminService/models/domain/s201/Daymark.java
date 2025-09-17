@@ -17,12 +17,10 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.*;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Daymark Entity Class.
@@ -42,34 +40,39 @@ public class Daymark extends Equipment {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
-
-    private BigDecimal height;
+    private Set<ColourPatternType> colourPatterns;
 
     private BigDecimal elevation;
 
+    private BigDecimal height;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfConstructions;
+    private Set<NatureOfConstructionType> natureOfConstructions;
+
+    private BigDecimal orientationValue;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     private String topmarkDaymarkShape;
 
+    /**
+     * The Vertical datum.
+     */
+    @Enumerated(EnumType.STRING)
+    private VerticalDatumType verticalDatum;
+
     private BigDecimal verticalLength;
 
-    private BigDecimal verticalAccuracy;
+    private ShapeInformation shapeInformation;
 
-    @Enumerated(EnumType.STRING)
-    protected VerticalDatumType verticalDatum;
-
-    private BigDecimal orientation;
+    private boolean isSlatted;
 
     /**
      * Gets category of special purpose mark.
@@ -94,7 +97,7 @@ public class Daymark extends Equipment {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -103,7 +106,7 @@ public class Daymark extends Equipment {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -112,7 +115,7 @@ public class Daymark extends Equipment {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -121,26 +124,8 @@ public class Daymark extends Equipment {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
-    }
-
-    /**
-     * Gets height.
-     *
-     * @return the height
-     */
-    public BigDecimal getHeight() {
-        return height;
-    }
-
-    /**
-     * Sets height.
-     *
-     * @param height the height
-     */
-    public void setHeight(BigDecimal height) {
-        this.height = height;
     }
 
     /**
@@ -162,11 +147,29 @@ public class Daymark extends Equipment {
     }
 
     /**
+     * Gets height.
+     *
+     * @return the height
+     */
+    public BigDecimal getHeight() {
+        return height;
+    }
+
+    /**
+     * Sets height.
+     *
+     * @param height the height
+     */
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    /**
      * Gets nature of constructions.
      *
      * @return the nature of constructions
      */
-    public List<NatureOfConstructionType> getNatureOfConstructions() {
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
         return natureOfConstructions;
     }
 
@@ -175,8 +178,26 @@ public class Daymark extends Equipment {
      *
      * @param natureOfConstructions the nature of constructions
      */
-    public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
         this.natureOfConstructions = natureOfConstructions;
+    }
+
+    /**
+     * Gets orientation value.
+     *
+     * @return the orientation value
+     */
+    public BigDecimal getOrientationValue() {
+        return orientationValue;
+    }
+
+    /**
+     * Sets orientation value.
+     *
+     * @param orientationValue the orientation value
+     */
+    public void setOrientationValue(BigDecimal orientationValue) {
+        this.orientationValue = orientationValue;
     }
 
     /**
@@ -184,7 +205,7 @@ public class Daymark extends Equipment {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -193,7 +214,7 @@ public class Daymark extends Equipment {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 
@@ -216,42 +237,6 @@ public class Daymark extends Equipment {
     }
 
     /**
-     * Gets vertical length.
-     *
-     * @return the vertical length
-     */
-    public BigDecimal getVerticalLength() {
-        return verticalLength;
-    }
-
-    /**
-     * Sets vertical length.
-     *
-     * @param verticalLength the vertical length
-     */
-    public void setVerticalLength(BigDecimal verticalLength) {
-        this.verticalLength = verticalLength;
-    }
-
-    /**
-     * Gets vertical accuracy.
-     *
-     * @return the vertical accuracy
-     */
-    public BigDecimal getVerticalAccuracy() {
-        return verticalAccuracy;
-    }
-
-    /**
-     * Sets vertical accuracy.
-     *
-     * @param verticalAccuracy the vertical accuracy
-     */
-    public void setVerticalAccuracy(BigDecimal verticalAccuracy) {
-        this.verticalAccuracy = verticalAccuracy;
-    }
-
-    /**
      * Gets vertical datum.
      *
      * @return the vertical datum
@@ -270,20 +255,56 @@ public class Daymark extends Equipment {
     }
 
     /**
-     * Gets orientation.
+     * Gets vertical length.
      *
-     * @return the orientation
+     * @return the vertical length
      */
-    public BigDecimal getOrientation() {
-        return orientation;
+    public BigDecimal getVerticalLength() {
+        return verticalLength;
     }
 
     /**
-     * Sets orientation.
+     * Sets vertical length.
      *
-     * @param orientation the orientation
+     * @param verticalLength the vertical length
      */
-    public void setOrientation(BigDecimal orientation) {
-        this.orientation = orientation;
+    public void setVerticalLength(BigDecimal verticalLength) {
+        this.verticalLength = verticalLength;
+    }
+
+    /**
+     * Gets shape information.
+     *
+     * @return the shape information
+     */
+    public ShapeInformation getShapeInformation() {
+        return shapeInformation;
+    }
+
+    /**
+     * Sets shape information.
+     *
+     * @param shapeInformation the shape information
+     */
+    public void setShapeInformation(ShapeInformation shapeInformation) {
+        this.shapeInformation = shapeInformation;
+    }
+
+    /**
+     * Is slatted boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isSlatted() {
+        return isSlatted;
+    }
+
+    /**
+     * Sets slatted.
+     *
+     * @param slatted the slatted
+     */
+    public void setSlatted(boolean slatted) {
+        isSlatted = slatted;
     }
 }

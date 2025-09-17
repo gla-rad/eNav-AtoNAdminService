@@ -26,7 +26,7 @@ import jakarta.persistence.Entity;
  * super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s_201.gml.cs0._2.BeaconSafeWaterType
+ * @see _int.iho.s_201.gml.cs0._2.SafeWaterBeacon
  */
 @Entity
 public class BeaconSafeWater extends GenericBeacon {

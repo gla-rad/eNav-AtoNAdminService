@@ -22,7 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Generic Beacon Entity Class.
@@ -43,13 +43,11 @@ public abstract class GenericBeacon extends StructureObject {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourType.class)
-    private List<ColourType> colours;
+    private Set<ColourType> colours;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = ColourPatternType.class)
-    private List<ColourPatternType> colourPatterns;
-
-    private Boolean radarConspicuous;
+    private Set<ColourPatternType> colourPatterns;
 
     private BigDecimal height;
 
@@ -59,11 +57,13 @@ public abstract class GenericBeacon extends StructureObject {
     private MarksNavigationalSystemOfType marksNavigationalSystemOf;
 
     @Enumerated(EnumType.STRING)
-    private VisualProminenceType visualProminence;
+    @ElementCollection(targetClass = NatureOfConstructionType.class)
+    private Set<NatureOfConstructionType> natureOfConstructions;
+
+    private Boolean radarConspicuous;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = NatureOfConstructionType.class)
-    private List<NatureOfConstructionType> natureOfConstructions;
+    private VisualProminenceType visualProminence;
 
     private BigDecimal verticalLength;
 
@@ -71,7 +71,7 @@ public abstract class GenericBeacon extends StructureObject {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
-    private List<StatusType> statuses;
+    private Set<StatusType> statuses;
 
     /**
      * Gets beacon shape.
@@ -96,7 +96,7 @@ public abstract class GenericBeacon extends StructureObject {
      *
      * @return the colours
      */
-    public List<ColourType> getColours() {
+    public Set<ColourType> getColours() {
         return colours;
     }
 
@@ -105,7 +105,7 @@ public abstract class GenericBeacon extends StructureObject {
      *
      * @param colours the colours
      */
-    public void setColours(List<ColourType> colours) {
+    public void setColours(Set<ColourType> colours) {
         this.colours = colours;
     }
 
@@ -114,7 +114,7 @@ public abstract class GenericBeacon extends StructureObject {
      *
      * @return the colour patterns
      */
-    public List<ColourPatternType> getColourPatterns() {
+    public Set<ColourPatternType> getColourPatterns() {
         return colourPatterns;
     }
 
@@ -123,28 +123,9 @@ public abstract class GenericBeacon extends StructureObject {
      *
      * @param colourPatterns the colour patterns
      */
-    public void setColourPatterns(List<ColourPatternType> colourPatterns) {
+    public void setColourPatterns(Set<ColourPatternType> colourPatterns) {
         this.colourPatterns = colourPatterns;
     }
-
-    /**
-     * Gets radar conspicuous.
-     *
-     * @return the radar conspicuous
-     */
-    public Boolean getRadarConspicuous() {
-        return radarConspicuous;
-    }
-
-    /**
-     * Sets radar conspicuous.
-     *
-     * @param radarConspicuous the radar conspicuous
-     */
-    public void setRadarConspicuous(Boolean radarConspicuous) {
-        this.radarConspicuous = radarConspicuous;
-    }
-
     /**
      * Gets height.
      *
@@ -200,6 +181,42 @@ public abstract class GenericBeacon extends StructureObject {
     }
 
     /**
+     * Gets nature of constructions.
+     *
+     * @return the nature of constructions
+     */
+    public Set<NatureOfConstructionType> getNatureOfConstructions() {
+        return natureOfConstructions;
+    }
+
+    /**
+     * Sets nature of constructions.
+     *
+     * @param natureOfConstructions the nature of constructions
+     */
+    public void setNatureOfConstructions(Set<NatureOfConstructionType> natureOfConstructions) {
+        this.natureOfConstructions = natureOfConstructions;
+    }
+
+    /**
+     * Gets radar conspicuous.
+     *
+     * @return the radar conspicuous
+     */
+    public Boolean getRadarConspicuous() {
+        return radarConspicuous;
+    }
+
+    /**
+     * Sets radar conspicuous.
+     *
+     * @param radarConspicuous the radar conspicuous
+     */
+    public void setRadarConspicuous(Boolean radarConspicuous) {
+        this.radarConspicuous = radarConspicuous;
+    }
+
+    /**
      * Gets visual prominence.
      *
      * @return the visual prominence
@@ -215,24 +232,6 @@ public abstract class GenericBeacon extends StructureObject {
      */
     public void setVisualProminence(VisualProminenceType visualProminence) {
         this.visualProminence = visualProminence;
-    }
-
-    /**
-     * Gets nature of constructions.
-     *
-     * @return the nature of constructions
-     */
-    public List<NatureOfConstructionType> getNatureOfConstructions() {
-        return natureOfConstructions;
-    }
-
-    /**
-     * Sets nature of constructions.
-     *
-     * @param natureOfConstructions the nature of constructions
-     */
-    public void setNatureOfConstructions(List<NatureOfConstructionType> natureOfConstructions) {
-        this.natureOfConstructions = natureOfConstructions;
     }
 
     /**
@@ -276,7 +275,7 @@ public abstract class GenericBeacon extends StructureObject {
      *
      * @return the statuses
      */
-    public List<StatusType> getStatuses() {
+    public Set<StatusType> getStatuses() {
         return statuses;
     }
 
@@ -285,7 +284,7 @@ public abstract class GenericBeacon extends StructureObject {
      *
      * @param statuses the statuses
      */
-    public void setStatuses(List<StatusType> statuses) {
+    public void setStatuses(Set<StatusType> statuses) {
         this.statuses = statuses;
     }
 

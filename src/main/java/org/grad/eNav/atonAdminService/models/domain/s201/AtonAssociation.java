@@ -24,6 +24,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The S-201 Association Entity Class
@@ -175,30 +176,28 @@ public class AtonAssociation implements Serializable {
     }
 
     /**
-     * Returns a list of all the peer AtoN ID Codes included in the association.
+     * Returns a set of all the peer AtoN ID Codes included in the association.
      *
-     * @return a list of all the peer AtoN ID Codes included in the association
+     * @return a set of all the peer AtoN ID Codes included in the association
      */
     @JsonIgnore
-    public List<String> getPeerIdCodes() {
+    public Set<String> getPeerIdCodes() {
         return this.getPeers()
                 .stream()
                 .map(AidsToNavigation::getIdCode)
-                .sorted()
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     /**
-     * Returns a list of all the dangerous feature IDs included in the association.
+     * Returns a set of all the dangerous feature IDs included in the association.
      *
-     * @return a list of all the dangerous feature IDs included in the association
+     * @return a set of all the dangerous feature IDs included in the association
      */
     @JsonIgnore
-    public List<BigInteger> getDangerIds() {
+    public Set<BigInteger> getDangerIds() {
         return this.getDangers()
                 .stream()
                 .map(DangerousFeature::getId)
-                .sorted()
-                .toList();
+                .collect(Collectors.toSet());
     }
 }

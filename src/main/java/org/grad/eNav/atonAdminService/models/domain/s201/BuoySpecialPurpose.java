@@ -22,7 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The S-201 Buoy Special Purpose Entity Class.
@@ -32,7 +32,7 @@ import java.util.List;
  * {@link GenericBuoy} super class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s_201.gml.cs0._2.CategoryOfSpecialPurposeMarkType
+ * @see _int.iho.s_201.gml.cs0._2.SpecialPurposeGeneralBuoy
  */
 @Entity
 public class BuoySpecialPurpose extends GenericBuoy {
@@ -40,14 +40,14 @@ public class BuoySpecialPurpose extends GenericBuoy {
     // Class Variables
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = CategoryOfSpecialPurposeMarkType.class)
-    private List<CategoryOfSpecialPurposeMarkType> categoryOfSpecialPurposeMarks;
+    private Set<CategoryOfSpecialPurposeMarkType> categoryOfSpecialPurposeMarks;
 
     /**
      * Gets category of special purpose marks.
      *
      * @return the category of special purpose marks
      */
-    public List<CategoryOfSpecialPurposeMarkType> getCategoryOfSpecialPurposeMarks() {
+    public Set<CategoryOfSpecialPurposeMarkType> getCategoryOfSpecialPurposeMarks() {
         return categoryOfSpecialPurposeMarks;
     }
 
@@ -56,7 +56,7 @@ public class BuoySpecialPurpose extends GenericBuoy {
      *
      * @param categoryOfSpecialPurposeMarks the category of special purpose marks
      */
-    public void setCategoryOfSpecialPurposeMarks(List<CategoryOfSpecialPurposeMarkType> categoryOfSpecialPurposeMarks) {
+    public void setCategoryOfSpecialPurposeMarks(Set<CategoryOfSpecialPurposeMarkType> categoryOfSpecialPurposeMarks) {
         this.categoryOfSpecialPurposeMarks = categoryOfSpecialPurposeMarks;
     }
 }

@@ -16,6 +16,8 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
+import _int.iho.s_201.gml.cs0._2.DataCoverage;
+import _int.iho.s_201.gml.cs0._2.impl.DataCoverageImpl;
 import _int.iho.s_201.s_100.gml.base._5_2.*;
 import _int.iho.s_201.s_100.gml.base._5_2.CurveType;
 import _int.iho.s_201.s_100.gml.base._5_2.PointType;
@@ -31,6 +33,7 @@ import _int.iho.s_201.gml.cs0._2.AidsToNavigationType;
 import jakarta.xml.bind.JAXBElement;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201AtonTypes;
+import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.s201.utils.S201Utils;
 import org.locationtech.jts.geom.*;
 
@@ -66,8 +69,25 @@ public class GeometryS201Converter {
     public List<?> convertFromGeometry(AidsToNavigation aidsToNavigation) {
         return Optional.ofNullable(aidsToNavigation)
                 .map(aton -> this.geometryToS201PointCurveSurfaceGeometry(aton.getGeometry()))
-                .map(values -> S201Utils.generateS201AidsToNavigationTypeGeometriesList(S201AtonTypes.fromLocalClass(aidsToNavigation.getClass()).getS201Class(), values))
+                .map(values -> S201Utils.generateS201AbstractFeatureGeometriesList(S201AtonTypes.fromLocalClass(aidsToNavigation.getClass()).getS201Class(), values))
                 .orElse(null);
+    }
+
+    /**
+     * Convert an S-201 dataset entry to the S-201 Point/Curve/Surface
+     * geometry.
+     *
+     * @param s201Dataset the S-201 dataset entry
+     * @return the respective Point/Curve/Surface geometry object
+     */
+    public List<DataCoverage.Geometry> convertFromGeometry(S201Dataset s201Dataset) {
+        return Optional.ofNullable(s201Dataset)
+                .map(dataset -> this.geometryToS201PointCurveSurfaceGeometry(dataset.getGeometry()))
+                .map(values -> S201Utils.generateS201AbstractFeatureGeometriesList(DataCoverageImpl.class, values))
+                .stream()
+                .filter(DataCoverage.Geometry.class::isInstance)
+                .map(DataCoverage.Geometry.class::cast)
+                .toList();
     }
 
     /**

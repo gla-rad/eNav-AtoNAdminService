@@ -271,12 +271,10 @@ public class RecommendedTrack extends AidsToNavigation {
      * @param navigationLines the navigation lines
      */
     public void setNavigationLines(Set<NavigationLine> navigationLines) {
-        this.navigationLines.clear();
-        if (navigationLines != null) {
-            // Set the parent correctly
-            navigationLines.forEach(fn -> fn.getNavigableTracks().add(this));
-            // And update the associations
-            this.navigationLines.addAll(navigationLines);
+        if(navigationLines != null) {
+            navigationLines.forEach(navLine -> navLine.getNavigableTracks().add(this));
         }
+        this.navigationLines.clear();
+        this.navigationLines.addAll(navigationLines);
     }
 }

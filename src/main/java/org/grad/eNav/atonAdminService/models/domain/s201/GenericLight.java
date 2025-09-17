@@ -51,10 +51,6 @@ public abstract class GenericLight extends Equipment {
     private BigDecimal peakIntensity;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = ColourType.class)
-    private Set<ColourType> colours;
-
-    @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
     private Set<StatusType> statuses;
 
@@ -146,19 +142,6 @@ public abstract class GenericLight extends Equipment {
      */
     public void setPeakIntensity(BigDecimal peakIntensity) {
         this.peakIntensity = peakIntensity;
-    }
-
-    public Set<ColourType> getColours() {
-        return colours;
-    }
-
-    /**
-     * Sets colours.
-     *
-     * @param colours the colours
-     */
-    public void setColours(Set<ColourType> colours) {
-        this.colours = colours;
     }
 
     /**

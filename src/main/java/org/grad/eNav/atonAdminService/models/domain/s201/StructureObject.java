@@ -17,8 +17,11 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.AidAvailabilityCategoryType;
+import _int.iho.s_201.gml.cs0._2.ConditionType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,15 +42,48 @@ import java.util.Set;
 public abstract class StructureObject extends AidsToNavigation {
 
     //Class Variables
+    @KeywordField(name="aton_number", sortable = Sortable.YES)
+    private String atonNumber;
+
     @Enumerated(EnumType.STRING)
     private AidAvailabilityCategoryType aidAvailabilityCategory;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Enumerated(EnumType.STRING)
+    private ConditionType condition;
+
     private ContactAddress contactAddress;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Information> informations = new HashSet<>();
+
+    private Set<AtonFixingMethod> fixingMethods = new HashSet<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "positions", cascade = CascadeType.ALL, orphanRemoval = true)
+    final private Set<PositioningInformation> positioningMethods = new HashSet<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     final private Set<Equipment> children = new HashSet<>();
+
+    /**
+     * Gets aton number.
+     *
+     * @return the aton number
+     */
+    public String getAtonNumber() {
+        return atonNumber;
+    }
+
+    /**
+     * Sets aton number.
+     *
+     * @param atonNumber the aton number
+     */
+    public void setAtonNumber(String atonNumber) {
+        this.atonNumber = atonNumber;
+    }
 
     /**
      * Gets aid availability category.
@@ -65,6 +101,24 @@ public abstract class StructureObject extends AidsToNavigation {
      */
     public void setAidAvailabilityCategory(AidAvailabilityCategoryType aidAvailabilityCategory) {
         this.aidAvailabilityCategory = aidAvailabilityCategory;
+    }
+
+    /**
+     * Gets condition type.
+     *
+     * @return the condition type
+     */
+    public ConditionType getCondition() {
+        return condition;
+    }
+
+    /**
+     * Sets condition type.
+     *
+     * @param condition the condition type
+     */
+    public void setCondition(ConditionType condition) {
+        this.condition = condition;
     }
 
     /**
@@ -86,6 +140,50 @@ public abstract class StructureObject extends AidsToNavigation {
     }
 
     /**
+     * Gets positioning methods.
+     *
+     * @return the positioning methods
+     */
+    public Set<PositioningInformation> getPositioningMethods() {
+        return positioningMethods;
+    }
+
+    /**
+     * Sets positioning methods.
+     *
+     * @param positioningMethods the positioning methods
+     */
+    public void setPositioningMethods(Set<PositioningInformation> positioningMethods) {
+        if(positioningMethods != null)  {
+            positioningMethods.forEach(positioningMethod -> positioningMethod.setPositions(this));
+        }
+        this.positioningMethods.clear();
+        this.positioningMethods.addAll(positioningMethods);
+    }
+
+    /**
+     * Gets fixing methods.
+     *
+     * @return the fixing methods
+     */
+    public Set<AtonFixingMethod> getFixingMethods() {
+        return fixingMethods;
+    }
+
+    /**
+     * Sets fixing methods.
+     *
+     * @param fixingMethods the fixing methods
+     */
+    public void setFixingMethods(Set<AtonFixingMethod> fixingMethods) {
+        if(fixingMethods != null) {
+            fixingMethods.forEach(positioningMethod -> positioningMethod.setFixes(this));
+        }
+        this.fixingMethods.clear();
+        this.fixingMethods.addAll(fixingMethods);
+    }
+
+    /**
      * Gets children.
      *
      * @return the children
@@ -100,9 +198,10 @@ public abstract class StructureObject extends AidsToNavigation {
      * @param children the children
      */
     public void setChildren(Set<Equipment> children) {
-        this.children.clear();
-        if (children!= null) {
-            this.children.addAll(children);
+        if(children != null) {
+            children.forEach(child -> child.setParent(this));
         }
+        this.children.clear();
+        this.children.addAll(children);
     }
 }
