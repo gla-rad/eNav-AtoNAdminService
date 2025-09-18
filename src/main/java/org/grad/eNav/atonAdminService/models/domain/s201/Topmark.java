@@ -18,13 +18,9 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.ColourPatternType;
 import _int.iho.s_201.gml.cs0._2.ColourType;
-import _int.iho.s_201.gml.cs0._2.MarksNavigationalSystemOfType;
 import _int.iho.s_201.gml.cs0._2.StatusType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -60,6 +56,7 @@ public class Topmark extends Equipment {
     private BigDecimal verticalLength;
 
     @JsonBackReference
+    @ManyToOne
     private GenericBuoy buoyPart;
 
     /**

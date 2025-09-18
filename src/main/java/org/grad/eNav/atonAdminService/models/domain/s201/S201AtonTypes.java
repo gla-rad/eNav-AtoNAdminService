@@ -16,9 +16,7 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s_201.gml.cs0._2.AidsToNavigationType;
-import _int.iho.s_201.gml.cs0._2.EquipmentType;
-import _int.iho.s_201.gml.cs0._2.StructureObjectType;
+import _int.iho.s_201.gml.cs0._2.*;
 import _int.iho.s_201.gml.cs0._2.impl.*;
 
 import java.lang.reflect.Field;
@@ -76,10 +74,10 @@ public enum S201AtonTypes {
     TOPMARK("Topmark", TopmarkImpl.class, Topmark.class),
     VIRTUAL_AIS_ATON("Virtual AtoN", VirtualAISAidToNavigationImpl.class, VirtualAISAidToNavigation.class),
     MOORING_SHACKLE("Mooring Shackle", MooringShackleImpl.class, MooringShackle.class),
-    BRIDLE("Bridle", BridgeImpl.class, Bridle.class),
+    BRIDLE("Bridle", BridleImpl.class, Bridle.class),
     SWIVEL("Swivel", SwivelImpl.class, Swivel.class),
     SINKER_ANCHOR("Sinker Anchor", SinkerAnchorImpl.class, SinkerAnchor.class),
-    CABLE_SUBMARINE("Sinker Anchor", CableSubmarineImpl.class, CableSubmarine.class),
+    CABLE_SUBMARINE("Cable Submarine", CableSubmarineImpl.class, CableSubmarine.class),
     UNKNOWN("Unknown", AidsToNavigationTypeImpl.class, AidsToNavigation.class);
 
     // Enum Variables

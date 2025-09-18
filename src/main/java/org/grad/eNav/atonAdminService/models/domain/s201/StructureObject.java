@@ -54,10 +54,8 @@ public abstract class StructureObject extends AidsToNavigation {
     private ContactAddress contactAddress;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Information> informations = new HashSet<>();
-
-    private Set<AtonFixingMethod> fixingMethods = new HashSet<>();
+    @OneToMany(mappedBy = "fixes", cascade = CascadeType.ALL, orphanRemoval = true)
+    final private Set<AtonFixingMethod> fixingMethods = new HashSet<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "positions", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -154,11 +152,11 @@ public abstract class StructureObject extends AidsToNavigation {
      * @param positioningMethods the positioning methods
      */
     public void setPositioningMethods(Set<PositioningInformation> positioningMethods) {
+        this.positioningMethods.clear();
         if(positioningMethods != null)  {
             positioningMethods.forEach(positioningMethod -> positioningMethod.setPositions(this));
+            this.positioningMethods.addAll(positioningMethods);
         }
-        this.positioningMethods.clear();
-        this.positioningMethods.addAll(positioningMethods);
     }
 
     /**
@@ -176,11 +174,11 @@ public abstract class StructureObject extends AidsToNavigation {
      * @param fixingMethods the fixing methods
      */
     public void setFixingMethods(Set<AtonFixingMethod> fixingMethods) {
+        this.fixingMethods.clear();
         if(fixingMethods != null) {
             fixingMethods.forEach(positioningMethod -> positioningMethod.setFixes(this));
+            this.fixingMethods.addAll(fixingMethods);
         }
-        this.fixingMethods.clear();
-        this.fixingMethods.addAll(fixingMethods);
     }
 
     /**
@@ -198,10 +196,10 @@ public abstract class StructureObject extends AidsToNavigation {
      * @param children the children
      */
     public void setChildren(Set<Equipment> children) {
+        this.children.clear();
         if(children != null) {
             children.forEach(child -> child.setParent(this));
+            this.children.addAll(children);
         }
-        this.children.clear();
-        this.children.addAll(children);
     }
 }

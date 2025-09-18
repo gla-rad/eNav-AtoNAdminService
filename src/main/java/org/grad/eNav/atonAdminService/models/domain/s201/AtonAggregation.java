@@ -109,8 +109,9 @@ public class AtonAggregation implements Serializable {
      */
     public void setPeers(Set<AidsToNavigation> peers) {
         this.peers.clear();
-        if (peers!= null) {
-            this.getPeers().addAll(peers);
+        if(peers != null) {
+            peers.forEach(peer -> peer.getAggregations().add(this));
+            this.peers.addAll(peers);
         }
     }
 

@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -68,7 +69,8 @@ public class RecommendedTrack extends AidsToNavigation {
     /**
      * The Navigation lines.
      */
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @JsonBackReference
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "recommended_track_nav_lines",
             joinColumns = {@JoinColumn(name = "recommended_track_id")},
@@ -271,10 +273,10 @@ public class RecommendedTrack extends AidsToNavigation {
      * @param navigationLines the navigation lines
      */
     public void setNavigationLines(Set<NavigationLine> navigationLines) {
+        this.navigationLines.clear();
         if(navigationLines != null) {
             navigationLines.forEach(navLine -> navLine.getNavigableTracks().add(this));
+            this.navigationLines.addAll(navigationLines);
         }
-        this.navigationLines.clear();
-        this.navigationLines.addAll(navigationLines);
     }
 }

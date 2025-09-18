@@ -61,7 +61,7 @@ public class LightSectored extends GenericLight {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "sectorOf", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<SectorCharacteristics> sectorCharacteristics = new HashSet<>();
+    final private Set<SectorCharacteristics> sectorCharacteristics = new HashSet<>();
 
     /**
      * Gets colours.
@@ -204,10 +204,10 @@ public class LightSectored extends GenericLight {
      * @param sectorCharacteristics the sector characteristics
      */
     public void setSectorCharacteristics(Set<SectorCharacteristics> sectorCharacteristics) {
+        this.sectorCharacteristics.clear();
         if(sectorCharacteristics != null) {
             sectorCharacteristics.forEach(sectorCharacteristic -> sectorCharacteristic.setSectorOf(this));
+            this.sectorCharacteristics.addAll(sectorCharacteristics);
         }
-        this.sectorCharacteristics.clear();
-        this.sectorCharacteristics.addAll(sectorCharacteristics);
     }
 }

@@ -124,6 +124,19 @@ public class DangerousFeature implements Serializable {
     }
 
     /**
+     * Sets marking atons.
+     *
+     * @param markingAtons the marking atons
+     */
+    public void setMarkingAtons(Set<AtonAssociation> markingAtons) {
+        this.markingAtons.clear();
+        if(markingAtons != null) {
+            markingAtons.forEach(peer -> peer.getDangers().add(this));
+            this.markingAtons.addAll(markingAtons);
+        }
+    }
+
+    /**
      * Gets geometry.
      *
      * @return the geometry

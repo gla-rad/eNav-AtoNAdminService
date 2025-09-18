@@ -56,7 +56,7 @@ public class SectorCharacteristics implements Serializable {
     private Set<SignalSequence> signalSequences;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private LightSectored sectorOf;
 
     /**

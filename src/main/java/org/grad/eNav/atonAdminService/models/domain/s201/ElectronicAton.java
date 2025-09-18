@@ -54,7 +54,7 @@ public abstract class ElectronicAton extends AidsToNavigation {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "broadcast_by_join_table",
-            joinColumns = { @JoinColumn(name = "ais_aton_id") },
+            joinColumns = { @JoinColumn(name = "electronic_aton_id") },
             inverseJoinColumns = { @JoinColumn(name = "radio_station_id") }
     )
     private Set<RadioStation> broadcastBy;

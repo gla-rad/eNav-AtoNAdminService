@@ -171,10 +171,10 @@ public class Swivel extends AidsToNavigation {
      * @param swivelAttacheds the swivel attacheds
      */
     public void setSwivelAttacheds(Set<CableSubmarine> swivelAttacheds) {
+        this.swivelAttacheds.clear();
         if(swivelAttacheds != null) {
             swivelAttacheds.forEach(swivel -> swivel.setCableHoldsSwivel(this));
+            this.swivelAttacheds.addAll(swivelAttacheds);
         }
-        this.swivelAttacheds.clear();
-        this.swivelAttacheds.addAll(swivelAttacheds);
     }
 }

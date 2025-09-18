@@ -51,20 +51,20 @@ public class AtonAssociation implements Serializable {
     @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "dangerous_feature_association_join_table",
-            joinColumns = { @JoinColumn(name = "association_id") },
-            inverseJoinColumns = { @JoinColumn(name = "dangerous_feature_id") }
-    )
-    final private Set<DangerousFeature> dangers = new HashSet<>();
-
-    @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
             name = "association_join_table",
             joinColumns = { @JoinColumn(name = "association_id") },
             inverseJoinColumns = { @JoinColumn(name = "aton_id") }
     )
     final private Set<AidsToNavigation> peers = new HashSet<>();
+
+    @JsonBackReference
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "dangerous_feature_association_join_table",
+            joinColumns = { @JoinColumn(name = "association_id") },
+            inverseJoinColumns = { @JoinColumn(name = "dangerous_feature_id") }
+    )
+    final private Set<DangerousFeature> dangers = new HashSet<>();
 
     /**
      * Gets id.
@@ -103,27 +103,6 @@ public class AtonAssociation implements Serializable {
     }
 
     /**
-     * Gets dangers.
-     *
-     * @return the dangers
-     */
-    public Set<DangerousFeature> getDangers() {
-        return dangers;
-    }
-
-    /**
-     * Sets dangers.
-     *
-     * @param dangers the dangers
-     */
-    public void setDangers(Set<DangerousFeature> dangers) {
-        this.dangers.clear();
-        if (dangers!= null) {
-            this.getDangers().addAll(dangers);
-        }
-    }
-
-    /**
      * Gets peers.
      *
      * @return the peers
@@ -139,8 +118,31 @@ public class AtonAssociation implements Serializable {
      */
     public void setPeers(Set<AidsToNavigation> peers) {
         this.peers.clear();
-        if (peers!= null) {
-            this.getPeers().addAll(peers);
+        if(peers != null) {
+            peers.forEach(peer -> peer.getAssociations().add(this));
+            this.peers.addAll(peers);
+        }
+    }
+
+    /**
+     * Gets dangers.
+     *
+     * @return the dangers
+     */
+    public Set<DangerousFeature> getDangers() {
+        return dangers;
+    }
+
+    /**
+     * Sets dangers.
+     *
+     * @param dangers the dangers
+     */
+    public void setDangers(Set<DangerousFeature> dangers) {
+        this.dangers.clear();
+        if(dangers != null) {
+            dangers.forEach(peer -> peer.getMarkingAtons().add(this));
+            this.dangers.addAll(dangers);
         }
     }
 

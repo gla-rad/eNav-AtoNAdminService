@@ -46,11 +46,11 @@ public class MooringShackle extends AidsToNavigation {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "shackleToCableConnected", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CableSubmarine> shackleToCableConnectedTo = new HashSet<>();
+    final private Set<CableSubmarine> shackleToCableConnectedTo = new HashSet<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "shackleToSwivelConnected", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Swivel> shackleToSwivelConnectedTo = new HashSet<>();
+    final private Set<Swivel> shackleToSwivelConnectedTo = new HashSet<>();
 
     /**
      * Gets nature of construction.
@@ -175,11 +175,11 @@ public class MooringShackle extends AidsToNavigation {
      * @param shackleToSwivelConnectedTo the shackle to swivel connected to
      */
     public void setShackleToSwivelConnectedTo(Set<Swivel> shackleToSwivelConnectedTo) {
+        this.shackleToSwivelConnectedTo.clear();
         if(shackleToSwivelConnectedTo != null) {
             shackleToSwivelConnectedTo.forEach(connection -> connection.setShackleToSwivelConnected(this));
+            this.shackleToSwivelConnectedTo.addAll(shackleToSwivelConnectedTo);
         }
-        this.shackleToSwivelConnectedTo.clear();
-        this.shackleToSwivelConnectedTo.addAll(shackleToSwivelConnectedTo);
     }
 
     /**
@@ -197,10 +197,10 @@ public class MooringShackle extends AidsToNavigation {
      * @param shackleToCableConnectedTo the shackle to cable connected to
      */
     public void setShackleToCableConnectedTo(Set<CableSubmarine> shackleToCableConnectedTo) {
+        this.shackleToSwivelConnectedTo.clear();
         if(shackleToCableConnectedTo != null) {
             shackleToCableConnectedTo.forEach(connection -> connection.setShackleToCableConnected(this));
+            this.shackleToCableConnectedTo.addAll(shackleToCableConnectedTo);
         }
-        this.shackleToSwivelConnectedTo.clear();
-        this.shackleToCableConnectedTo.addAll(shackleToCableConnectedTo);
     }
 }

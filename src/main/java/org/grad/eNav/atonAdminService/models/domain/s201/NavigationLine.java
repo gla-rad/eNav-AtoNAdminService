@@ -18,8 +18,10 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.CategoryOfNavigationLineType;
 import _int.iho.s_201.gml.cs0._2.StatusType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -45,8 +47,9 @@ public class NavigationLine extends AidsToNavigation {
     @ElementCollection(targetClass = StatusType.class)
     private Set<StatusType> statuses;
 
+    @JsonManagedReference
     @ManyToMany(mappedBy = "navigationLines")
-    private Set<RecommendedTrack> navigableTracks;
+    final private Set<RecommendedTrack> navigableTracks = new HashSet<>();
 
     /**
      * Gets category of navigation line.
@@ -117,6 +120,10 @@ public class NavigationLine extends AidsToNavigation {
      * @param navigableTracks the navigable tracks
      */
     public void setNavigableTracks(Set<RecommendedTrack> navigableTracks) {
-        this.navigableTracks = navigableTracks;
+        this.navigableTracks.clear();
+        if(navigableTracks != null) {
+            navigableTracks.forEach(navigableTrack -> navigableTrack.getNavigationLines().add(this));
+            this.navigableTracks.addAll(navigableTracks);
+        }
     }
 }

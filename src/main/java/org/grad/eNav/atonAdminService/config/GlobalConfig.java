@@ -131,120 +131,116 @@ public class GlobalConfig {
         // Loop all the mapped S-201 AtoN types and configure the model mapper
         // to translate correctly from the S-201 onto the local classes and
         // vice versa
-        try {
-            for (S201AtonTypes atonType : S201AtonTypes.values()) {
-                // Skip the unknown type, we don't need it
-                if (atonType == S201AtonTypes.UNKNOWN) {
-                    continue;
-                }
-
-                modelMapper.createTypeMap(atonType.getS201Class(), atonType.getLocalClass())
-                        .implicitMappings()
-                        .addMappings(mapper -> {
-                            mapper.skip(AidsToNavigation::setId); // We don't know if the ID is correct so skip it
-                            mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
-                                            .map(AidsToNavigationTypeImpl.class::cast)
-                                            .map(AidsToNavigationTypeImpl::getFixedDateRange)
-                                            .map(FixedDateRangeType::getDateStart)
-                                            .orElse(null)))
-                                    .map(src -> src, AidsToNavigation::setDateStart);
-                            mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
-                                            .map(AidsToNavigationTypeImpl.class::cast)
-                                            .map(AidsToNavigationTypeImpl::getFixedDateRange)
-                                            .map(FixedDateRangeType::getDateEnd)
-                                            .orElse(null)))
-                                    .map(src -> src, AidsToNavigation::setDateEnd);
-                            mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
-                                            .map(AidsToNavigationTypeImpl.class::cast)
-                                            .map(AidsToNavigationTypeImpl::getPeriodicDateRange)
-                                            .map(PeriodicDateRangeType::getDateStart)
-                                            .orElse(null)))
-                                    .map(src -> src, AidsToNavigation::setPeriodStart);
-                            mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
-                                            .map(AidsToNavigationTypeImpl.class::cast)
-                                            .map(AidsToNavigationTypeImpl::getPeriodicDateRange)
-                                            .map(PeriodicDateRangeType::getDateEnd)
-                                            .orElse(null)))
-                                    .map(src -> src, AidsToNavigation::setPeriodEnd);
-                            mapper.using(ctx -> new GeometryS201Converter().convertToGeometry(((AidsToNavigationType) ctx.getSource())))
-                                    .map(src -> src, AidsToNavigation::setGeometry);
-                        });
-
-                // For structures, don't map the children
-                if (atonType.isStructure()) {
-                    modelMapper.typeMap(atonType.getS201Class(), atonType.getLocalStructureClass())
-                            .addMappings(mapper -> {
-                                mapper.skip(StructureObject::setChildren);
-                            });
-                }
-
-                // For equipment, don't map the parent
-                if (atonType.isEquipment()) {
-                    modelMapper.typeMap(atonType.getS201Class(), atonType.getLocalEquipmentClass())
-                            .addMappings(mapper -> {
-                                mapper.skip(Equipment::setParent);
-                            });
-                }
-
-                modelMapper.createTypeMap(atonType.getLocalClass(), atonType.getS201Class())
-                        .implicitMappings()
-                        .addMappings(mapper -> {
-                            mapper.using(ctx -> "ID-ATON-" + ((AidsToNavigation) ctx.getSource()).getId())
-                                    .map(src -> src, AidsToNavigationType::setId);
-                            mapper.when(ctx -> ctx.getDestinationType().equals(FixedDateRangeType.class))
-                                    .with(ctx -> new FixedDateRangeTypeImpl())
-                                    .using(ctx -> {
-                                        final FixedDateRangeType fixedDateRangeType = new FixedDateRangeTypeImpl();
-                                        fixedDateRangeType.setDateStart(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getDateStart()));
-                                        fixedDateRangeType.setDateEnd(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getDateEnd()));
-                                        return fixedDateRangeType;
-                                    })
-                                    .map(src -> src, AidsToNavigationType::setFixedDateRange);
-                            mapper.when(ctx -> ctx.getDestinationType().equals(PeriodicDateRangeType.class))
-                                    .with(ctx -> new PeriodicDateRangeTypeImpl())
-                                    .using(ctx -> {
-                                        final PeriodicDateRangeType periodicDateRangeType = new PeriodicDateRangeTypeImpl();
-                                        periodicDateRangeType.setDateStart(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getPeriodStart()));
-                                        periodicDateRangeType.setDateEnd(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getPeriodEnd()));
-                                        return periodicDateRangeType;
-                                    })
-                                    .map(src -> src, AidsToNavigationType::setPeriodicDateRange);
-                            mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getInformations(), new TypeToken<List<InformationTypeImpl>>() {
-                                    }.getType()))
-                                    .map(src -> src, AidsToNavigationTypeImpl::setInformations);
-                            mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getFeatureNames(), new TypeToken<List<FeatureNameTypeImpl>>() {
-                                    }.getType()))
-                                    .map(src -> src, AidsToNavigationTypeImpl::setFeatureNames);
-                            mapper.using(ctx -> new GeometryS201Converter().convertFromGeometry((AidsToNavigation) ctx.getSource()))
-                                    .map(src -> src, (dest, val) -> {
-                                        try {
-                                            new PropertyDescriptor("geometries", atonType.getS201Class()).getWriteMethod().invoke(dest, val);
-                                        } catch (Exception ex) {
-                                            log.error(ex.getMessage());
-                                        }
-                                    });
-                        });
-
-                // For structures, map the children to reference types
-                if (atonType.isStructure()) {
-                    modelMapper.typeMap(atonType.getLocalStructureClass(), atonType.getS201StructureClass())
-                            .addMappings(mapper -> {
-                                mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceTypes(((StructureObject) ctx.getSource()).getChildren(), ReferenceTypeRole.CHILD))
-                                        .map(src -> src, StructureObjectTypeImpl::setchildren);
-                            });
-                }
-
-                // For equipment, map the parent to single reference type
-                if (atonType.isEquipment()) {
-                    modelMapper.typeMap(atonType.getLocalEquipmentClass(), atonType.getS201EquipmentClass())
-                            .addMappings(mapper -> {
-                                mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceType(((Equipment) ctx.getSource()).getParent(), ReferenceTypeRole.PARENT))
-                                        .map(src -> src, EquipmentTypeImpl::setParent);
-                            });
-                }
+        for (S201AtonTypes atonType : S201AtonTypes.values()) {
+            // Skip the unknown type, we don't need it
+            if (atonType == S201AtonTypes.UNKNOWN) {
+                continue;
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            modelMapper.createTypeMap(atonType.getS201Class(), atonType.getLocalClass())
+                    .implicitMappings()
+                    .addMappings(mapper -> {
+                        mapper.skip(AidsToNavigation::setId); // We don't know if the ID is correct so skip it
+                        mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
+                                        .map(AidsToNavigationTypeImpl.class::cast)
+                                        .map(AidsToNavigationTypeImpl::getFixedDateRange)
+                                        .map(FixedDateRangeType::getDateStart)
+                                        .orElse(null)))
+                                .map(src -> src, AidsToNavigation::setDateStart);
+                        mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
+                                        .map(AidsToNavigationTypeImpl.class::cast)
+                                        .map(AidsToNavigationTypeImpl::getFixedDateRange)
+                                        .map(FixedDateRangeType::getDateEnd)
+                                        .orElse(null)))
+                                .map(src -> src, AidsToNavigation::setDateEnd);
+                        mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
+                                        .map(AidsToNavigationTypeImpl.class::cast)
+                                        .map(AidsToNavigationTypeImpl::getPeriodicDateRange)
+                                        .map(PeriodicDateRangeType::getDateStart)
+                                        .orElse(null)))
+                                .map(src -> src, AidsToNavigation::setPeriodStart);
+                        mapper.using(ctx -> S201Utils.s100TruncatedDateToLocalDate(Optional.ofNullable(ctx.getSource())
+                                        .map(AidsToNavigationTypeImpl.class::cast)
+                                        .map(AidsToNavigationTypeImpl::getPeriodicDateRange)
+                                        .map(PeriodicDateRangeType::getDateEnd)
+                                        .orElse(null)))
+                                .map(src -> src, AidsToNavigation::setPeriodEnd);
+                        mapper.using(ctx -> new GeometryS201Converter().convertToGeometry(((AidsToNavigationType) ctx.getSource())))
+                                .map(src -> src, AidsToNavigation::setGeometry);
+                    });
+
+            // For structures, don't map the children
+            if (atonType.isStructure()) {
+                modelMapper.typeMap(atonType.getS201Class(), atonType.getLocalStructureClass())
+                        .addMappings(mapper -> {
+                            mapper.skip(StructureObject::setChildren);
+                        });
+            }
+
+            // For equipment, don't map the parent
+            if (atonType.isEquipment()) {
+                modelMapper.typeMap(atonType.getS201Class(), atonType.getLocalEquipmentClass())
+                        .addMappings(mapper -> {
+                            mapper.skip(Equipment::setParent);
+                        });
+            }
+
+            modelMapper.createTypeMap(atonType.getLocalClass(), atonType.getS201Class())
+                    .implicitMappings()
+                    .addMappings(mapper -> {
+                        mapper.using(ctx -> "ID-ATON-" + ((AidsToNavigation) ctx.getSource()).getId())
+                                .map(src -> src, AidsToNavigationType::setId);
+                        mapper.when(ctx -> ctx.getDestinationType().equals(FixedDateRangeType.class))
+                                .with(ctx -> new FixedDateRangeTypeImpl())
+                                .using(ctx -> {
+                                    final FixedDateRangeType fixedDateRangeType = new FixedDateRangeTypeImpl();
+                                    fixedDateRangeType.setDateStart(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getDateStart()));
+                                    fixedDateRangeType.setDateEnd(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getDateEnd()));
+                                    return fixedDateRangeType;
+                                })
+                                .map(src -> src, AidsToNavigationType::setFixedDateRange);
+                        mapper.when(ctx -> ctx.getDestinationType().equals(PeriodicDateRangeType.class))
+                                .with(ctx -> new PeriodicDateRangeTypeImpl())
+                                .using(ctx -> {
+                                    final PeriodicDateRangeType periodicDateRangeType = new PeriodicDateRangeTypeImpl();
+                                    periodicDateRangeType.setDateStart(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getPeriodStart()));
+                                    periodicDateRangeType.setDateEnd(S201Utils.localDateToS100TruncatedDate(((AidsToNavigation) ctx.getSource()).getPeriodEnd()));
+                                    return periodicDateRangeType;
+                                })
+                                .map(src -> src, AidsToNavigationType::setPeriodicDateRange);
+                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getInformations(), new TypeToken<List<InformationTypeImpl>>() {
+                                }.getType()))
+                                .map(src -> src, AidsToNavigationTypeImpl::setInformations);
+                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getFeatureNames(), new TypeToken<List<FeatureNameTypeImpl>>() {
+                                }.getType()))
+                                .map(src -> src, AidsToNavigationTypeImpl::setFeatureNames);
+                        mapper.using(ctx -> new GeometryS201Converter().convertFromGeometry((AidsToNavigation) ctx.getSource()))
+                                .map(src -> src, (dest, val) -> {
+                                    try {
+                                        new PropertyDescriptor("geometries", atonType.getS201Class()).getWriteMethod().invoke(dest, val);
+                                    } catch (Exception ex) {
+                                        log.error(ex.getMessage());
+                                    }
+                                });
+                    });
+
+            // For structures, map the children to reference types
+            if (atonType.isStructure()) {
+                modelMapper.typeMap(atonType.getLocalStructureClass(), atonType.getS201StructureClass())
+                        .addMappings(mapper -> {
+                            mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceTypes(((StructureObject) ctx.getSource()).getChildren(), ReferenceTypeRole.CHILD))
+                                    .map(src -> src, StructureObjectTypeImpl::setchildren);
+                        });
+            }
+
+            // For equipment, map the parent to single reference type
+            if (atonType.isEquipment()) {
+                modelMapper.typeMap(atonType.getLocalEquipmentClass(), atonType.getS201EquipmentClass())
+                        .addMappings(mapper -> {
+                            mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceType(((Equipment) ctx.getSource()).getParent(), ReferenceTypeRole.PARENT))
+                                    .map(src -> src, EquipmentTypeImpl::setParent);
+                        });
+            }
         }
 
         // Create the Aggregation/Association type maps

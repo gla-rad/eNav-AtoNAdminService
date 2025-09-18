@@ -31,15 +31,15 @@ public class CableSubmarine extends AidsToNavigation {
     private Set<StatusType> statuses;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Swivel cableHoldsSwivel;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Bridle cableHoldsBridle;
 
     @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private MooringShackle shackleToCableConnected;
 
     /**

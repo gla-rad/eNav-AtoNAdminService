@@ -110,6 +110,7 @@ public abstract class AidsToNavigation implements Serializable {
     private Set<FeatureName> featureNames = new HashSet<>();
 
     @JsonManagedReference
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
     final private Set<Information> informations = new HashSet<>();
 
     @JsonManagedReference
@@ -430,11 +431,11 @@ public abstract class AidsToNavigation implements Serializable {
      * @param informations the informations
      */
     public void setInformations(Set<Information> informations) {
+        this.informations.clear();
         if(informations != null) {
             informations.forEach(information -> information.setFeature(this));
+            this.informations.addAll(informations);
         }
-        this.informations.clear();
-        this.informations.addAll(informations);
     }
 
     /**
@@ -452,11 +453,11 @@ public abstract class AidsToNavigation implements Serializable {
      * @param aggregations the aggregations
      */
     public void setAggregations(Set<AtonAggregation> aggregations) {
+        this.aggregations.clear();
         if(aggregations != null) {
             aggregations.forEach(aggregation -> aggregation.getPeers().add(this));
+            this.aggregations.addAll(aggregations);
         }
-        this.aggregations.clear();
-        this.aggregations.addAll(aggregations);
     }
 
     /**
@@ -474,11 +475,11 @@ public abstract class AidsToNavigation implements Serializable {
      * @param associations the associations
      */
     public void setAssociations(Set<AtonAssociation> associations) {
+        this.associations.clear();
         if(associations != null) {
             associations.forEach(association -> association.getPeers().add(this));
+            this.associations.addAll(associations);
         }
-        this.associations.clear();
-        this.associations.addAll(associations);
     }
 
     /**

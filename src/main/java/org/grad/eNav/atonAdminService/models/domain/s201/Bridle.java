@@ -127,10 +127,10 @@ public class Bridle extends AidsToNavigation {
      * @param bridleAttacheds the bridle attacheds
      */
     public void setBridleAttacheds(Set<CableSubmarine> bridleAttacheds) {
+        this.bridleAttacheds.clear();
         if(bridleAttacheds != null) {
             bridleAttacheds.forEach(bridleAttached -> bridleAttached.setCableHoldsBridle(this));
+            this.bridleAttacheds.addAll(bridleAttacheds);
         }
-        this.bridleAttacheds.clear();
-        this.bridleAttacheds.addAll(bridleAttacheds);
     }
 }

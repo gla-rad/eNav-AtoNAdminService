@@ -279,11 +279,11 @@ public abstract class GenericBuoy extends StructureObject {
      * @param topmarkParts the topmark parts
      */
     public void setTopmarkParts(Set<Topmark> topmarkParts) {
+        this.topmarkParts.clear();
         if(topmarkParts != null) {
             topmarkParts.forEach(topmark -> topmark.setBuoyPart(this));
+            this.topmarkParts.addAll(topmarkParts);
         }
-        this.topmarkParts.clear();
-        this.topmarkParts.addAll(topmarkParts);
     }
 
     /**

@@ -73,7 +73,7 @@ public class S201Dataset {
     @Column(columnDefinition="uuid", unique = true, updatable = false, nullable = false)
     private UUID uuid;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dataset_identification_id", referencedColumnName = "id")
     @IndexedEmbedded(includeEmbeddedObjectId = true)
     private S201DatasetIdentification datasetIdentificationInformation;
