@@ -23,7 +23,6 @@ import jakarta.persistence.Enumerated;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * The S-201 Sinker Dimensions Embeddable Class.

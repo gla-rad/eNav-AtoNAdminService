@@ -30,7 +30,7 @@ public class CounterWeight extends AidsToNavigation {
     private String counterWeightType;
 
     @JsonBackReference
-    @OneToOne(mappedBy = "buoyAttached", cascade = CascadeType.ALL)
+    @OneToOne
     private GenericBuoy counterWeightHolds;
 
     /**

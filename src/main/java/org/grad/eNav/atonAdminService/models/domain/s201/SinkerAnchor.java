@@ -1,6 +1,7 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.NatureOfConstructionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -29,8 +30,8 @@ public class SinkerAnchor extends AidsToNavigation {
 
     private String sinkerType;
 
-    @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @OneToOne
     private MooringShackle shackleToAnchorConnected;
 
     /**

@@ -17,7 +17,6 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.LightCharacteristicType;
-import _int.iho.s_201.gml.cs0._2.StatusType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -47,12 +46,13 @@ public class SectorCharacteristics implements Serializable {
     @Enumerated(EnumType.STRING)
     private LightCharacteristicType lightCharacteristic;
 
-    private Set<LightSector> lightSectors;
+    private LightSector lightSector;
 
     private Set<String> signalGroups;
 
     private BigDecimal signalPeriod;
 
+    @ElementCollection
     private Set<SignalSequence> signalSequences;
 
     @JsonBackReference
@@ -96,21 +96,21 @@ public class SectorCharacteristics implements Serializable {
     }
 
     /**
-     * Gets light sectors.
+     * Gets light sector.
      *
-     * @return the light sectors
+     * @return the light sector
      */
-    public Set<LightSector> getLightSectors() {
-        return lightSectors;
+    public LightSector getLightSector() {
+        return lightSector;
     }
 
     /**
-     * Sets light sectors.
+     * Sets light sector.
      *
-     * @param lightSectors the light sectors
+     * @param lightSector the light sector
      */
-    public void setLightSectors(Set<LightSector> lightSectors) {
-        this.lightSectors = lightSectors;
+    public void setLightSector(LightSector lightSector) {
+        this.lightSector = lightSector;
     }
 
     /**

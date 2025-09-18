@@ -220,6 +220,15 @@ public class S201Dataset {
     }
 
     /**
+     * Sets dataset content.
+     *
+     * @param datasetContent the dataset content
+     */
+    public void setDatasetContent(DatasetContent datasetContent) {
+        this.datasetContent = datasetContent;
+    }
+
+    /**
      * Gets cancels.
      *
      * @return the cancels
@@ -235,15 +244,6 @@ public class S201Dataset {
      */
     public void setReplaces(UUID replaces) {
         this.replaces = replaces;
-    }
-
-    /**
-     * Sets dataset content.
-     *
-     * @param datasetContent the dataset content
-     */
-    public void setDatasetContent(DatasetContent datasetContent) {
-        this.datasetContent = datasetContent;
     }
 
     /**

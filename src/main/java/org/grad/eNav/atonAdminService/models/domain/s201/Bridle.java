@@ -1,10 +1,8 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,16 +23,17 @@ public class Bridle extends AidsToNavigation {
     // Class Variables
     private String bridleLinkType;
 
-    @OneToOne(mappedBy = "buoyHangs")
+    @JsonBackReference
+    @OneToOne
     private GenericBuoy bridleHolds;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
-    private Swivel bridleHangs;
+    @OneToOne(mappedBy = "shackleToBridleConnectedTo", cascade = CascadeType.ALL)
+    private MooringShackle shackleToBridleConnected;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
-    private MooringShackle shackleToBridleConnected;
+    @OneToOne(mappedBy = "swivelHolds", cascade = CascadeType.ALL)
+    private Swivel bridleHangs;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "cableHoldsBridle", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -77,24 +76,6 @@ public class Bridle extends AidsToNavigation {
     }
 
     /**
-     * Gets bridle hangs.
-     *
-     * @return the bridle hangs
-     */
-    public Swivel getBridleHangs() {
-        return bridleHangs;
-    }
-
-    /**
-     * Sets bridle hangs.
-     *
-     * @param bridleHangs the bridle hangs
-     */
-    public void setBridleHangs(Swivel bridleHangs) {
-        this.bridleHangs = bridleHangs;
-    }
-
-    /**
      * Gets shackle to bridle connected.
      *
      * @return the shackle to bridle connected
@@ -110,6 +91,24 @@ public class Bridle extends AidsToNavigation {
      */
     public void setShackleToBridleConnected(MooringShackle shackleToBridleConnected) {
         this.shackleToBridleConnected = shackleToBridleConnected;
+    }
+
+    /**
+     * Gets bridle hangs.
+     *
+     * @return the bridle hangs
+     */
+    public Swivel getBridleHangs() {
+        return bridleHangs;
+    }
+
+    /**
+     * Sets bridle hangs.
+     *
+     * @param bridleHangs the bridle hangs
+     */
+    public void setBridleHangs(Swivel bridleHangs) {
+        this.bridleHangs = bridleHangs;
     }
 
     /**

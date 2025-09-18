@@ -33,7 +33,7 @@ import java.util.Set;
  * class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s_201.gml.cs0._2.RetroReflector
+ * @see _int.iho.s_201.gml.cs0._2.Retroreflector
  */
 @Entity
 public class RetroReflector extends Equipment {

@@ -32,9 +32,18 @@
 		<hibernate.search-orm.version>7.1.1.Final</hibernate.search-orm.version>
 		<hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
 		<lucene.spatial.version>9.8.0</lucene.spatial.version>
+        <mockito.version>5.19.0</mockito.version>
 	</properties>
 
 	<repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>maven-central</id>
+            <name>Maven Apache Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
 		<repository>
 			<id>grad</id>
 			<url>https://rnavlab.gla-rad.org/mvn/repository/grad/</url>
@@ -68,11 +77,23 @@
 				<artifactId>git-commit-id-maven-plugin</artifactId>
 				<version>7.0.0</version>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.3</version>
 				<configuration>
+                    <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
 					<systemPropertyVariables>
 						<pactbroker.url>${pact_broker_url}</pactbroker.url>
 						<pactbroker.auth.username>${pact_broker_username}</pactbroker.auth.username>
@@ -380,12 +401,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-inline</artifactId>
-			<version>3.8.0</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>au.com.dius.pact.provider</groupId>

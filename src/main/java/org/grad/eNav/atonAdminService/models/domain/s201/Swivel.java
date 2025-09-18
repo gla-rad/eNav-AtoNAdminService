@@ -37,7 +37,7 @@ public class Swivel extends AidsToNavigation {
     private Set<StatusType> statuses;
 
     @JsonBackReference
-    @OneToOne(mappedBy = "bridleHangs")
+    @OneToOne
     private Bridle swivelHolds;
 
     @JsonBackReference

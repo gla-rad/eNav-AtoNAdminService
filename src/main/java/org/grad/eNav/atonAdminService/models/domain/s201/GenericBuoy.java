@@ -73,15 +73,15 @@ public abstract class GenericBuoy extends StructureObject {
     private final Set<Topmark> topmarkParts = new HashSet<>();
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "shackleToBuoyConnectedTo", cascade = CascadeType.ALL)
     private MooringShackle shackleToBuoyConnected;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "bridleHolds", cascade = CascadeType.ALL)
     private Bridle buoyHangs;
 
     @JsonManagedReference
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "counterWeightHolds", cascade = CascadeType.ALL)
     private CounterWeight buoyAttached;
 
     /**

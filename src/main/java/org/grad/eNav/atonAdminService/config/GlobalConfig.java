@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.config;
 
 import _int.iho.s_201.gml.cs0._2.*;
+import _int.iho.s_201.gml.cs0._2.AtonStatusInformation;
 import _int.iho.s_201.gml.cs0._2.impl.*;
 import _int.iho.s_201.s_100.gml.base._5_2.impl.DataSetIdentificationTypeImpl;
 import jakarta.xml.bind.JAXBException;
@@ -51,6 +52,7 @@ import java.beans.PropertyDescriptor;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -125,6 +127,8 @@ public class GlobalConfig {
                 .implicitMappings();
 
         // For interface fields that don't have constructors, use converters
+        modelMapper.addConverter(ctx -> new FeatureNameTypeImpl(),
+                FeatureName.class, FeatureNameType.class);
         modelMapper.addConverter(ctx -> new SignalSequenceTypeImpl(),
                 SignalSequence.class, SignalSequenceType.class);
 
@@ -208,10 +212,10 @@ public class GlobalConfig {
                                     return periodicDateRangeType;
                                 })
                                 .map(src -> src, AidsToNavigationType::setPeriodicDateRange);
-                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getInformations(), new TypeToken<List<InformationTypeImpl>>() {
+                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getInformations(), new TypeToken<Set<InformationTypeImpl>>() {
                                 }.getType()))
                                 .map(src -> src, AidsToNavigationTypeImpl::setInformations);
-                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getFeatureNames(), new TypeToken<List<FeatureNameTypeImpl>>() {
+                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getFeatureNames(), new TypeToken<Set<FeatureNameTypeImpl>>() {
                                 }.getType()))
                                 .map(src -> src, AidsToNavigationTypeImpl::setFeatureNames);
                         mapper.using(ctx -> new GeometryS201Converter().convertFromGeometry((AidsToNavigation) ctx.getSource()))

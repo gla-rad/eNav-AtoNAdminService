@@ -16,11 +16,9 @@
 
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 /**
  * The S-201 Feature Name Embeddable Class.
@@ -41,10 +39,6 @@ public class FeatureName implements Serializable  {
     private String name;
 
     private String language;
-
-    @JsonBackReference
-    @ManyToOne
-    private AidsToNavigation feature;
 
     /**
      * Gets display name.
@@ -98,23 +92,5 @@ public class FeatureName implements Serializable  {
      */
     public void setLanguage(String language) {
         this.language = language;
-    }
-
-    /**
-     * Gets feature.
-     *
-     * @return the feature
-     */
-    public AidsToNavigation getFeature() {
-        return feature;
-    }
-
-    /**
-     * Sets feature.
-     *
-     * @param feature the feature
-     */
-    public void setFeature(AidsToNavigation feature) {
-        this.feature = feature;
     }
 }

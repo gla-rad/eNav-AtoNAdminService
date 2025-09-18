@@ -43,6 +43,7 @@ public class RhythmOfLight implements Serializable {
 
     private BigDecimal signalPeriod;
 
+    @ElementCollection
     private Set<SignalSequence> signalSequences;
 
     /**

@@ -68,6 +68,9 @@ public abstract class AidsToNavigation implements Serializable {
     @Column(unique=true)
     private String idCode;
 
+    @ElementCollection
+    private Set<FeatureName> featureNames;
+
     @GenericField(indexNullAs = "9999-01-01")
     private LocalDate dateEnd;
 
@@ -106,8 +109,6 @@ public abstract class AidsToNavigation implements Serializable {
     @JsonDeserialize(using = GeometryJSONDeserializer.class)
     @NonStandardField(name="geometry", valueBinder = @ValueBinderRef(type = GeometryBinder.class))
     private Geometry geometry;
-
-    private Set<FeatureName> featureNames = new HashSet<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -162,6 +163,24 @@ public abstract class AidsToNavigation implements Serializable {
      */
     public void setIdCode(String idCode) {
         this.idCode = idCode;
+    }
+
+    /**
+     * Gets feature names.
+     *
+     * @return the feature names
+     */
+    public Set<FeatureName> getFeatureNames() {
+        return featureNames;
+    }
+
+    /**
+     * Sets feature names.
+     *
+     * @param featureNames the feature names
+     */
+    public void setFeatureNames(Set<FeatureName> featureNames) {
+        this.featureNames = featureNames;
     }
 
     /**
@@ -396,24 +415,6 @@ public abstract class AidsToNavigation implements Serializable {
      */
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
-    }
-
-    /**
-     * Gets feature names.
-     *
-     * @return the feature names
-     */
-    public Set<FeatureName> getFeatureNames() {
-        return featureNames;
-    }
-
-    /**
-     * Sets feature names.
-     *
-     * @param featureNames the feature names
-     */
-    public void setFeatureNames(Set<FeatureName> featureNames) {
-        this.featureNames = featureNames;
     }
 
     /**

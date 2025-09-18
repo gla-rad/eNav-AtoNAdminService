@@ -75,6 +75,7 @@ public enum S201AtonTypes {
     VIRTUAL_AIS_ATON("Virtual AtoN", VirtualAISAidToNavigationImpl.class, VirtualAISAidToNavigation.class),
     MOORING_SHACKLE("Mooring Shackle", MooringShackleImpl.class, MooringShackle.class),
     BRIDLE("Bridle", BridleImpl.class, Bridle.class),
+    COUNTER_WEIGHT("Counter Weight", CounterWeightImpl.class, CounterWeight.class),
     SWIVEL("Swivel", SwivelImpl.class, Swivel.class),
     SINKER_ANCHOR("Sinker Anchor", SinkerAnchorImpl.class, SinkerAnchor.class),
     CABLE_SUBMARINE("Cable Submarine", CableSubmarineImpl.class, CableSubmarine.class),

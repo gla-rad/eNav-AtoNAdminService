@@ -321,6 +321,9 @@ class S201GDSListenerTest {
         assertEquals(VirtualAISAidToNavigation.class, aidsToNavigation.getFirst().getClass());
         assertNotNull(aidsToNavigation.getFirst().getAggregations());
         assertFalse(aidsToNavigation.getFirst().getAggregations().isEmpty());
+        for(AtonAggregation aggr : aidsToNavigation.getFirst().getAggregations()) {
+            System.out.println("Aggregation Info: "+ aggr.getId() + aggr.getCategoryOfAggregationType());
+        }
         assertEquals(1, aidsToNavigation.getFirst().getAggregations().size());
         assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).orElse(null));
         assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).stream().count());
