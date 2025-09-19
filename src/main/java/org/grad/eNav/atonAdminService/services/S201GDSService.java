@@ -89,9 +89,9 @@ public class S201GDSService {
         // the station node deletions by UID. Unfortunately Geomesa does not
         // support geographic filtering in deletions, so we have to do it
         // manually.
-        this.gdsListener = this.applicationContext.getBean(S201GDSListener.class);
         try {
-            gdsListener.init(this.consumer,
+            this.gdsListener = this.applicationContext.getBean(S201GDSListener.class);
+            this.gdsListener.init(this.consumer,
                     new GeomesaS201(WKTUtils.convertWKTtoGeometry(this.geometryWKT)),
                     WKTUtils.convertWKTtoGeometry(this.geometryWKT));
         } catch (IOException | ParseException e) {
