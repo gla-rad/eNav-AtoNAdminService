@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.geotools.api.data.DataStore;
 import org.geotools.api.data.DataStoreFinder;
@@ -36,6 +37,7 @@ import java.util.Objects;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Slf4j
 @Configuration
 @ConditionalOnProperty({"kafka.brokers"})
 public class GSDataStoreConfig {
@@ -60,7 +62,7 @@ public class GSDataStoreConfig {
      */
     @Bean
     DataStore gsDataStore() {
-        // The the connection parameters
+        // The connection parameters
         Map<String, String> params = new HashMap<>();
         params.put("kafka.brokers", kafkaBrokers);
         params.put("kafka.consumer.config", String.format("%s=%d", ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 10485760));
@@ -70,6 +72,7 @@ public class GSDataStoreConfig {
         try {
             return DataStoreFinder.getDataStore(params);
         } catch (IOException ex) {
+            log.error(ex.getMessage());
             return null;
         }
     }
