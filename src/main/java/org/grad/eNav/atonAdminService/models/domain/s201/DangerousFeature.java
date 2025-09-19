@@ -58,11 +58,11 @@ public class DangerousFeature implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "dangerousFeature", cascade = CascadeType.ALL, orphanRemoval = true)
-    final private Set<Information> informations = new HashSet<>();
+    private Set<Information> informations = new HashSet<>();
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "dangers")
-    final private Set<AtonAssociation> markingAtons = new HashSet<>();
+    private Set<AtonAssociation> markingAtons = new HashSet<>();
 
     @JsonSerialize(using = GeometryJSONSerializer.class)
     @JsonDeserialize(using = GeometryJSONDeserializer.class)
@@ -112,6 +112,19 @@ public class DangerousFeature implements Serializable {
      */
     public Set<Information> getInformations() {
         return informations;
+    }
+
+    /**
+     * Sets informations.
+     *
+     * @param informations the informations
+     */
+    public void setInformations(Set<Information> informations) {
+        this.informations.clear();
+        if(informations != null) {
+            informations.forEach(information -> information.setDangerousFeature(this));
+            this.informations.addAll(informations);
+        }
     }
 
     /**
