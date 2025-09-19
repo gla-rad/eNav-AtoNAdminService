@@ -78,10 +78,12 @@ public class SubscriptionRequest {
 
     @KeywordField(sortable = Sortable.YES,
                   valueBridge = @ValueBridgeRef(type = NullValueIndexerBridge.class))
+    @Enumerated(EnumType.STRING)
     private ContainerTypeEnum containerType;
 
     @KeywordField(sortable = Sortable.YES,
                   valueBridge = @ValueBridgeRef(type = NullValueIndexerBridge.class))
+    @Enumerated(EnumType.STRING)
     private SECOM_DataProductType dataProductType;
 
     @KeywordField(sortable = Sortable.YES,

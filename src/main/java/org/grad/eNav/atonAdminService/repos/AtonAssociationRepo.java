@@ -37,7 +37,7 @@ public interface AtonAssociationRepo extends JpaRepository<AtonAssociation, BigI
      * @param idCode The AtoN ID code to find the corresponding associations
      * @return the associations that include the specified AtoN number
      */
-    @Query("SELECT a FROM AtonAssociation a JOIN a.peers p WHERE p.idCode = :idCode")
+    @Query("SELECT a FROM AtonAssociation a JOIN a.atonAssociationBies p WHERE p.idCode = :idCode")
     Set<AtonAssociation> findByIncludedIdCode(String idCode);
 
 }

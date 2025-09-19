@@ -16,7 +16,6 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
-import _int.iho.s_201.gml.cs0._2.DataCoverage;
 import _int.iho.s_201.gml.cs0._2.impl.DataCoverageImpl;
 import _int.iho.s_201.s_100.gml.base._5_2.CurveProperty;
 import _int.iho.s_201.s_100.gml.base._5_2.MultiPointProperty;
@@ -142,7 +141,7 @@ public class S201DatasetBuilder {
         S201Utils.addDatasetMembers(dataset, Optional.ofNullable(atons)
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(AidsToNavigation::getAggregations)
+                .map(AidsToNavigation::getPeerAtonAggregations)
                 .flatMap(Set::stream)
                 .distinct()
                 .map(agg -> this.modelMapper.map(agg, AtonAggregationImpl.class))
@@ -152,7 +151,7 @@ public class S201DatasetBuilder {
         S201Utils.addDatasetMembers(dataset,Optional.ofNullable(atons)
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(AidsToNavigation::getAssociations)
+                .map(AidsToNavigation::getPeerAtonAssociations)
                 .flatMap(Set::stream)
                 .distinct()
                 .map(ass -> this.modelMapper.map(ass, AtonAssociationImpl.class))

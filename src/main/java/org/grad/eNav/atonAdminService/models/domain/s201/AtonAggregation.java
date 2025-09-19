@@ -55,7 +55,7 @@ public class AtonAggregation implements Serializable {
             joinColumns = { @JoinColumn(name = "aggregation_id") },
             inverseJoinColumns = { @JoinColumn(name = "aton_id") }
     )
-    final private Set<AidsToNavigation> peers = new HashSet<>();
+    final private Set<AidsToNavigation> atonAggregationBies = new HashSet<>();
 
     /**
      * Gets id.
@@ -94,24 +94,24 @@ public class AtonAggregation implements Serializable {
     }
 
     /**
-     * Gets peers.
+     * Gets aton aggregation by entries.
      *
-     * @return the peers
+     * @return the aton aggregation by entries
      */
-    public Set<AidsToNavigation> getPeers() {
-        return peers;
+    public Set<AidsToNavigation> getAtonAggregationBies() {
+        return atonAggregationBies;
     }
 
     /**
-     * Sets peers.
+     * Sets aton aggregation by entries.
      *
-     * @param peers the peers
+     * @param atonAggregationBies the aton aggregation by entries
      */
-    public void setPeers(Set<AidsToNavigation> peers) {
-        this.peers.clear();
-        if(peers != null) {
-            peers.forEach(peer -> peer.getAggregations().add(this));
-            this.peers.addAll(peers);
+    public void setAtonAggregationBies(Set<AidsToNavigation> atonAggregationBies) {
+        this.atonAggregationBies.clear();
+        if(atonAggregationBies != null) {
+            atonAggregationBies.forEach(peer -> peer.getPeerAtonAggregations().add(this));
+            this.atonAggregationBies.addAll(atonAggregationBies);
         }
     }
 
@@ -126,7 +126,7 @@ public class AtonAggregation implements Serializable {
         if (this == o) return true;
         if (!(o instanceof AtonAggregation that)) return false;
         return categoryOfAggregationType == that.categoryOfAggregationType
-                && Objects.equals(this.getPeers().size(), that.getPeers().size())
+                && Objects.equals(this.getAtonAggregationBies().size(), that.getAtonAggregationBies().size())
                 && new HashSet<>(this.getPeerIDCodes()).containsAll(that.getPeerIDCodes());
     }
 
@@ -150,7 +150,7 @@ public class AtonAggregation implements Serializable {
      */
     @JsonIgnore
     public Set<String> getPeerIDCodes() {
-        return this.getPeers()
+        return this.getAtonAggregationBies()
                 .stream()
                 .map(AidsToNavigation::getIdCode)
                 .collect(Collectors.toSet());

@@ -19,6 +19,8 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 import _int.iho.s_201.gml.cs0._2.CategoryOfSyntheticAISAidtoNavigationType;
 import _int.iho.s_201.gml.cs0._2.VirtualAISAidToNavigationTypeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 /**
  * The S-201 Synthetic AIS Aids to Navigation Entity Class.
@@ -34,8 +36,10 @@ import jakarta.persistence.Entity;
 public class SyntheticAISAidToNavigation extends ElectronicAton {
 
     // Class Variables
+    @Enumerated(EnumType.STRING)
     private CategoryOfSyntheticAISAidtoNavigationType categoryOfSyntheticAISAidtoNavigation;
 
+    @Enumerated(EnumType.STRING)
     private VirtualAISAidToNavigationTypeType virtualAISAidToNavigationType;
 
     /**

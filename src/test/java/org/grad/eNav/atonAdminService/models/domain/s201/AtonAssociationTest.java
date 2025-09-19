@@ -74,9 +74,9 @@ class AtonAssociationTest {
         }
 
         // Set the list as peers to the associations
-        this.association1.setPeers(new HashSet<>(aidsToNavigationList));
+        this.association1.setAtonAssociationBies(new HashSet<>(aidsToNavigationList));
         Collections.reverse(aidsToNavigationList);
-        this.association2.setPeers(new HashSet<>(aidsToNavigationList));
+        this.association2.setAtonAssociationBies(new HashSet<>(aidsToNavigationList));
     }
 
     /**

@@ -126,7 +126,7 @@ public class AggregationService {
         final Set<AtonAggregation> createdAggregations = Sets.difference(newAggregations, existingAggregations)
                 .stream()
                 // We need to make sure that we have the correct objects to persist
-                .peek(aggregation -> aggregation.setPeers(aggregation.getPeers()
+                .peek(aggregation -> aggregation.setAtonAggregationBies(aggregation.getAtonAggregationBies()
                         .stream()
                         .map(AidsToNavigation::getIdCode)
                         .map(this.aidsToNavigationRepo::findByIdCode)

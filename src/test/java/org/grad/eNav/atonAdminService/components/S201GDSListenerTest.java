@@ -319,18 +319,18 @@ class S201GDSListenerTest {
         assertFalse(aidsToNavigation.isEmpty());
         assertEquals(1, aidsToNavigation.size());
         assertEquals(VirtualAISAidToNavigation.class, aidsToNavigation.getFirst().getClass());
-        assertNotNull(aidsToNavigation.getFirst().getAggregations());
-        assertFalse(aidsToNavigation.getFirst().getAggregations().isEmpty());
-        for(AtonAggregation aggr : aidsToNavigation.getFirst().getAggregations()) {
+        assertNotNull(aidsToNavigation.getFirst().getPeerAtonAggregations());
+        assertFalse(aidsToNavigation.getFirst().getPeerAtonAggregations().isEmpty());
+        for(AtonAggregation aggr : aidsToNavigation.getFirst().getPeerAtonAggregations()) {
             System.out.println("Aggregation Info: "+ aggr.getId() + aggr.getCategoryOfAggregationType());
         }
-        assertEquals(1, aidsToNavigation.getFirst().getAggregations().size());
-        assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).orElse(null));
-        assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).stream().count());
-        assertNotNull(aidsToNavigation.getFirst().getAssociations());
-        assertFalse(aidsToNavigation.getFirst().getAggregations().isEmpty());
-        assertEquals(1, aidsToNavigation.getFirst().getAggregations().size());
-        assertNotNull(aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).orElse(null));
-        assertEquals(1, aidsToNavigation.getFirst().getAggregations().stream().findFirst().map(AtonAggregation::getPeers).stream().count());
+        assertEquals(1, aidsToNavigation.getFirst().getPeerAtonAggregations().size());
+        assertNotNull(aidsToNavigation.getFirst().getPeerAtonAggregations().stream().findFirst().map(AtonAggregation::getAtonAggregationBies).orElse(null));
+        assertEquals(1, aidsToNavigation.getFirst().getPeerAtonAggregations().stream().findFirst().map(AtonAggregation::getAtonAggregationBies).stream().count());
+        assertNotNull(aidsToNavigation.getFirst().getPeerAtonAssociations());
+        assertFalse(aidsToNavigation.getFirst().getPeerAtonAggregations().isEmpty());
+        assertEquals(1, aidsToNavigation.getFirst().getPeerAtonAggregations().size());
+        assertNotNull(aidsToNavigation.getFirst().getPeerAtonAggregations().stream().findFirst().map(AtonAggregation::getAtonAggregationBies).orElse(null));
+        assertEquals(1, aidsToNavigation.getFirst().getPeerAtonAggregations().stream().findFirst().map(AtonAggregation::getAtonAggregationBies).stream().count());
     }
 }

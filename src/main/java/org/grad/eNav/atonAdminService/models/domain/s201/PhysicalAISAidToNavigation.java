@@ -18,6 +18,8 @@ package org.grad.eNav.atonAdminService.models.domain.s201;
 
 import _int.iho.s_201.gml.cs0._2.CategoryOfPhysicalAISAidToNavigationType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 /**
  * The S-201 Physical AIS Aids to Navigation Entity Class.
@@ -33,6 +35,7 @@ import jakarta.persistence.Entity;
 public class PhysicalAISAidToNavigation extends ElectronicAton {
 
     // Class Variables
+    @Enumerated(EnumType.STRING)
     private CategoryOfPhysicalAISAidToNavigationType categoryOfPhysicalAISAidToNavigationType;
 
     /**

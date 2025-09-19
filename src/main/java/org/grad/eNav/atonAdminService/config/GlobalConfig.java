@@ -17,7 +17,6 @@
 package org.grad.eNav.atonAdminService.config;
 
 import _int.iho.s_201.gml.cs0._2.*;
-import _int.iho.s_201.gml.cs0._2.AtonStatusInformation;
 import _int.iho.s_201.gml.cs0._2.impl.*;
 import _int.iho.s_201.s_100.gml.base._5_2.impl.DataSetIdentificationTypeImpl;
 import jakarta.xml.bind.JAXBException;
@@ -52,7 +51,6 @@ import java.beans.PropertyDescriptor;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -127,6 +125,8 @@ public class GlobalConfig {
                 .implicitMappings();
 
         // For interface fields that don't have constructors, use converters
+        modelMapper.addConverter(ctx -> new FeatureNameTypeImpl(),
+                FeatureName.class, FeatureNameType.class);
         modelMapper.addConverter(ctx -> new FeatureNameTypeImpl(),
                 FeatureName.class, FeatureNameType.class);
         modelMapper.addConverter(ctx -> new SignalSequenceTypeImpl(),
@@ -212,10 +212,10 @@ public class GlobalConfig {
                                     return periodicDateRangeType;
                                 })
                                 .map(src -> src, AidsToNavigationType::setPeriodicDateRange);
-                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getInformations(), new TypeToken<Set<InformationTypeImpl>>() {
+                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getInformations(), new TypeToken<List<InformationTypeImpl>>() {
                                 }.getType()))
                                 .map(src -> src, AidsToNavigationTypeImpl::setInformations);
-                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getFeatureNames(), new TypeToken<Set<FeatureNameTypeImpl>>() {
+                        mapper.using(ctx -> modelMapper.map(((AidsToNavigation) ctx.getSource()).getFeatureNames(), new TypeToken<List<FeatureNameTypeImpl>>() {
                                 }.getType()))
                                 .map(src -> src, AidsToNavigationTypeImpl::setFeatureNames);
                         mapper.using(ctx -> new GeometryS201Converter().convertFromGeometry((AidsToNavigation) ctx.getSource()))
@@ -252,20 +252,20 @@ public class GlobalConfig {
                 .implicitMappings()
                 .addMappings(mapper -> {
                     mapper.skip(AtonAggregation::setId); // We don't know if the ID is correct so skip it
-                    mapper.skip(AtonAggregation::setPeers);
+                    mapper.skip(AtonAggregation::setAtonAggregationBies);
                 });
         modelMapper.createTypeMap(AtonAssociationImpl.class, AtonAssociation.class)
                 .implicitMappings()
                 .addMappings(mapper -> {
                     mapper.skip(AtonAssociation::setId); // We don't know if the ID is correct so skip it
-                    mapper.skip(AtonAssociation::setPeers);
+                    mapper.skip(AtonAssociation::setAtonAssociationBies);
                 });
         modelMapper.createTypeMap(AtonAggregation.class, AtonAggregationImpl.class)
                 .implicitMappings()
                 .addMappings(mapper -> {
                     mapper.using(ctx -> "ID-AGGR-" + ((AtonAggregation) ctx.getSource()).getId())
                             .map(src -> src, AtonAggregationImpl::setId);
-                    mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceTypes(((AtonAggregation) ctx.getSource()).getPeers(), ReferenceTypeRole.AGGREGATION))
+                    mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceTypes(((AtonAggregation) ctx.getSource()).getAtonAggregationBies(), ReferenceTypeRole.AGGREGATION))
                             .map(src-> src, AtonAggregationImpl::setAtonAggregationBies);
                 });
         modelMapper.createTypeMap(AtonAssociation.class, AtonAssociationImpl.class)
@@ -273,7 +273,7 @@ public class GlobalConfig {
                 .addMappings(mapper -> {
                     mapper.using(ctx -> "ID-ASSO-" + ((AtonAssociation) ctx.getSource()).getId())
                             .map(src -> src, AtonAssociationImpl::setId);
-                    mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceTypes(((AtonAssociation) ctx.getSource()).getPeers(), ReferenceTypeRole.ASSOCIATION))
+                    mapper.using(ctx -> new ReferenceTypeS201Converter().convertToReferenceTypes(((AtonAssociation) ctx.getSource()).getAtonAssociationBies(), ReferenceTypeRole.ASSOCIATION))
                             .map(src-> src, AtonAssociationImpl::setAtonAssociationBies);
                 });
 

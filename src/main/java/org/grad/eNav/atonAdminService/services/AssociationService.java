@@ -126,7 +126,7 @@ public class AssociationService {
         final Set<AtonAssociation> createdAssociations = Sets.difference(newAssociations, existingAssociations)
                 .stream()
                 // We need to make sure that we have the correct objects to persist
-                .peek(association -> association.setPeers(association.getPeers()
+                .peek(association -> association.setAtonAssociationBies(association.getAtonAssociationBies()
                         .stream()
                         .map(AidsToNavigation::getIdCode)
                         .map(this.aidsToNavigationRepo::findByIdCode)

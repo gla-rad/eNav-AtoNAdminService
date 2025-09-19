@@ -36,6 +36,7 @@ import java.util.Set;
 public class Daymark extends Equipment {
 
     // Class Variables
+    @Enumerated(EnumType.STRING)
     private CategoryOfSpecialPurposeMarkType categoryOfSpecialPurposeMark;
 
     @Enumerated(EnumType.STRING)

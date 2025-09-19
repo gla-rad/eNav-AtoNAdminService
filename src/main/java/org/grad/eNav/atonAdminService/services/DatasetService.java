@@ -40,7 +40,7 @@ import org.grad.eNav.atonAdminService.models.domain.s201.S201DatasetIdentificati
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.repos.DatasetRepo;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.hibernate.search.backend.lucene.LuceneExtension;
 import org.hibernate.search.backend.lucene.search.sort.dsl.LuceneSearchSortFactory;
 import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;

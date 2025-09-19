@@ -31,7 +31,6 @@ import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.AtonAggregation;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
 import org.grad.eNav.atonAdminService.models.domain.s201.AtonAssociation;
-import org.grad.eNav.atonAdminService.models.domain.s201.FeatureName;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
 import org.hibernate.search.backend.lucene.LuceneExtension;
@@ -55,9 +54,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The Aids to Navigation Service.
@@ -239,14 +236,14 @@ public class AidsToNavigationService {
         final AidsToNavigation saved = this.aidsToNavigationRepo.save(aidsToNavigation);
 
         // Update the associations and aggregations links
-        saved.setAggregations(this.aggregationService.updateAidsToNavigationAggregations(saved.getIdCode(), aidsToNavigation.getAggregations()));
-        saved.setAssociations(this.associationService.updateAidsToNavigationAssociations(saved.getIdCode(), aidsToNavigation.getAssociations()));
+        saved.setPeerAtonAggregations(this.aggregationService.updateAidsToNavigationAggregations(saved.getIdCode(), aidsToNavigation.getPeerAtonAggregations()));
+        saved.setPeerAtonAssociations(this.associationService.updateAidsToNavigationAssociations(saved.getIdCode(), aidsToNavigation.getPeerAtonAssociations()));
 
         // DO NOT REMOVE: Perform a log, which also handles lazy loading!
         log.debug(String.format("Saved Aid to Navigation %s with %d aggregations and %d associations.",
                 saved.getIdCode(),
-                saved.getAggregations().size(),
-                saved.getAssociations().size()));
+                saved.getPeerAtonAggregations().size(),
+                saved.getPeerAtonAssociations().size()));
 
         // Return the saved entry
         return saved;
@@ -266,14 +263,14 @@ public class AidsToNavigationService {
                 .orElseThrow(() -> new DataNotFoundException(String.format("No Aid to Navigation found for the provided ID: %d", id)));
 
         // Update the associations and aggregations links and clean up
-        aidsToNavigation.getAggregations().stream()
-                .peek(aggr -> aggr.getPeers().remove(aidsToNavigation))
-                .filter(aggr -> aggr.getPeers().isEmpty())
+        aidsToNavigation.getPeerAtonAggregations().stream()
+                .peek(aggr -> aggr.getAtonAggregationBies().remove(aidsToNavigation))
+                .filter(aggr -> aggr.getAtonAggregationBies().isEmpty())
                 .map(AtonAggregation::getId)
                 .forEach(this.aggregationService::delete);
-        aidsToNavigation.getAssociations().stream()
-                .peek(asso -> asso.getPeers().remove(aidsToNavigation))
-                .filter(asso -> asso.getPeers().isEmpty())
+        aidsToNavigation.getPeerAtonAssociations().stream()
+                .peek(asso -> asso.getAtonAssociationBies().remove(aidsToNavigation))
+                .filter(asso -> asso.getAtonAssociationBies().isEmpty())
                 .map(AtonAssociation::getId)
                 .forEach(this.associationService::delete);
 

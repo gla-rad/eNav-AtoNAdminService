@@ -15,6 +15,7 @@
  */
 
 package org.grad.eNav.atonAdminService.components;
+
 import _int.iho.s_201.s_100.gml.profiles._5_2.AbstractGMLType;
 import _int.iho.s_201.s_100.gml.profiles._5_2.ReferenceType;
 import _int.iho.s_201.gml.cs0._2.AidsToNavigationType;
@@ -301,91 +302,87 @@ public class S201GDSListener implements FeatureListener {
         combinedAidsToNavigationMap.putAll(equipmentTypeMap);
         combinedAidsToNavigationMap.putAll(otherAidsToNavigationMap);
 
-        // Now start building the links to the remaining objects (e.g. aggregations/associations)
-        final Map<String, AtonAggregation> aggregationsMap = members.stream()
-                .filter(AtonAggregationImpl.class::isInstance)
-                .map(AtonAggregationImpl.class::cast)
-                .collect(Collectors.toMap(
-                        AtonAggregationImpl::getId,
-                        aggr -> {
-                            AtonAggregation result = this.modelMapper.map(aggr, AtonAggregation.class);
-                            result.setPeers(aggr.getAtonAggregationBies()
-                                    .stream()
-                                    .map(this::getInternalReference)
-                                    .filter(combinedAidsToNavigationMap::containsKey)
-                                    .map(combinedAidsToNavigationMap::get)
-                                    .collect(Collectors.toSet()));
-                            return result;
-                        }
-                ));
-        final Map<String, AtonAssociation> associationsMap = members.stream()
-                .filter(AtonAssociationImpl.class::isInstance)
-                .map(AtonAssociationImpl.class::cast)
-                .collect(Collectors.toMap(
-                        AtonAssociationImpl::getId,
-                        asso -> {
-                            AtonAssociation result = this.modelMapper.map(asso, AtonAssociation.class);
-                            result.setPeers(asso.getAtonAssociationBies()
-                                    .stream()
-                                    .map(this::getInternalReference)
-                                    .filter(combinedAidsToNavigationMap::containsKey)
-                                    .map(combinedAidsToNavigationMap::get)
-                                    .collect(Collectors.toSet()));
-                            return result;
-                        }
-                ));
+//        // Now start building the links to the remaining objects (e.g. aggregations/associations)
+//        final Map<String, AtonAggregation> aggregationsMap = members.stream()
+//                .filter(AtonAggregationImpl.class::isInstance)
+//                .map(AtonAggregationImpl.class::cast)
+//                .collect(Collectors.toMap(
+//                        AtonAggregationImpl::getId,
+//                        aggr -> {
+//                            AtonAggregation result = this.modelMapper.map(aggr, AtonAggregation.class);
+//                            result.setPeerAtonAggregations(aggr.getAtonAggregationBies()
+//                                    .stream()
+//                                    .map(this::getInternalReference)
+//                                    .filter(combinedAidsToNavigationMap::containsKey)
+//                                    .map(combinedAidsToNavigationMap::get)
+//                                    .collect(Collectors.toSet()));
+//                            return result;
+//                        }
+//                ));
+//        final Map<String, AtonAssociation> associationsMap = members.stream()
+//                .filter(AtonAssociationImpl.class::isInstance)
+//                .map(AtonAssociationImpl.class::cast)
+//                .collect(Collectors.toMap(
+//                        AtonAssociationImpl::getId,
+//                        asso -> {
+//                            AtonAssociation result = this.modelMapper.map(asso, AtonAssociation.class);
+//                            result.setPeerAtonAssociations(asso.getAtonAssociationBies()
+//                                    .stream()
+//                                    .map(this::getInternalReference)
+//                                    .filter(combinedAidsToNavigationMap::containsKey)
+//                                    .map(combinedAidsToNavigationMap::get)
+//                                    .collect(Collectors.toSet()));
+//                            return result;
+//                        }
+//                ));
 
         // Now map the S-201 structure objects and add all the associated information
-        try {
-            for (AbstractGMLType member : members) {
-                //Sanity Check
-                if(Objects.isNull(member)) {
-                    continue;
-                }
-                // Handle structure members
-                if (member instanceof StructureObjectType structure) {
-                    Optional.of(structure)
-                            .map(StructureObjectType::getchildren)
-                            .orElse(Collections.emptyList())
-                            .stream()
-                            .map(this::getInternalReference)
-                            .filter(equipmentTypeMap::containsKey)
-                            .map(equipmentTypeMap::get)
-                            .forEach(e -> e.setParent(structureObjectTypeMap.get(structure.getId())));
-                }
-                // Handle equipment members
-                if (member instanceof EquipmentType equipment) {
-                    Optional.of(equipment)
-                            .map(EquipmentType::getParent)
-                            .map(this::getInternalReference)
-                            .filter(structureObjectTypeMap::containsKey)
-                            .map(structureObjectTypeMap::get)
-                            .map(StructureObject::getChildren)
-                            .ifPresent(l -> l.add(equipmentTypeMap.get(equipment.getId())));
-                }
-                // Handle aggregation members
-                if (member instanceof AtonAggregationImpl aggregation) {
-                    aggregation.getAtonAggregationBies()
-                            .stream()
-                            .map(this::getInternalReference)
-                            .filter(combinedAidsToNavigationMap::containsKey)
-                            .map(combinedAidsToNavigationMap::get)
-                            .map(AidsToNavigation::getAggregations)
-                            .forEach(aggregations -> aggregations.add(aggregationsMap.get(aggregation.getId())));
-                }
-                // Handle association members
-                if (member instanceof AtonAssociationImpl association) {
-                    association.getAtonAssociationBies()
-                            .stream()
-                            .map(this::getInternalReference)
-                            .filter(combinedAidsToNavigationMap::containsKey)
-                            .map(combinedAidsToNavigationMap::get)
-                            .map(AidsToNavigation::getAssociations)
-                            .forEach(associations -> associations.add(associationsMap.get(association.getId())));
-                }
+        for (AbstractGMLType member : members) {
+            //Sanity Check
+            if(Objects.isNull(member)) {
+                continue;
             }
-        } catch (Exception ex) {
-            log.error(ex.getMessage());
+            // Handle structure members
+            if (member instanceof StructureObjectType structure) {
+                Optional.of(structure)
+                        .map(StructureObjectType::getchildren)
+                        .orElse(Collections.emptyList())
+                        .stream()
+                        .map(this::getInternalReference)
+                        .filter(equipmentTypeMap::containsKey)
+                        .map(equipmentTypeMap::get)
+                        .forEach(e -> e.setParent(structureObjectTypeMap.get(structure.getId())));
+            }
+            // Handle equipment members
+            if (member instanceof EquipmentType equipment) {
+                Optional.of(equipment)
+                        .map(EquipmentType::getParent)
+                        .map(this::getInternalReference)
+                        .filter(structureObjectTypeMap::containsKey)
+                        .map(structureObjectTypeMap::get)
+                        .map(StructureObject::getChildren)
+                        .ifPresent(l -> l.add(equipmentTypeMap.get(equipment.getId())));
+            }
+            // Handle aggregation members
+            if (member instanceof AtonAggregationImpl aggregation) {
+                final AtonAggregation atonAggregation = this.modelMapper.map(member, AtonAggregation.class);
+                atonAggregation.setAtonAggregationBies(aggregation.getAtonAggregationBies()
+                        .stream()
+                        .map(this::getInternalReference)
+                        .filter(combinedAidsToNavigationMap::containsKey)
+                        .map(combinedAidsToNavigationMap::get)
+                        .collect(Collectors.toSet()));
+            }
+            // Handle association members
+            if (member instanceof AtonAssociationImpl association) {
+                final AtonAssociation atonAssociation = this.modelMapper.map(member, AtonAssociation.class);
+                atonAssociation.setAtonAssociationBies(association.getAtonAssociationBies()
+                        .stream()
+                        .map(this::getInternalReference)
+                        .filter(combinedAidsToNavigationMap::containsKey)
+                        .map(combinedAidsToNavigationMap::get)
+                        .collect(Collectors.toSet()));
+            }
         }
 
         // And now return the combined populated data

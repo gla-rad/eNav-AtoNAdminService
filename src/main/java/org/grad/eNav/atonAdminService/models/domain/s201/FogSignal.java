@@ -47,6 +47,7 @@ public class FogSignal extends Equipment {
 
     private BigInteger signalFrequency;
 
+    @Enumerated(EnumType.STRING)
     private SignalGenerationType signalGeneration;
 
     private String signalGroup;

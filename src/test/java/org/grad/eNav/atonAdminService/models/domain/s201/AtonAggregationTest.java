@@ -75,9 +75,9 @@ class AtonAggregationTest {
         }
 
         // Set the list as peers to the aggregations
-        this.aggregation1.setPeers(new HashSet<>(aidsToNavigationList));
+        this.aggregation1.setAtonAggregationBies(new HashSet<>(aidsToNavigationList));
         Collections.reverse(aidsToNavigationList);
-        this.aggregation2.setPeers(new HashSet<>(aidsToNavigationList));
+        this.aggregation2.setAtonAggregationBies(new HashSet<>(aidsToNavigationList));
     }
 
     /**

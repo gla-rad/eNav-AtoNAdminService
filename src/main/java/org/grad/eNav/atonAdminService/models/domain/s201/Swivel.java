@@ -1,14 +1,11 @@
 package org.grad.eNav.atonAdminService.models.domain.s201;
 
-import _int.iho.s_201.gml.cs0._2.CategoryOfCableType;
 import _int.iho.s_201.gml.cs0._2.NatureOfConstructionType;
 import _int.iho.s_201.gml.cs0._2.StatusType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -43,10 +40,6 @@ public class Swivel extends AidsToNavigation {
     @JsonBackReference
     @ManyToOne
     private MooringShackle shackleToSwivelConnected;
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "cableHoldsSwivel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<CableSubmarine> swivelAttacheds = new HashSet<>();
 
     /**
      * Gets nature of construction.
@@ -154,27 +147,5 @@ public class Swivel extends AidsToNavigation {
      */
     public void setShackleToSwivelConnected(MooringShackle shackleToSwivelConnected) {
         this.shackleToSwivelConnected = shackleToSwivelConnected;
-    }
-
-    /**
-     * Gets swivel attacheds.
-     *
-     * @return the swivel attacheds
-     */
-    public Set<CableSubmarine> getSwivelAttacheds() {
-        return swivelAttacheds;
-    }
-
-    /**
-     * Sets swivel attacheds.
-     *
-     * @param swivelAttacheds the swivel attacheds
-     */
-    public void setSwivelAttacheds(Set<CableSubmarine> swivelAttacheds) {
-        this.swivelAttacheds.clear();
-        if(swivelAttacheds != null) {
-            swivelAttacheds.forEach(swivel -> swivel.setCableHoldsSwivel(this));
-            this.swivelAttacheds.addAll(swivelAttacheds);
-        }
     }
 }

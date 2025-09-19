@@ -95,7 +95,7 @@ class AtonAssociationServiceTest {
             information.setText("Description of AtoN No" + i);
             information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             aidsToNavigation.setInformations(Collections.singleton(information));
-            this.association.getPeers().add(aidsToNavigation);
+            this.association.getAtonAssociationBies().add(aidsToNavigation);
         }
     }
 
@@ -114,9 +114,9 @@ class AtonAssociationServiceTest {
         assertNotNull(result);
         assertEquals(this.association.getId(), result.getId());
         assertEquals(this.association.getCategoryOfAssociation(), result.getCategoryOfAssociation());
-        assertNotNull(result.getPeers());
-        assertEquals(this.association.getPeers().size(), result.getPeers().size());
-        assertTrue(result.getPeers().containsAll(this.association.getPeers()));
+        assertNotNull(result.getAtonAssociationBies());
+        assertEquals(this.association.getAtonAssociationBies().size(), result.getAtonAssociationBies().size());
+        assertTrue(result.getAtonAssociationBies().containsAll(this.association.getAtonAssociationBies()));
 
         // Also, that a saving call took place in the repository
         verify(this.atonAssociationRepo, times(1)).save(this.association);
@@ -148,7 +148,7 @@ class AtonAssociationServiceTest {
     void testUpdateAidsToNavigationAssociations() {
         doReturn(Collections.emptySet()).when(this.atonAssociationRepo).findByIncludedIdCode(any());
         doAnswer((inv) ->
-                this.association.getPeers()
+                this.association.getAtonAssociationBies()
                         .stream()
                         .filter(aton -> Objects.equals(aton.getIdCode(), inv.getArgument(0)))
                         .findFirst()
@@ -168,10 +168,10 @@ class AtonAssociationServiceTest {
         assertNotNull(resultAssociation);
         assertEquals(this.association.getId(), resultAssociation.getId());
         assertEquals(this.association.getCategoryOfAssociation(), resultAssociation.getCategoryOfAssociation());
-        assertNotNull(resultAssociation.getPeers());
-        assertFalse(resultAssociation.getPeers().isEmpty());
-        assertEquals(this.association.getPeers().size(), resultAssociation.getPeers().size());
-        assertTrue(this.association.getPeers().containsAll(resultAssociation.getPeers()));
+        assertNotNull(resultAssociation.getAtonAssociationBies());
+        assertFalse(resultAssociation.getAtonAssociationBies().isEmpty());
+        assertEquals(this.association.getAtonAssociationBies().size(), resultAssociation.getAtonAssociationBies().size());
+        assertTrue(this.association.getAtonAssociationBies().containsAll(resultAssociation.getAtonAssociationBies()));
     }
 
 }

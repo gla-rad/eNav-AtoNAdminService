@@ -95,7 +95,7 @@ class AtonAggregationServiceTest {
             information.setText("Description of AtoN No" + i);
             information.setChangeTypes(ChangeTypesType.TEMPORARY_CHANGES);
             aidsToNavigation.setInformations(Collections.singleton(information));
-            this.aggregation.getPeers().add(aidsToNavigation);
+            this.aggregation.getAtonAggregationBies().add(aidsToNavigation);
         }
     }
 
@@ -114,9 +114,9 @@ class AtonAggregationServiceTest {
         assertNotNull(result);
         assertEquals(this.aggregation.getId(), result.getId());
         assertEquals(this.aggregation.getCategoryOfAggregationType(), result.getCategoryOfAggregationType());
-        assertNotNull(result.getPeers());
-        assertEquals(this.aggregation.getPeers().size(), result.getPeers().size());
-        assertTrue(result.getPeers().containsAll(this.aggregation.getPeers()));
+        assertNotNull(result.getAtonAggregationBies());
+        assertEquals(this.aggregation.getAtonAggregationBies().size(), result.getAtonAggregationBies().size());
+        assertTrue(result.getAtonAggregationBies().containsAll(this.aggregation.getAtonAggregationBies()));
 
         // Also, that a saving call took place in the repository
         verify(this.atonAggregationRepo, times(1)).save(this.aggregation);
@@ -148,7 +148,7 @@ class AtonAggregationServiceTest {
     void testUpdateAidsToNavigationAggregations() {
         doReturn(Collections.emptySet()).when(this.atonAggregationRepo).findByIncludedIdCode(any());
         doAnswer((inv) ->
-                this.aggregation.getPeers()
+                this.aggregation.getAtonAggregationBies()
                         .stream()
                         .filter(aton -> Objects.equals(aton.getIdCode(), inv.getArgument(0)))
                         .findFirst()
@@ -168,10 +168,10 @@ class AtonAggregationServiceTest {
         assertNotNull(resultAggregation);
         assertEquals(this.aggregation.getId(), resultAggregation.getId());
         assertEquals(this.aggregation.getCategoryOfAggregationType(), resultAggregation.getCategoryOfAggregationType());
-        assertNotNull(resultAggregation.getPeers());
-        assertFalse(resultAggregation.getPeers().isEmpty());
-        assertEquals(this.aggregation.getPeers().size(), resultAggregation.getPeers().size());
-        assertTrue(this.aggregation.getPeers().containsAll(resultAggregation.getPeers()));
+        assertNotNull(resultAggregation.getAtonAggregationBies());
+        assertFalse(resultAggregation.getAtonAggregationBies().isEmpty());
+        assertEquals(this.aggregation.getAtonAggregationBies().size(), resultAggregation.getAtonAggregationBies().size());
+        assertTrue(this.aggregation.getAtonAggregationBies().containsAll(resultAggregation.getAtonAggregationBies()));
     }
 
 }

@@ -29,12 +29,12 @@ import java.util.stream.Collectors;
 /**
  * The S-201 Association Entity Class
  * <p/>
- * This class implements the {@link _int.iho.s_201.gml.cs0._2.AtonAggregation}
+ * This class implements the {@link _int.iho.s_201.gml.cs0._2.AtonAssociation}
  * objects of the S-201 data product. These can be used to group multiple
  * Aids to Navigation into a single association with a give type.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
- * @see _int.iho.s_201.gml.cs0._2.AtonAggregation
+ * @see _int.iho.s_201.gml.cs0._2.AtonAssociation
  */
 @Entity
 public class AtonAssociation implements Serializable {
@@ -55,7 +55,7 @@ public class AtonAssociation implements Serializable {
             joinColumns = { @JoinColumn(name = "association_id") },
             inverseJoinColumns = { @JoinColumn(name = "aton_id") }
     )
-    final private Set<AidsToNavigation> peers = new HashSet<>();
+    final private Set<AidsToNavigation> atonAssociationBies = new HashSet<>();
 
     @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -103,24 +103,24 @@ public class AtonAssociation implements Serializable {
     }
 
     /**
-     * Gets peers.
+     * Gets aton association by entries.
      *
-     * @return the peers
+     * @return the aton association by entries
      */
-    public Set<AidsToNavigation> getPeers() {
-        return peers;
+    public Set<AidsToNavigation> getAtonAssociationBies() {
+        return atonAssociationBies;
     }
 
     /**
-     * Sets peers.
+     * Sets  aton association by entries.
      *
-     * @param peers the peers
+     * @param atonAssociationBies the aton association by entries
      */
-    public void setPeers(Set<AidsToNavigation> peers) {
-        this.peers.clear();
-        if(peers != null) {
-            peers.forEach(peer -> peer.getAssociations().add(this));
-            this.peers.addAll(peers);
+    public void setAtonAssociationBies(Set<AidsToNavigation> atonAssociationBies) {
+        this.atonAssociationBies.clear();
+        if(atonAssociationBies != null) {
+            atonAssociationBies.forEach(peer -> peer.getPeerAtonAssociations().add(this));
+            this.atonAssociationBies.addAll(atonAssociationBies);
         }
     }
 
@@ -157,7 +157,7 @@ public class AtonAssociation implements Serializable {
         if (this == o) return true;
         if (!(o instanceof AtonAssociation that)) return false;
         return categoryOfAssociation == that.categoryOfAssociation
-                && Objects.equals(this.getPeers().size(), that.getPeers().size())
+                && Objects.equals(this.getAtonAssociationBies().size(), that.getAtonAssociationBies().size())
                 && new HashSet<>(this.getPeerIdCodes()).containsAll(that.getPeerIdCodes())
                 && Objects.equals(this.getDangers().size(), that.getDangers().size())
                 && new HashSet<>(this.getDangerIds()).containsAll(that.getDangerIds());
@@ -184,7 +184,7 @@ public class AtonAssociation implements Serializable {
      */
     @JsonIgnore
     public Set<String> getPeerIdCodes() {
-        return this.getPeers()
+        return this.getAtonAssociationBies()
                 .stream()
                 .map(AidsToNavigation::getIdCode)
                 .collect(Collectors.toSet());

@@ -28,10 +28,6 @@ public class Bridle extends AidsToNavigation {
     private GenericBuoy bridleHolds;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "shackleToBridleConnectedTo", cascade = CascadeType.ALL)
-    private MooringShackle shackleToBridleConnected;
-
-    @JsonManagedReference
     @OneToOne(mappedBy = "swivelHolds", cascade = CascadeType.ALL)
     private Swivel bridleHangs;
 
@@ -73,24 +69,6 @@ public class Bridle extends AidsToNavigation {
      */
     public void setBridleHolds(GenericBuoy bridleHolds) {
         this.bridleHolds = bridleHolds;
-    }
-
-    /**
-     * Gets shackle to bridle connected.
-     *
-     * @return the shackle to bridle connected
-     */
-    public MooringShackle getShackleToBridleConnected() {
-        return shackleToBridleConnected;
-    }
-
-    /**
-     * Sets shackle to bridle connected.
-     *
-     * @param shackleToBridleConnected the shackle to bridle connected
-     */
-    public void setShackleToBridleConnected(MooringShackle shackleToBridleConnected) {
-        this.shackleToBridleConnected = shackleToBridleConnected;
     }
 
     /**

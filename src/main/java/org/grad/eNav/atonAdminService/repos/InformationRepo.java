@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.repos;
 
 import org.grad.eNav.atonAdminService.models.domain.s201.AtonAggregation;
+import org.grad.eNav.atonAdminService.models.domain.s201.Information;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,20 +25,20 @@ import java.math.BigInteger;
 import java.util.Set;
 
 /**
- * Spring Data JPA repository for the AtoN Aggregation entities.
+ * Spring Data JPA repository for the Generic Information entities.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AtonAggregationRepo extends JpaRepository<AtonAggregation, BigInteger>  {
+public interface InformationRepo extends JpaRepository<Information, BigInteger>  {
 
     /**
-     * Retrieves all the aggregations that include the ID Code of the AtoN
+     * Retrieves all the information that include the ID Code of the AtoN
      * provided in the input parameter.
      *
-     * @param idCode The AtoN ID Code to find the corresponding aggregations
-     * @return the aggregations that include the specified AtoN number
+     * @param idCode The AtoN ID Code to find the corresponding information
+     * @return the information that include the specified AtoN number
      */
-    @Query("SELECT a FROM AtonAggregation a JOIN a.atonAggregationBies p WHERE p.idCode = :idCode")
+    @Query("SELECT i FROM Information i JOIN i.feature f WHERE f.idCode = :idCode")
     Set<AtonAggregation> findByIncludedIdCode(String idCode);
 
 }

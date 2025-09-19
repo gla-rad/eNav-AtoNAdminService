@@ -36,17 +36,13 @@ public class MooringShackle extends AidsToNavigation {
     @OneToOne
     private GenericBuoy shackleToBuoyConnectedTo;
 
-    @JsonBackReference
-    @OneToOne
-    private Bridle shackleToBridleConnectedTo;
+    @JsonManagedReference
+    @OneToOne(mappedBy = "shackleToAnchorConnected", cascade = CascadeType.ALL, orphanRemoval = true)
+    private SinkerAnchor shackleToAnchorConnectedTo;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "shackleToSwivelConnected", cascade = CascadeType.ALL, orphanRemoval = true)
     final private Set<Swivel> shackleToSwivelConnectedTo = new HashSet<>();
-
-    @JsonManagedReference
-    @OneToOne(mappedBy = "shackleToAnchorConnected", cascade = CascadeType.ALL, orphanRemoval = true)
-    private SinkerAnchor shackleToAnchorConnectedTo;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "shackleToCableConnected", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -125,21 +121,21 @@ public class MooringShackle extends AidsToNavigation {
     }
 
     /**
-     * Gets shackle to bridle connected to.
+     * Gets shackle to anchor connected to.
      *
-     * @return the shackle to bridle connected to
+     * @return the shackle to anchor connected to
      */
-    public Bridle getShackleToBridleConnectedTo() {
-        return shackleToBridleConnectedTo;
+    public SinkerAnchor getShackleToAnchorConnectedTo() {
+        return shackleToAnchorConnectedTo;
     }
 
     /**
-     * Sets shackle to bridle connected to.
+     * Sets shackle to anchor connected to.
      *
-     * @param shackleToBridleConnectedTo the shackle to bridle connected to
+     * @param shackleToAnchorConnectedTo the shackle to anchor connected to
      */
-    public void setShackleToBridleConnectedTo(Bridle shackleToBridleConnectedTo) {
-        this.shackleToBridleConnectedTo = shackleToBridleConnectedTo;
+    public void setShackleToAnchorConnectedTo(SinkerAnchor shackleToAnchorConnectedTo) {
+        this.shackleToAnchorConnectedTo = shackleToAnchorConnectedTo;
     }
 
     /**
@@ -164,23 +160,6 @@ public class MooringShackle extends AidsToNavigation {
         }
     }
 
-    /**
-     * Gets shackle to anchor connected to.
-     *
-     * @return the shackle to anchor connected to
-     */
-    public SinkerAnchor getShackleToAnchorConnectedTo() {
-        return shackleToAnchorConnectedTo;
-    }
-
-    /**
-     * Sets shackle to anchor connected to.
-     *
-     * @param shackleToAnchorConnectedTo the shackle to anchor connected to
-     */
-    public void setShackleToAnchorConnectedTo(SinkerAnchor shackleToAnchorConnectedTo) {
-        this.shackleToAnchorConnectedTo = shackleToAnchorConnectedTo;
-    }
     /**
      * Gets shackle to cable connected to.
      *

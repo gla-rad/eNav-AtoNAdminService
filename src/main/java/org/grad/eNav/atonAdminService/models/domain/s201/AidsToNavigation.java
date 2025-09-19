@@ -115,12 +115,12 @@ public abstract class AidsToNavigation implements Serializable {
     final private Set<Information> informations = new HashSet<>();
 
     @JsonManagedReference
-    @ManyToMany(mappedBy = "peers")
-    final private Set<AtonAggregation> aggregations = new HashSet<>();
+    @ManyToMany(mappedBy = "atonAggregationBies")
+    final private Set<AtonAggregation> peerAtonAggregations = new HashSet<>();
 
     @JsonManagedReference
-    @ManyToMany(mappedBy = "peers")
-    final private Set<AtonAssociation> associations = new HashSet<>();
+    @ManyToMany(mappedBy = "atonAssociationBies")
+    final private Set<AtonAssociation> peerAtonAssociations = new HashSet<>();
 
     @ElementCollection
     private Set<String> seasonalActionRequireds;
@@ -444,42 +444,42 @@ public abstract class AidsToNavigation implements Serializable {
      *
      * @return the aggregations
      */
-    public Set<AtonAggregation> getAggregations() {
-        return aggregations;
+    public Set<AtonAggregation> getPeerAtonAggregations() {
+        return peerAtonAggregations;
     }
 
     /**
-     * Sets aggregations.
+     * Sets peer aton aggregations.
      *
-     * @param aggregations the aggregations
+     * @param peerAtonAggregations the peer aton aggregations
      */
-    public void setAggregations(Set<AtonAggregation> aggregations) {
-        this.aggregations.clear();
-        if(aggregations != null) {
-            aggregations.forEach(aggregation -> aggregation.getPeers().add(this));
-            this.aggregations.addAll(aggregations);
+    public void setPeerAtonAggregations(Set<AtonAggregation> peerAtonAggregations) {
+        this.peerAtonAggregations.clear();
+        if(peerAtonAggregations != null) {
+            peerAtonAggregations.forEach(aggregation -> aggregation.getAtonAggregationBies().add(this));
+            this.peerAtonAggregations.addAll(peerAtonAggregations);
         }
     }
 
     /**
-     * Gets associations.
+     * Gets peer aton associations.
      *
-     * @return the associations
+     * @return the peer aton associations
      */
-    public Set<AtonAssociation> getAssociations() {
-        return associations;
+    public Set<AtonAssociation> getPeerAtonAssociations() {
+        return peerAtonAssociations;
     }
 
     /**
      * Sets associations.
      *
-     * @param associations the associations
+     * @param peerAtonAssociations the associations
      */
-    public void setAssociations(Set<AtonAssociation> associations) {
-        this.associations.clear();
-        if(associations != null) {
-            associations.forEach(association -> association.getPeers().add(this));
-            this.associations.addAll(associations);
+    public void setPeerAtonAssociations(Set<AtonAssociation> peerAtonAssociations) {
+        this.peerAtonAssociations.clear();
+        if(peerAtonAssociations != null) {
+            peerAtonAssociations.forEach(association -> association.getAtonAssociationBies().add(this));
+            this.peerAtonAssociations.addAll(peerAtonAssociations);
         }
     }
 

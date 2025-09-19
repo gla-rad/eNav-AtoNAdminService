@@ -22,7 +22,7 @@ import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
