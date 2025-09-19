@@ -41,7 +41,7 @@ import org.grad.eNav.s100.enums.TelephoneType;
 import org.grad.eNav.s100.utils.S100ExchangeCatalogueBuilder;
 import org.grad.eNav.s100.utils.S100ExchangeSetUtils;
 import org.grad.eNav.s201.utils.GIRegistryInfo;
-import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
+import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;

@@ -302,40 +302,6 @@ public class S201GDSListener implements FeatureListener {
         combinedAidsToNavigationMap.putAll(equipmentTypeMap);
         combinedAidsToNavigationMap.putAll(otherAidsToNavigationMap);
 
-//        // Now start building the links to the remaining objects (e.g. aggregations/associations)
-//        final Map<String, AtonAggregation> aggregationsMap = members.stream()
-//                .filter(AtonAggregationImpl.class::isInstance)
-//                .map(AtonAggregationImpl.class::cast)
-//                .collect(Collectors.toMap(
-//                        AtonAggregationImpl::getId,
-//                        aggr -> {
-//                            AtonAggregation result = this.modelMapper.map(aggr, AtonAggregation.class);
-//                            result.setPeerAtonAggregations(aggr.getAtonAggregationBies()
-//                                    .stream()
-//                                    .map(this::getInternalReference)
-//                                    .filter(combinedAidsToNavigationMap::containsKey)
-//                                    .map(combinedAidsToNavigationMap::get)
-//                                    .collect(Collectors.toSet()));
-//                            return result;
-//                        }
-//                ));
-//        final Map<String, AtonAssociation> associationsMap = members.stream()
-//                .filter(AtonAssociationImpl.class::isInstance)
-//                .map(AtonAssociationImpl.class::cast)
-//                .collect(Collectors.toMap(
-//                        AtonAssociationImpl::getId,
-//                        asso -> {
-//                            AtonAssociation result = this.modelMapper.map(asso, AtonAssociation.class);
-//                            result.setPeerAtonAssociations(asso.getAtonAssociationBies()
-//                                    .stream()
-//                                    .map(this::getInternalReference)
-//                                    .filter(combinedAidsToNavigationMap::containsKey)
-//                                    .map(combinedAidsToNavigationMap::get)
-//                                    .collect(Collectors.toSet()));
-//                            return result;
-//                        }
-//                ));
-
         // Now map the S-201 structure objects and add all the associated information
         for (AbstractGMLType member : members) {
             //Sanity Check

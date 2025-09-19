@@ -28,9 +28,7 @@ import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
 import org.apache.lucene.spatial.query.SpatialArgs;
 import org.apache.lucene.spatial.query.SpatialOperation;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
-import org.grad.eNav.atonAdminService.models.domain.s201.AtonAggregation;
-import org.grad.eNav.atonAdminService.models.domain.s201.AidsToNavigation;
-import org.grad.eNav.atonAdminService.models.domain.s201.AtonAssociation;
+import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
 import org.grad.eNav.atonAdminService.repos.AidsToNavigationRepo;
 import org.hibernate.search.backend.lucene.LuceneExtension;
@@ -52,9 +50,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * The Aids to Navigation Service.
@@ -208,29 +206,20 @@ public class AidsToNavigationService {
         log.debug("Request to save Aid to Navigation : {}", aidsToNavigation);
 
         // Update the entity ID if the Code ID was found
-//        this.aidsToNavigationRepo.findByIdCode(aidsToNavigation.getIdCode())
-//                .ifPresent(aton -> {
-//                    // Re-use the object ID
-//                    aidsToNavigation.setId(aton.getId());
-//                    // Re-use the existing feature name IDs
-//                    final AtomicInteger featureNameCounter = new AtomicInteger();
-//                    final List<BigInteger> featureNameIds = aton.getFeatureNames()
-//                            .stream().map(FeatureName::getId)
-//                            .toList();
-//                    aidsToNavigation.getFeatureNames()
-//                            .stream()
-//                            .filter(fn -> featureNameCounter.get() < featureNameIds.size())
-//                            .forEach(fn -> fn.setId(featureNameIds.get(featureNameCounter.getAndIncrement())));
-//                    // Re-use the existing information IDs
-//                    final AtomicInteger informationCounter = new AtomicInteger();
-//                    final List<BigInteger> informationIds = aton.getFeatureNames()
-//                            .stream().map(FeatureName::getId)
-//                            .toList();
-//                    aidsToNavigation.getInformations()
-//                            .stream()
-//                            .filter(inf -> informationCounter.get() < informationIds.size())
-//                            .forEach(inf -> inf.setId(informationIds.get(informationCounter.getAndIncrement())));
-//                });
+        this.aidsToNavigationRepo.findByIdCode(aidsToNavigation.getIdCode())
+                .ifPresent(aton -> {
+                    // Re-use the object ID
+                    aidsToNavigation.setId(aton.getId());
+                    // Re-use the existing information IDs
+                    final AtomicInteger informationCounter = new AtomicInteger();
+                    final List<BigInteger> informationIds = aton.getInformations()
+                            .stream().map(Information::getId)
+                            .toList();
+                    aidsToNavigation.getInformations()
+                            .stream()
+                            .filter(inf -> informationCounter.get() < informationIds.size())
+                            .forEach(inf -> inf.setId(informationIds.get(informationCounter.getAndIncrement())));
+                });
 
         // Now save for each type
         final AidsToNavigation saved = this.aidsToNavigationRepo.save(aidsToNavigation);
