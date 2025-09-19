@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.4</version>
+		<version>3.4.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -32,7 +32,6 @@
 		<hibernate.search-orm.version>7.1.1.Final</hibernate.search-orm.version>
 		<hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
 		<lucene.spatial.version>9.8.0</lucene.spatial.version>
-        <mockito.version>5.19.0</mockito.version>
 	</properties>
 
 	<repositories>
@@ -401,13 +400,8 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>3.8.0</version>
             <scope>test</scope>
-        </dependency>
+		</dependency>
 		<dependency>
 			<groupId>au.com.dius.pact.provider</groupId>
 			<artifactId>junit5spring</artifactId>
