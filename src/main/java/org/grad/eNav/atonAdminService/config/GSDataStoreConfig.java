@@ -18,6 +18,7 @@ package org.grad.eNav.atonAdminService.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.geotools.api.data.DataStore;
 import org.geotools.api.data.DataStoreFinder;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +67,7 @@ public class GSDataStoreConfig {
         Map<String, String> params = new HashMap<>();
         params.put("kafka.brokers", kafkaBrokers);
         params.put("kafka.consumer.config", String.format("%s=%d", ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 10485760));
+        params.put("kafka.producer.config", String.format("%s=%d", ProducerConfig.MAX_REQUEST_SIZE_CONFIG, 10485760));
         params.put("kafka.consumer.count", Objects.toString(noKafkaConsumers));
 
         // And construct the data store
@@ -73,6 +75,7 @@ public class GSDataStoreConfig {
             return DataStoreFinder.getDataStore(params);
         } catch (IOException ex) {
             log.error(ex.getMessage());
+            log.error(ex.getCause().toString());
             return null;
         }
     }
