@@ -133,6 +133,8 @@ public class GlobalConfig {
                 SignalSequence.class, SignalSequenceType.class);
         modelMapper.addConverter(ctx -> new RhythmOfLightTypeImpl(),
                 RhythmOfLight.class, RhythmOfLightType.class);
+        modelMapper.addConverter(ctx -> new MultiplicityOfFeaturesTypeImpl(),
+                MultiplicityOfFeatures.class, MultiplicityOfFeaturesType.class);
 
         // Loop all the mapped S-201 AtoN types and configure the model mapper
         // to translate correctly from the S-201 onto the local classes and

@@ -111,8 +111,6 @@ public class S201GDSService {
      */
     //@PreDestroy
     public void destroy() {
-        //Optional.ofNullable(gdsListener).ifPresent(S201GDSListener::destroy);
-
         // If we are just reloading, don't drop the Geomesa DataStore Consumer
         if(this.reloading) {
             return;
