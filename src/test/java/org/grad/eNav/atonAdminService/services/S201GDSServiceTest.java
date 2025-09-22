@@ -128,7 +128,7 @@ class S201GDSServiceTest {
         // Perform the service call
         this.s201GDSService.destroy();
 
-        // Make sure the listeners and the Geomesa datastore gets disconnected
+        // Make sure the Geomesa datastore gets disconnected
         verify(this.consumer, times(1)).dispose();
     }
 
@@ -152,7 +152,7 @@ class S201GDSServiceTest {
         // Perform the service call
         this.s201GDSService.destroy();
 
-        // Make sure the listeners and the Geomesa datastore gets disconnected
+        // Make sure the Geomesa datastore gets disconnected
         verify(this.consumer, never()).dispose();
     }
 

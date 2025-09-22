@@ -56,6 +56,8 @@ class HibernateSearchInitTest {
      */
     @BeforeEach
     void setup() {
+        this.hibernateSearchInit.indexingMaxRetries = 2;
+        this.hibernateSearchInit.indexingBackOffMillis = 100;
         this.searchSession = mock(SearchSession.class);
         this.massIndexer = mock(MassIndexer.class);
     }
@@ -99,7 +101,7 @@ class HibernateSearchInitTest {
         }
 
         // Verify the indexing initialisation was performed
-        verify(massIndexer, times(1)).startAndWait();
+        verify(massIndexer, times(2)).startAndWait();
     }
 
 }

@@ -30,6 +30,7 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.hibernate.search.util.common.SearchException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -57,6 +58,18 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
     EntityManager entityManager;
 
     /**
+     * The maximum retries to index the database.
+     */
+    @Value("${gla.rad.aton-service.indexing.max-retries:3}")
+    int indexingMaxRetries;
+
+    /**
+     * The retry back off tim ein millis to index the database.
+     */
+    @Value("${gla.rad.aton-service.indexing.back-off:300}")
+    int indexingBackOffMillis;
+
+    /**
      * Override the application event handler to index the database.
      *
      * @param event the context refreshed event
@@ -64,24 +77,50 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
     @Override
     @Transactional
     public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
-        // Once the application has booted up, access the search session
-        SearchSession searchSession = Search.session( entityManager );
+        // Add some retries in case this failed - mainly for K8s
+        int attempt = 0;
 
-        // Create a mass indexer
-        MassIndexer indexer = searchSession.massIndexer(Arrays.asList(
-                        S201Dataset.class,
-                        S201DatasetIdentification.class,
-                        DatasetContent.class,
-                        AidsToNavigation.class,
-                        SubscriptionRequest.class,
-                        DatasetContentLog.class))
-                .threadsToLoadObjects( 7 );
+        // Try multiple times to index if it fails
+        while (attempt < indexingMaxRetries) {
+            // And perform the indexing
+            try {
+                //Count the attempt
+                attempt++;
 
-        // And perform the indexing
-        try {
-            indexer.startAndWait();
-        } catch (InterruptedException | SearchException e) {
-            log.error(e.getMessage());
+                // Once the application has booted up, access the search session
+                SearchSession searchSession = Search.session(entityManager);
+
+                // Create a mass indexer
+                MassIndexer indexer = searchSession.massIndexer(Arrays.asList(
+                                S201Dataset.class,
+                                S201DatasetIdentification.class,
+                                DatasetContent.class,
+                                AidsToNavigation.class,
+                                SubscriptionRequest.class,
+                                DatasetContentLog.class))
+                        .threadsToLoadObjects(7);
+
+
+                // Start the indexer
+                indexer.startAndWait();
+                log.info("Hibernate Search indexing completed successfully");
+                return;
+            } catch (InterruptedException | SearchException ex) {
+                log.error("Indexing attempt {} failed: {}", attempt, ex.getMessage(), ex);
+
+                if (attempt >= indexingMaxRetries) {
+                    log.error("All {} indexing attempts failed, giving up...", indexingMaxRetries);
+                    break;
+                }
+
+                try {
+                    log.info("Retrying in {} ms...", indexingBackOffMillis);
+                    Thread.sleep(indexingBackOffMillis);
+                } catch (InterruptedException iex) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
         }
     }
 
