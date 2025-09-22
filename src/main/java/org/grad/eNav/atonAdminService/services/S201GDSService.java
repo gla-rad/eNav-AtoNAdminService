@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -43,10 +44,10 @@ import java.util.Optional;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Slf4j
-@DependsOn(value="gsDataStore")
 @Service
+@DependsOn(value="gsDataStore")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class S201GDSService {
+public class S201GDSService implements SmartLifecycle {
 
     /**
      * The Application Context
@@ -70,6 +71,30 @@ public class S201GDSService {
     // Service Variables
     protected S201GDSListener gdsListener;
     protected boolean reloading;
+    protected boolean running = false;
+
+    @Override
+    public void start() {
+        // Flag as running
+        this.running = true;
+
+        // And initialise
+        this.init();
+    }
+
+    @Override
+    public void stop() {
+        // Flag as stopping
+        this.running = false;
+
+        // And destroy
+        this.destroy();
+    }
+
+    @Override
+    public boolean isRunning() {
+        return this.running;
+    }
 
     /**
      * Once the service has been initialised, we can that start the execution
@@ -77,7 +102,7 @@ public class S201GDSService {
      * on independent threads. All incoming messages with then be consumed by
      * the same handler, but handled based on the topic.
      */
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         log.info("Geomesa Data Store Service is booting up...");
 
@@ -106,7 +131,7 @@ public class S201GDSService {
      * When shutting down the application we need to make sure that all
      * threads have been gracefully shutdown as well.
      */
-    @PreDestroy
+    //@PreDestroy
     public void destroy() {
         Optional.ofNullable(gdsListener).ifPresent(S201GDSListener::destroy);
 
