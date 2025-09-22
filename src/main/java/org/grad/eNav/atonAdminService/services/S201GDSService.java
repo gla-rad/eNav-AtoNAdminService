@@ -27,10 +27,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -47,7 +49,7 @@ import java.util.Optional;
 @Service
 @DependsOn(value="gsDataStore")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class S201GDSService implements SmartLifecycle {
+public class S201GDSService {
 
     /**
      * The Application Context
@@ -71,30 +73,6 @@ public class S201GDSService implements SmartLifecycle {
     // Service Variables
     protected S201GDSListener gdsListener;
     protected boolean reloading;
-    protected boolean running = false;
-
-    @Override
-    public void start() {
-        // Flag as running
-        this.running = true;
-
-        // And initialise
-        this.init();
-    }
-
-    @Override
-    public void stop() {
-        // Flag as stopping
-        this.running = false;
-
-        // And destroy
-        this.destroy();
-    }
-
-    @Override
-    public boolean isRunning() {
-        return this.running;
-    }
 
     /**
      * Once the service has been initialised, we can that start the execution
@@ -102,7 +80,7 @@ public class S201GDSService implements SmartLifecycle {
      * on independent threads. All incoming messages with then be consumed by
      * the same handler, but handled based on the topic.
      */
-    //@PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void init() {
         log.info("Geomesa Data Store Service is booting up...");
 
@@ -133,7 +111,7 @@ public class S201GDSService implements SmartLifecycle {
      */
     //@PreDestroy
     public void destroy() {
-        Optional.ofNullable(gdsListener).ifPresent(S201GDSListener::destroy);
+        //Optional.ofNullable(gdsListener).ifPresent(S201GDSListener::destroy);
 
         // If we are just reloading, don't drop the Geomesa DataStore Consumer
         if(this.reloading) {

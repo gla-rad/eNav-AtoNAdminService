@@ -47,7 +47,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.integration.channel.PublishSubscribeChannel;
@@ -144,7 +146,10 @@ public class S201GDSListener implements FeatureListener {
     @PreDestroy
     public void destroy() {
         log.info("AtoN message Listener is shutting down...");
-        this.featureSource.removeFeatureListener(this);
+        // Destroy the feature source if there
+        if(this.featureSource != null) {
+            this.featureSource.removeFeatureListener(this);
+        }
     }
 
     /**
