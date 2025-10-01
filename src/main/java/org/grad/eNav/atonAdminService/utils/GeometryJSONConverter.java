@@ -48,7 +48,7 @@ public class GeometryJSONConverter {
             JsonNode node = om.readTree(new GeoJsonWriter().write(geometry));
             return node;
         } catch (IOException e) {
-            return null;
+            return om.createObjectNode();
         }
     }
 

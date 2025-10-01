@@ -127,8 +127,6 @@ public class GlobalConfig {
         // For interface fields that don't have constructors, use converters
         modelMapper.addConverter(ctx -> new FeatureNameTypeImpl(),
                 FeatureName.class, FeatureNameType.class);
-        modelMapper.addConverter(ctx -> new FeatureNameTypeImpl(),
-                FeatureName.class, FeatureNameType.class);
         modelMapper.addConverter(ctx -> new SignalSequenceTypeImpl(),
                 SignalSequence.class, SignalSequenceType.class);
         modelMapper.addConverter(ctx -> new RhythmOfLightTypeImpl(),
