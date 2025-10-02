@@ -60,7 +60,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 /**
- * The SECOM Get Service Interface Controller.
+ * The SECOM v2 Get Service Interface Controller.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

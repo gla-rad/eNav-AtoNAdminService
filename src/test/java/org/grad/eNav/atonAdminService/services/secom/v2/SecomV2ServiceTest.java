@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.eNav.atonAdminService.services.secom;
+package org.grad.eNav.atonAdminService.services.secom.v2;
 
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.ResponseSearchObject;
@@ -40,14 +40,14 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-class SecomServiceTest {
+class SecomV2ServiceTest {
 
     /**
      * The Tested Service.
      */
     @InjectMocks
     @Spy
-    SecomService secomService;
+    SecomV2Service secomV2Service;
 
     /**
      * The Discovery Service mock.
@@ -65,7 +65,7 @@ class SecomServiceTest {
     @BeforeEach
     void setUp() {
         // Set the discovery service URL variable
-        this.secomService.discoveryServiceUrl = "http://localhost:8444/v1/searchService";
+        this.secomV2Service.discoveryServiceUrl = "http://localhost:8444/v1/searchService";
 
         // Create a set of retrieved instances
         SearchObjectResult searchObjectResult1 = new SearchObjectResult();
@@ -88,10 +88,10 @@ class SecomServiceTest {
     @Test
     void testInit() {
         // Perform the service call
-        this.secomService.init();
+        this.secomV2Service.init();
 
         // Make sure the discovery service was initialise properly
-        assertNotNull(this.secomService.discoveryService);
+        assertNotNull(this.secomV2Service.discoveryService);
     }
 
     /**
@@ -101,11 +101,11 @@ class SecomServiceTest {
     @Test
     void testDestroy() {
         // Perform the service call
-        this.secomService.init();
-        this.secomService.destroy();
+        this.secomV2Service.init();
+        this.secomV2Service.destroy();
 
         // Make sure the discovery service was destroyed properly
-        assertNull(this.secomService.discoveryService);
+        assertNull(this.secomV2Service.discoveryService);
     }
 
     /**
@@ -115,11 +115,11 @@ class SecomServiceTest {
     @Test
     void testGetClient() {
         // And mock a SECOM discovery service client
-        this.secomService.discoveryService = mock(SecomClient.class);
-        doReturn(Optional.of(this.responseSearchObject)).when(this.secomService.discoveryService).searchService(any(), any(), any());
+        this.secomV2Service.discoveryService = mock(SecomClient.class);
+        doReturn(Optional.of(this.responseSearchObject)).when(this.secomV2Service.discoveryService).searchService(any(), any(), any());
 
         // Perform the service call
-        SecomClient result = this.secomService.getClient("urn:mrn:org:test");
+        SecomClient result = this.secomV2Service.getClient("urn:mrn:org:test");
 
         // Make sure the client seems OK
         assertNotNull(result);
@@ -133,7 +133,7 @@ class SecomServiceTest {
     @Test
     void testGetClientByUrl() throws MalformedURLException {
         // Perform the service call
-        SecomClient result = this.secomService.getClient(URI.create("http://localhost").toURL());
+        SecomClient result = this.secomV2Service.getClient(URI.create("http://localhost").toURL());
 
         // Make sure the client seems OK
         assertNotNull(result);
@@ -152,11 +152,11 @@ class SecomServiceTest {
         this.responseSearchObject.getSearchServiceResult().get(1).setEndpointUri("a broken URL");
 
         // And mock a SECOM discovery service client
-        this.secomService.discoveryService = mock(SecomClient.class);
-        doReturn(Optional.of(this.responseSearchObject)).when(this.secomService.discoveryService).searchService(any(), any(), any());
+        this.secomV2Service.discoveryService = mock(SecomClient.class);
+        doReturn(Optional.of(this.responseSearchObject)).when(this.secomV2Service.discoveryService).searchService(any(), any(), any());
 
         // Perform the service call
-        assertThrows(SecomValidationException.class, () -> this.secomService.getClient("urn:mrn:org:test"));
+        assertThrows(SecomValidationException.class, () -> this.secomV2Service.getClient("urn:mrn:org:test"));
     }
 
 }

@@ -105,7 +105,7 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
                 indexer.startAndWait();
                 log.info("Hibernate Search indexing completed successfully");
                 return;
-            } catch (InterruptedException | SearchException ex) {
+            } catch (IllegalStateException | InterruptedException | SearchException ex) {
                 log.error("Indexing attempt {} failed: {}", attempt, ex.getMessage(), ex);
 
                 if (attempt >= indexingMaxRetries) {

@@ -17,7 +17,7 @@
 package org.grad.eNav.atonAdminService.pacts.secomV2;
 
 import au.com.dius.pact.provider.junitsupport.State;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 
 import java.util.Map;
@@ -40,7 +40,7 @@ public interface RemoveSubscriptionSecomControllerTestInterface {
      *
      * @return the mocked SECOM subscription service
      */
-    SecomSubscriptionService getSecomSubscriptionService();
+    SecomV2SubscriptionService getSecomSubscriptionService();
 
     /**
      * Test that the SECOM remove subscription interface will return an

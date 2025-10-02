@@ -26,7 +26,7 @@ import org.springframework.validation.annotation.Validated;
 import java.time.Instant;
 
 /**
- * The SECOM Ping Interface Controller.
+ * The SECOM v1 Ping Interface Controller.
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */

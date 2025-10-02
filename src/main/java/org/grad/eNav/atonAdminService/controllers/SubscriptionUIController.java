@@ -22,7 +22,7 @@ import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPage;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
 import org.grad.eNav.atonAdminService.models.dtos.secom.SubscriptionRequestDto;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -43,7 +43,7 @@ public class SubscriptionUIController {
      * The Dataset Service.
      */
     @Autowired
-    SecomSubscriptionService secomSubscriptionService;
+    SecomV2SubscriptionService secomV2SubscriptionService;
 
     /**
      * Object Mapper from Domain to DTO.
@@ -67,7 +67,7 @@ public class SubscriptionUIController {
     @PostMapping(value = "/dt", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DtPage<SubscriptionRequestDto>> getSubscriptionsForDatatables(@RequestBody DtPagingRequest dtPagingRequest) {
         log.debug("REST request to get page of Subscriptions for datatables");
-        final Page<SubscriptionRequest> subscriptionPage = this.secomSubscriptionService.handleDatatablesPagingRequest(dtPagingRequest);
+        final Page<SubscriptionRequest> subscriptionPage = this.secomV2SubscriptionService.handleDatatablesPagingRequest(dtPagingRequest);
         return ResponseEntity.ok()
                 .body(this.subscriptionDtoMapper.convertToDtPage(subscriptionPage, dtPagingRequest, SubscriptionRequestDto.class));
     }

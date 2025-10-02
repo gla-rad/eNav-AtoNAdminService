@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 /**
- * The SECOM OpenApi Provider Implementation
+ * The SECOM v1 OpenApi Provider Implementation
  * <p/>
  * Provides the definition of the service OpenAPI documentation so that it can
  * be used for the description of the SECOM interfaces.

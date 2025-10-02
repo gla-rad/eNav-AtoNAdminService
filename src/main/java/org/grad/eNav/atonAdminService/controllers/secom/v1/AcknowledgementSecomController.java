@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * The SECOM Acknowledgement Interface Controller.
+ * The SECOM v1 Acknowledgement Interface Controller.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

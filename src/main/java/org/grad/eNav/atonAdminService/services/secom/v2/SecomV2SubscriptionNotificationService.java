@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.eNav.atonAdminService.services.secom;
+package org.grad.eNav.atonAdminService.services.secom.v2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.grad.secomv2.core.models.SubscriptionNotificationObject;
@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * The SECOM Subscription Notification Service Class.
+ * The SECOM v2 Subscription Notification Service Class.
  * <p/>
  * A service handles the subscription notifications in an asynchronous way so
  * that the responses can go back to the clients regardless of the respective
@@ -40,13 +40,13 @@ import java.util.concurrent.CompletableFuture;
  */
 @Service
 @Slf4j
-public class SecomSubscriptionNotificationService {
+public class SecomV2SubscriptionNotificationService {
 
     /**
-     * The SECOM Service.
+     * The SECOM v2 Service.
      */
     @Autowired
-    SecomService secomService;
+    SecomV2Service secomV2Service;
 
     /**
      * Sends a SECOM subscription notification response object to the SECOM
@@ -63,7 +63,7 @@ public class SecomSubscriptionNotificationService {
         log.debug("Sending notification to client {} for subscription {} to mark {} event", mrn, subscriptionIdentifier, subscriptionEventEnum);
 
         // Get the SECOM client matching the provided MRN
-        final SecomClient secomClient = this.secomService.getClient(mrn);
+        final SecomClient secomClient = this.secomV2Service.getClient(mrn);
 
         // Create the subscription notification response object
         SubscriptionNotificationObject subscriptionNotificationObject = new SubscriptionNotificationObject();
@@ -91,7 +91,7 @@ public class SecomSubscriptionNotificationService {
         log.debug("Sending notification to client URL {} for subscription {} to mark {} event", callbackEndpoint, subscriptionIdentifier, subscriptionEventEnum);
 
         // Get the SECOM client matching the provided MRN
-        final SecomClient secomClient = this.secomService.getClient(callbackEndpoint);
+        final SecomClient secomClient = this.secomV2Service.getClient(callbackEndpoint);
 
         // Create the subscription notification response object
         SubscriptionNotificationObject subscriptionNotificationObject = new SubscriptionNotificationObject();

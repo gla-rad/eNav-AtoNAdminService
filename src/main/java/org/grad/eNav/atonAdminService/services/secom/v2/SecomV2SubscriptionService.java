@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.eNav.atonAdminService.services.secom;
+package org.grad.eNav.atonAdminService.services.secom.v2;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -38,6 +38,7 @@ import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.repos.SecomSubscriptionRepo;
 import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.EnvelopeUploadObject;
@@ -77,17 +78,17 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * The SECOM Subscription Service Class.
+ * The SECOM v2 Subscription Service Class.
  * <p/>
- * A service to handle the incoming SECOM subscription requests. Each
+ * A service to handle the incoming SECOM v2 subscription requests. Each
  * subscription is persisted in the database and is handled appropriately
- * as specified by the SECOM standard.
+ * as specified by the SECOM v2 standard.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Service
 @Slf4j
-public class SecomSubscriptionService implements MessageHandler {
+public class SecomV2SubscriptionService implements MessageHandler {
 
     @Value("${gla.rad.service.secom.subscriptions.restrictDuplicates:false}")
     boolean restrictDuplicateSubscriptions;
@@ -105,16 +106,16 @@ public class SecomSubscriptionService implements MessageHandler {
     UnLoCodeService unLoCodeService;
 
     /**
-     * The SECOM Service.
+     * The SECOM v2 Service.
      */
     @Autowired
-    SecomService secomService;
+    SecomV2Service secomV2Service;
 
     /**
-     * The SECOM Subscription Notification Service.
+     * The SECOM v2 Subscription Notification Service.
      */
     @Autowired
-    SecomSubscriptionNotificationService secomSubscriptionNotificationService;
+    SecomV2SubscriptionNotificationService secomV2SubscriptionNotificationService;
 
     /**
      * The S-100 Exchange Set Service.
@@ -151,7 +152,7 @@ public class SecomSubscriptionService implements MessageHandler {
      */
     @PostConstruct
     public void init() {
-        log.info("SECOM Subscription Service is booting up...");
+        log.info("SECOM v2 Subscription Service is booting up...");
         this.entityManager = this.entityManagerFactory.createEntityManager();
         this.s201PublicationChannel.subscribe(this);
         this.s201RemovalChannel.subscribe(this);
@@ -163,7 +164,7 @@ public class SecomSubscriptionService implements MessageHandler {
      */
     @PreDestroy
     public void destroy() {
-        log.info("SECOM Subscription Service is shutting down...");
+        log.info("SECOM v2 Subscription Service is shutting down...");
         if(this.entityManager != null) {
             this.entityManager.close();
         }
@@ -206,7 +207,7 @@ public class SecomSubscriptionService implements MessageHandler {
             // Get the payload of the incoming message
 
             // A simple debug message
-            log.debug(String.format("SECOM Subscription Service received an S-201 dataset %s with UUID: %s.",
+            log.debug(String.format("SECOM v2 Subscription Service received an S-201 dataset %s with UUID: %s.",
                     datasetOperation.getOperation(),
                     s201Dataset.getUuid()));
 
@@ -248,7 +249,7 @@ public class SecomSubscriptionService implements MessageHandler {
             }
         }
         else {
-            log.warn("Aids to Navigation Service received a publish-subscribe message with erroneous format.");
+            log.warn("SECOM v2 Subscription Service received a publish-subscribe message with erroneous format.");
         }
     }
 
@@ -298,7 +299,7 @@ public class SecomSubscriptionService implements MessageHandler {
      */
     @Transactional(readOnly = true)
     public Page<SubscriptionRequest> handleDatatablesPagingRequest(DtPagingRequest dtPagingRequest) {
-        log.debug("Request to get SECOM Subscriptions in a Datatables pageable search");
+        log.debug("Request to get SECOM v2 Subscriptions in a Datatables pageable search");
         // Create the search query
         final SearchQuery<SubscriptionRequest> searchQuery = this.getDatasetSearchQueryByText(
                 dtPagingRequest.getSearch().getValue(),
@@ -321,7 +322,7 @@ public class SecomSubscriptionService implements MessageHandler {
      * @return the subscription request generated
      */
     public SubscriptionRequest save(String mrn, SubscriptionRequest subscriptionRequest) {
-        log.debug("Request from MRN {} to save SECOM subscription {}", mrn, subscriptionRequest.getUuid());
+        log.debug("Request from MRN {} to save SECOM v2 subscription {}", mrn, subscriptionRequest.getUuid());
 
         // Sanity Check
         Optional.ofNullable(mrn)
@@ -338,6 +339,7 @@ public class SecomSubscriptionService implements MessageHandler {
         }
 
         // Populate the subscription dataset and geometry
+        subscriptionRequest.setSecomVersion(SecomConstants.SECOM_VERSION);
         subscriptionRequest.setClientMrn(mrn);
         subscriptionRequest.updateSubscriptionGeometry(this.unLoCodeService);
 
@@ -346,7 +348,7 @@ public class SecomSubscriptionService implements MessageHandler {
 
         // Inform to the subscription client (identify through MRN) - asynchronous
         if(Objects.isNull(subscriptionRequest.getCallbackEndpoint())) {
-            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
+            this.secomV2SubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
                             result.getUuid(),
                             SubscriptionEventEnum.SUBSCRIPTION_CREATED)
                     .whenCompleteAsync((snr, ex) -> {
@@ -357,7 +359,7 @@ public class SecomSubscriptionService implements MessageHandler {
                         }
                     });
         } else {
-            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getCallbackEndpoint(),
+            this.secomV2SubscriptionNotificationService.sendNotification(subscriptionRequest.getCallbackEndpoint(),
                             result.getUuid(),
                             SubscriptionEventEnum.SUBSCRIPTION_CREATED)
                     .whenCompleteAsync((snr, ex) -> {
@@ -381,7 +383,7 @@ public class SecomSubscriptionService implements MessageHandler {
      * @return the subscription identifier UUID removed
      */
     public UUID delete(@NotNull UUID uuid) {
-        log.debug("Request to delete SECOM subscription with UUID : {}", uuid);
+        log.debug("Request to delete SECOM v2 subscription with UUID : {}", uuid);
 
         // Look for the subscription and delete it if found
         final SubscriptionRequest subscriptionRequest = Optional.of(uuid)
@@ -393,7 +395,7 @@ public class SecomSubscriptionService implements MessageHandler {
 
         // Inform to the subscription client (identify through MRN) - asynchronous
         if(Objects.isNull(subscriptionRequest.getCallbackEndpoint())) {
-            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
+            this.secomV2SubscriptionNotificationService.sendNotification(subscriptionRequest.getClientMrn(),
                             subscriptionRequest.getUuid(),
                             SubscriptionEventEnum.SUBSCRIPTION_REMOVED)
                     .whenCompleteAsync((snr, ex) -> {
@@ -404,7 +406,7 @@ public class SecomSubscriptionService implements MessageHandler {
                         }
                     });
         } else {
-            this.secomSubscriptionNotificationService.sendNotification(subscriptionRequest.getCallbackEndpoint(),
+            this.secomV2SubscriptionNotificationService.sendNotification(subscriptionRequest.getCallbackEndpoint(),
                             subscriptionRequest.getUuid(),
                             SubscriptionEventEnum.SUBSCRIPTION_REMOVED)
                     .whenCompleteAsync((snr, ex) -> {
@@ -440,8 +442,8 @@ public class SecomSubscriptionService implements MessageHandler {
 
         // Identify the subscription client if possible through the client MRN
         final SecomClient secomClient = Objects.isNull(subscriptionRequest.getCallbackEndpoint()) ?
-                this.secomService.getClient(subscriptionRequest.getClientMrn()) :
-                this.secomService.getClient(subscriptionRequest.getCallbackEndpoint());
+                this.secomV2Service.getClient(subscriptionRequest.getClientMrn()) :
+                this.secomV2Service.getClient(subscriptionRequest.getCallbackEndpoint());
 
         // Build the data envelope
         EnvelopeUploadObject envelopeUploadObject = new EnvelopeUploadObject();
@@ -536,6 +538,9 @@ public class SecomSubscriptionService implements MessageHandler {
                 .where( f -> {
                     BooleanPredicateClausesStep<?> step = f.bool()
                         .must(f.matchAll());
+                    step.must(f.match()
+                            .field("secomVersion")
+                            .matching(SecomConstants.SECOM_VERSION));
                     Optional.ofNullable(containerType).ifPresent(v -> {
                         final SearchPredicate existingValuePred = f.match()
                                 .field("containerType")

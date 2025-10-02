@@ -129,6 +129,10 @@ public class SubscriptionRequest {
 
     private Boolean pushAll;
 
+    @KeywordField(sortable = Sortable.YES,
+            valueBridge = @ValueBridgeRef(type = NullValueIndexerBridge.class))
+    private String secomVersion;
+
     /**
      * Gets uuid.
      *
@@ -397,6 +401,24 @@ public class SubscriptionRequest {
      */
     public void setPushAll(Boolean pushAll) {
         this.pushAll = pushAll;
+    }
+
+    /**
+     * Gets secom version.
+     *
+     * @return the secom version
+     */
+    public String getSecomVersion() {
+        return secomVersion;
+    }
+
+    /**
+     * Sets secom version.
+     *
+     * @param secomVersion the secom version
+     */
+    public void setSecomVersion(String secomVersion) {
+        this.secomVersion = secomVersion;
     }
 
     /**

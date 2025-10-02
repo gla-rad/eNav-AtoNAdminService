@@ -30,7 +30,7 @@ import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.services.DatasetService;
 import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.grad.eNav.atonAdminService.utils.S201DatasetBuilder;
 import org.grad.eNav.s201.utils.S201Utils;
 import org.grad.secomv2.core.base.DigitalSignatureCertificate;
@@ -129,7 +129,7 @@ class SecomV2ControllerTest {
      * The SECOM Subscription Service mock.
      */
     @MockitoBean
-    SecomSubscriptionService secomSubscriptionService;
+    SecomV2SubscriptionService secomV2SubscriptionService;
 
     /**
      * The Secom Certificate Provider mock.
@@ -600,7 +600,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testSubscription() {
-        doReturn(savedSubscriptionRequest).when(this.secomSubscriptionService).save(any(), any());
+        doReturn(savedSubscriptionRequest).when(this.secomV2SubscriptionService).save(any(), any());
 
         webTestClient.post()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -625,7 +625,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testSubscriptionWithCallback() throws MalformedURLException {
-        doReturn(savedSubscriptionRequest).when(this.secomSubscriptionService).save(any(), any());
+        doReturn(savedSubscriptionRequest).when(this.secomV2SubscriptionService).save(any(), any());
 
         // Set a callback URL
         this.subscriptionRequestObject.getEnvelope().setCallbackEndpoint(URI.create("http://localhost").toURL());
@@ -653,7 +653,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testSubscriptionBadRequest() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).save(any(), any());
+        doThrow(SecomValidationException.class).when(this.secomV2SubscriptionService).save(any(), any());
 
         webTestClient.post()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -670,7 +670,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testSubscriptionMethodNotAllowed() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).save(any(), any());
+        doThrow(SecomValidationException.class).when(this.secomV2SubscriptionService).save(any(), any());
 
         webTestClient.get()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -685,7 +685,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testRemoveSubscription() {
-        doReturn(removeSubscriptionObject.getSubscriptionIdentifier()).when(this.secomSubscriptionService).delete(any());
+        doReturn(removeSubscriptionObject.getSubscriptionIdentifier()).when(this.secomV2SubscriptionService).delete(any());
 
         webTestClient.method(HttpMethod.DELETE)
                 .uri(uriBuilder -> uriBuilder
@@ -711,7 +711,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testRemoveSubscriptionBadRequest() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).delete(any());
+        doThrow(SecomValidationException.class).when(this.secomV2SubscriptionService).delete(any());
 
         webTestClient.method(HttpMethod.DELETE)
                 .uri(uriBuilder -> uriBuilder
@@ -730,7 +730,7 @@ class SecomV2ControllerTest {
      */
     @Test
     void testRemoveSubscriptionMethodNotAllowed() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).delete(any());
+        doThrow(SecomValidationException.class).when(this.secomV2SubscriptionService).delete(any());
 
         webTestClient.get()
                 .uri("/api/secom" + REMOVE_SUBSCRIPTION_INTERFACE_PATH)

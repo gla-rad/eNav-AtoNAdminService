@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 /**
- * The SECOM Capability Interface Controller.
+ * The SECOM v1 Capability Interface Controller.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

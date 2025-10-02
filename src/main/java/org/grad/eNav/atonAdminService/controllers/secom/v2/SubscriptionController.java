@@ -25,7 +25,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.grad.eNav.atonAdminService.components.DomainDtoMapper;
 import org.grad.eNav.atonAdminService.controllers.secom.SecomRequestHeaders;
 import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.interfaces.SubscriptionServiceInterface;
 import org.grad.secomv2.core.models.EnvelopeSubscriptionObject;
@@ -40,7 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * The SECOM Subscription Service Interface Controller.
+ * The SECOM v2 Subscription Service Interface Controller.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
@@ -51,16 +51,16 @@ import java.util.Optional;
 public class SubscriptionController implements SubscriptionServiceInterface {
 
     /**
-     * Object Mapper from SECOM Subscription Request DTO to Domain.
+     * Object Mapper from SECOM v2 Subscription Request DTO to Domain.
      */
     @Autowired
     DomainDtoMapper<EnvelopeSubscriptionObject, SubscriptionRequest> subscriptionRequestDomainMapper;
 
     /**
-     * The SECOM Service.
+     * The SECOM v2 Service.
      */
     @Autowired
-    SecomSubscriptionService secomSubscriptionService;
+    SecomV2SubscriptionService secomV2SubscriptionService;
 
     /**
      * The Request Context.
@@ -91,7 +91,7 @@ public class SubscriptionController implements SubscriptionServiceInterface {
         final SubscriptionRequest subscriptionRequest = Optional.ofNullable(subscriptionRequestObject)
                 .map(SubscriptionRequestObject::getEnvelope)
                 .map(dto -> this.subscriptionRequestDomainMapper.convertTo(dto, SubscriptionRequest.class))
-                .map(subReq -> this.secomSubscriptionService.save(mrn, subReq))
+                .map(subReq -> this.secomV2SubscriptionService.save(mrn, subReq))
                 .filter(req -> Objects.nonNull(req.getUuid()))
                 .orElseThrow(() -> new SecomNotFoundException("UUID"));
 

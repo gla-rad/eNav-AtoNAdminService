@@ -22,7 +22,7 @@ import jakarta.ws.rs.QueryParam;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.components.DomainDtoMapper;
 import org.grad.eNav.atonAdminService.models.domain.secom.RemoveSubscription;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface;
 import org.grad.secomv2.core.models.RemoveSubscriptionObject;
@@ -36,7 +36,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The SECOM Remove Subscription Service Interface Controller.
+ * The SECOM v2 Remove Subscription Service Interface Controller.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
@@ -47,16 +47,16 @@ import java.util.UUID;
 public class RemoveSubscriptionController implements RemoveSubscriptionServiceInterface {
 
     /**
-     * The SECOM Service.
-     */
-    @Autowired
-    SecomSubscriptionService secomSubscriptionService;
-
-    /**
-     * Object Mapper from SECOM Remove Subscription DTO to Domain.
+     * Object Mapper from SECOM v2 Remove Subscription DTO to Domain.
      */
     @Autowired
     DomainDtoMapper<RemoveSubscriptionObject, RemoveSubscription> removeSubscriptionDomainMapper;
+
+    /**
+     * The SECOM v2 Service.
+     */
+    @Autowired
+    SecomV2SubscriptionService secomV2SubscriptionService;
 
     /**
      * DELETE /api/secom/v2/subscription : Subscription(s) can be removed either
@@ -71,7 +71,7 @@ public class RemoveSubscriptionController implements RemoveSubscriptionServiceIn
     @Transactional
     public RemoveSubscriptionResponseObject removeSubscription(@QueryParam(value="subscriptionIdentifier") UUID subscriptionIdentifier) {
         final UUID deletedSubscriptionIdentifier = Optional.ofNullable(subscriptionIdentifier)
-                .map(this.secomSubscriptionService::delete)
+                .map(this.secomV2SubscriptionService::delete)
                 .orElseThrow(() -> new SecomNotFoundException(String.format("%s", subscriptionIdentifier)));
 
         // Create the response

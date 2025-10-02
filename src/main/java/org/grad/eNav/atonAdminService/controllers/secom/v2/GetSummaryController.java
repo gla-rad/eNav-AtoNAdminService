@@ -61,7 +61,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * The SECOM Get Summary Service Interface Controller.
+ * The SECOM v2 Get Summary Service Interface Controller.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

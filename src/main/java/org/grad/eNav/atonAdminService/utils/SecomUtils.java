@@ -41,6 +41,20 @@ public class SecomUtils {
     }
 
     /**
+     * A simple static function that translated the SECOM container type
+     * enumerations between versions 2 and 1.
+     *
+     * @param containerType the SECOM v2 container type enumerations
+     * @return the SECOM v1 container type enumerations
+     */
+    public static org.grad.secom.core.models.enums.ContainerTypeEnum translateSecomContainerTypeEnum(org.grad.secomv2.core.models.enums.ContainerTypeEnum containerType) {
+        if(containerType == null) {
+            return null;
+        }
+        return org.grad.secom.core.models.enums.ContainerTypeEnum.fromValue(containerType.getValue());
+    }
+
+    /**
      * A simple static function that translated the SECOM data product type
      * enumerations between versions 1 and 2.
      *
@@ -52,6 +66,20 @@ public class SecomUtils {
             return null;
         }
         return org.grad.secomv2.core.models.enums.SECOM_DataProductType.fromDescription(dataProductType.getDescription());
+    }
+
+    /**
+     * A simple static function that translated the SECOM data product type
+     * enumerations between versions 2 and 1.
+     *
+     * @param dataProductType the SECOM v2 data product type enumerations
+     * @return the SECOM v1 data product type enumerations
+     */
+    public static org.grad.secom.core.models.enums.SECOM_DataProductType translateSecomDataProductTypeEnum(org.grad.secomv2.core.models.enums.SECOM_DataProductType dataProductType) {
+        if(dataProductType == null) {
+            return null;
+        }
+        return org.grad.secom.core.models.enums.SECOM_DataProductType.fromDescription(dataProductType.getDescription());
     }
 
 }

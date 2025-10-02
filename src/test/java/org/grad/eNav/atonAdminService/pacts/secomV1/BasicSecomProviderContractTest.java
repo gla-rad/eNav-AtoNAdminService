@@ -27,7 +27,7 @@ import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.feign.CKeeperClient;
 import org.grad.eNav.atonAdminService.services.DatasetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v1.SecomV1SubscriptionService;
 import org.grad.secom.core.components.SecomSignatureFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
@@ -115,7 +115,7 @@ public class BasicSecomProviderContractTest implements
      * The SecomSubscriptionService Service mock.
      */
     @MockitoBean
-    SecomSubscriptionService secomSubscriptionService;
+    SecomV1SubscriptionService secomV1SubscriptionService;
 
     /**
      * Common setup for all the tests.
@@ -194,8 +194,8 @@ public class BasicSecomProviderContractTest implements
      * @return the mocked SecomSubscriptionService service
      */
     @Override
-    public SecomSubscriptionService getSecomSubscriptionService() {
-        return this.secomSubscriptionService;
+    public SecomV1SubscriptionService getSecomSubscriptionService() {
+        return this.secomV1SubscriptionService;
     }
 
 }

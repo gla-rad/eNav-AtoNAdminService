@@ -30,7 +30,7 @@ import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.services.DatasetService;
 import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
-import org.grad.eNav.atonAdminService.services.secom.SecomSubscriptionService;
+import org.grad.eNav.atonAdminService.services.secom.v1.SecomV1SubscriptionService;
 import org.grad.eNav.atonAdminService.utils.S201DatasetBuilder;
 import org.grad.eNav.atonAdminService.utils.SecomUtils;
 import org.grad.eNav.s201.utils.S201Utils;
@@ -125,25 +125,25 @@ class SecomV1ControllerTest {
     UnLoCodeService unLoCodeService;
 
     /**
-     * The SECOM Subscription Service mock.
+     * The SECOM v1 Subscription Service mock.
      */
     @MockitoBean
-    SecomSubscriptionService secomSubscriptionService;
+    SecomV1SubscriptionService secomV1SubscriptionService;
 
     /**
-     * The Secom Certificate Provider mock.
+     * The SECOM v1 Certificate Provider mock.
      */
     @MockitoBean
     SecomV1CertificateProviderImpl secomCertificateProvider;
 
     /**
-     * The Secom Signature Provider mock.
+     * The SECOM v1 Signature Provider mock.
      */
     @MockitoBean
     SecomV1SignatureProviderImpl secomSignatureProvider;
 
     /**
-     * The Secom Signature Filter mock.
+     * The SECOM v1 Signature Filter mock.
      *
      * This will block the actual SECOM signature verification process and will
      * allow out test messages to go through the signature filter without valid
@@ -596,7 +596,7 @@ class SecomV1ControllerTest {
      */
     @Test
     void testSubscription() {
-        doReturn(savedSubscriptionRequest).when(this.secomSubscriptionService).save(any(), any());
+        doReturn(savedSubscriptionRequest).when(this.secomV1SubscriptionService).save(any(), any());
 
         webTestClient.post()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -620,7 +620,7 @@ class SecomV1ControllerTest {
      */
     @Test
     void testSubscriptionBadRequest() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).save(any(), any());
+        doThrow(SecomValidationException.class).when(this.secomV1SubscriptionService).save(any(), any());
 
         webTestClient.post()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -637,7 +637,7 @@ class SecomV1ControllerTest {
      */
     @Test
     void testSubscriptionMethodNotAllowed() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).save(any(), any());
+        doThrow(SecomValidationException.class).when(this.secomV1SubscriptionService).save(any(), any());
 
         webTestClient.get()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -652,7 +652,7 @@ class SecomV1ControllerTest {
      */
     @Test
     void testRemoveSubscription() {
-        doReturn(removeSubscriptionObject.getSubscriptionIdentifier()).when(this.secomSubscriptionService).delete(any());
+        doReturn(removeSubscriptionObject.getSubscriptionIdentifier()).when(this.secomV1SubscriptionService).delete(any());
 
         webTestClient.method(HttpMethod.DELETE)
                 .uri("/api/secom" + REMOVE_SUBSCRIPTION_INTERFACE_PATH)
@@ -675,7 +675,7 @@ class SecomV1ControllerTest {
      */
     @Test
     void testRemoveSubscriptionBadRequest() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).save(any(), any());
+        doThrow(SecomValidationException.class).when(this.secomV1SubscriptionService).save(any(), any());
 
         webTestClient.post()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
@@ -692,7 +692,7 @@ class SecomV1ControllerTest {
      */
     @Test
     void testRemoveSubscriptionMethodNotAllowed() {
-        doThrow(SecomValidationException.class).when(this.secomSubscriptionService).save(any(), any());
+        doThrow(SecomValidationException.class).when(this.secomV1SubscriptionService).save(any(), any());
 
         webTestClient.get()
                 .uri("/api/secom" + SUBSCRIPTION_INTERFACE_PATH)
