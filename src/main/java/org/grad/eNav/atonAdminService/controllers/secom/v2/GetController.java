@@ -117,7 +117,7 @@ public class GetController implements GetServiceInterface {
                                  @QueryParam("unlocode") @Parameter(schema = @Schema(description = "See UN web page")) @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") String unlocode,
                                  @QueryParam("validFrom") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) Instant validFrom,
                                  @QueryParam("validTo") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) Instant validTo,
-                                 @QueryParam("page") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 0..", defaultValue = "0")) Integer page,
+                                 @QueryParam("page") @Min(1) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 0..", defaultValue = "0")) Integer page,
                                  @QueryParam("pageSize") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page size. Must be a positive integer >= 0.", defaultValue = "100")) Integer pageSize) {
         log.debug("SECOM request to get page of Dataset");
         Optional.ofNullable(dataReference).ifPresent(v -> log.debug("Data Reference specified as: {}", dataReference));
@@ -131,7 +131,7 @@ public class GetController implements GetServiceInterface {
         // Init local variables
         Geometry jtsGeometry = null;
         Pageable pageable = Optional.ofNullable(page)
-                .map(p -> PageRequest.of(p, Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)))
+                .map(p -> PageRequest.of(p - 1, Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)))
                 .map(Pageable.class::cast)
                 .orElse(Pageable.unpaged());
         LocalDateTime validFromLdt = Optional.ofNullable(validFrom)

@@ -194,7 +194,7 @@ class SecomV2ControllerTest {
         this.queryUnlocode = "ADALV";
         this.queryValidFrom = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
         this.queryValidTo = LocalDateTime.of(3000, 1, 1, 0, 0, 0);
-        this.queryPage = 0;
+        this.queryPage = 1;
         this.queryPageSize = Integer.MAX_VALUE;
 
         // Construct a test S-201 Dataset
