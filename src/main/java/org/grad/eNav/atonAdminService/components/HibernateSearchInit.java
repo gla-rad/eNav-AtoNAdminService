@@ -87,6 +87,9 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
                 //Count the attempt
                 attempt++;
 
+                // Backoff for a period to let the service boot
+                Thread.sleep(indexingBackOffMillis);
+
                 // Once the application has booted up, access the search session
                 SearchSession searchSession = Search.session(entityManager);
 
@@ -105,7 +108,7 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
                 indexer.startAndWait();
                 log.info("Hibernate Search indexing completed successfully");
                 return;
-            } catch (IllegalStateException | InterruptedException | SearchException ex) {
+            } catch (InterruptedException | SearchException ex) {
                 log.error("Indexing attempt {} failed: {}", attempt, ex.getMessage(), ex);
 
                 if (attempt >= indexingMaxRetries) {
@@ -113,13 +116,7 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
                     break;
                 }
 
-                try {
-                    log.info("Retrying in {} ms...", indexingBackOffMillis);
-                    Thread.sleep(indexingBackOffMillis);
-                } catch (InterruptedException iex) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+                log.info("Retrying in {} ms...", indexingBackOffMillis);
             }
         }
     }

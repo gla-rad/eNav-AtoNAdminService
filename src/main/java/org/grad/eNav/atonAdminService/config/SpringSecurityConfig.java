@@ -233,9 +233,7 @@ class SpringSecurityConfig {
                                 HealthEndpoint.class    //health endpoints
                         )).permitAll()
                         .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
-                        .requestMatchers(Arrays.stream(this.openResources)
-                                .map(AntPathRequestMatcher::new)
-                                .toArray(AntPathRequestMatcher[]::new)).permitAll()
+                        .requestMatchers(this.openResources).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
