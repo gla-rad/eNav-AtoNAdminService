@@ -30,7 +30,11 @@ import org.geotools.api.data.DataStore;
 import org.geotools.api.data.FeatureEvent;
 import org.geotools.api.data.FeatureListener;
 import org.geotools.api.data.SimpleFeatureSource;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.filter.Filter;
 import org.geotools.filter.FidFilterImpl;
+import org.geotools.filter.GeometryFilterImpl;
+import org.geotools.filter.LogicFilterImpl;
 import org.grad.eNav.atonAdminService.models.GeomesaData;
 import org.grad.eNav.atonAdminService.models.GeomesaS201;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
@@ -200,18 +204,44 @@ public class S201GDSListener implements FeatureListener {
         }
         // For feature deletions,
         else if (featureEvent.getType() == FeatureEvent.Type.REMOVED) {
-            /// Extract the S-201 message UIDs and use it to delete all referencing nodes
-            final Set<String> idCodes = Optional.of(featureEvent)
+            // Extract the S-125 message UIDs and use it to delete all referencing nodes
+            List<Filter> filters = Optional.of(featureEvent)
                     .filter(KafkaFeatureEvent.KafkaFeatureRemoved.class::isInstance)
                     .map(KafkaFeatureEvent.KafkaFeatureRemoved.class::cast)
                     .map(KafkaFeatureEvent.KafkaFeatureRemoved::getFilter)
+                    .filter(LogicFilterImpl.class::isInstance)
+                    .map(LogicFilterImpl.class::cast)
+                    .map(LogicFilterImpl::getChildren)
+                    .orElse(Collections.singletonList(featureEvent.getFilter()));
+
+            // Get the geometry filter and if present use it to test
+            final SimpleFeature serviceFeature = new GeomesaS201().getFeatureData(Collections.singletonList(
+                            new S201Node("S201AtoNService",
+                                    GeometryJSONConverter.convertFromGeometry(this.geometry),
+                                    null)))
+                    .stream()
+                    .findFirst()
+                    .orElse(null);
+            if(filters.stream()
+                    .filter(GeometryFilterImpl.class::isInstance)
+                    .map(GeometryFilterImpl.class::cast)
+                    .anyMatch(f -> !f.evaluate(serviceFeature))) {
+                return;
+            }
+
+            // If all OK, get the IDs of the filter
+            final FidFilterImpl fidFilter = filters.stream()
                     .filter(FidFilterImpl.class::isInstance)
                     .map(FidFilterImpl.class::cast)
-                    .map(FidFilterImpl::getFidsSet)
-                    .orElse(Collections.emptySet());
+                    .findFirst()
+                    .orElse(null);
 
             // Now delete the selected AtoNs and collect the output
-            final List<? extends AidsToNavigation> listOfAtons = idCodes.stream()
+            final List<? extends AidsToNavigation> listOfAtons = Optional.ofNullable(fidFilter)
+                    .map(FidFilterImpl::getIDs)
+                    .orElse(Collections.emptySet())
+                    .stream()
+                    .map(String::valueOf)
                     .map(this.aidsToNavigationService::findByIdCode)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

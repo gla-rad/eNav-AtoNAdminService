@@ -23,7 +23,9 @@ import org.geotools.api.data.FeatureEvent;
 import org.geotools.api.data.FeatureListener;
 import org.geotools.api.data.SimpleFeatureSource;
 import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.filter.AndImpl;
 import org.geotools.filter.FidFilterImpl;
+import org.geotools.filter.GeometryFilterImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.grad.eNav.atonAdminService.config.GlobalConfig;
 import org.grad.eNav.atonAdminService.models.GeomesaS201;
@@ -280,11 +282,54 @@ class S201GDSListenerTest {
         doReturn(aidsToNavigation).when(this.aidsToNavigationService).delete(any());
 
         // Mock a new event
-        FidFilterImpl filter = mock(FidFilterImpl.class);
-        doReturn(Collections.singleton(this.s201Node.getAtonUID())).when(filter).getFidsSet();
+        AndImpl andFilter = mock(AndImpl.class);
+        FidFilterImpl fidFilter = mock(FidFilterImpl.class);
+        doReturn(Collections.singleton(this.s201Node.getAtonUID())).when(fidFilter).getIDs();
         KafkaFeatureEvent.KafkaFeatureRemoved featureEvent = mock(KafkaFeatureEvent.KafkaFeatureRemoved.class);
         doReturn(FeatureEvent.Type.REMOVED).when(featureEvent).getType();
-        doReturn(filter).when(featureEvent).getFilter();
+        doReturn(Collections.singletonList(fidFilter)).when(andFilter).getChildren();
+        doReturn(andFilter).when(featureEvent).getFilter();
+
+        // Add a matching dataset
+        doReturn(new PageImpl<>(Collections.singletonList(this.s201DataSet), Pageable.ofSize(1), 1))
+                .when(this.datasetService).findAll(isNull(), any(), isNull(), isNull(), any(), any());
+
+        // Init and perform the component call
+        this.s201GDSListener.init(this.consumer, this.geomesaData, this.geometry);
+        this.s201GDSListener.changed(featureEvent);
+
+        // Make sure the evaluation works
+        verify(this.atonDeletionChannel, times(1)).send(any(Message.class));
+        verify(this.datasetService, times(1)).findAll(isNull(), any(), isNull(), isNull(), any(), any());
+        verify(this.datasetService, times(1)).requestDatasetContentUpdate(eq(this.s201DataSet.getUuid()));
+    }
+
+    /**
+     * Test that the S-201 Geomesa Listener, if initialised correctly as a
+     * deletion handler, it can correctly handle the incoming S125 Geomesa
+     * delete events, regardless of the coverage area and will delete the
+     * applicable S-201 station nodes. In this test, the incoming deletion
+     * message also has a geometry component.
+     */
+    @Test
+    void testListenToEventsRemovedWithGeometry() throws IOException {
+        AidsToNavigation aidsToNavigation = new BeaconCardinal();
+        aidsToNavigation.setGeometry(this.geometryFactory.createPoint(new Coordinate(0, 0)));
+
+        // Mock the service calls
+        doReturn(Optional.of(aidsToNavigation)).when(this.aidsToNavigationService).findByIdCode(any());
+        doReturn(aidsToNavigation).when(this.aidsToNavigationService).delete(any());
+
+        // Mock a new event
+        GeometryFilterImpl geomFilter = mock(GeometryFilterImpl.class);
+        doReturn(Boolean.TRUE).when(geomFilter).evaluate(any());
+        FidFilterImpl fidFilter = mock(FidFilterImpl.class);
+        doReturn(Collections.singleton(this.s201Node.getAtonUID())).when(fidFilter).getIDs();
+        AndImpl andFilter = mock(AndImpl.class);
+        doReturn(Arrays.asList(geomFilter,fidFilter)).when(andFilter).getChildren();
+        KafkaFeatureEvent.KafkaFeatureRemoved featureEvent = mock(KafkaFeatureEvent.KafkaFeatureRemoved.class);
+        doReturn(FeatureEvent.Type.REMOVED).when(featureEvent).getType();
+        doReturn(andFilter).when(featureEvent).getFilter();
 
         // Add a matching dataset
         doReturn(new PageImpl<>(Collections.singletonList(this.s201DataSet), Pageable.ofSize(1), 1))
