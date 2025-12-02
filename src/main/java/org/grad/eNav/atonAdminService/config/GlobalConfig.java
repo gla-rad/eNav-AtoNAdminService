@@ -251,6 +251,20 @@ public class GlobalConfig {
             }
         }
 
+        // The Sector Characteristics is a bit of a more complex case
+        // We have only one sector internally but a set in the S201 dataset and we can only map one.
+        modelMapper.createTypeMap(SectorCharacteristicsTypeImpl.class, SectorCharacteristics.class)
+                .implicitMappings()
+                .addMappings(mapper -> {
+                    mapper.using(ctx -> Optional.of(ctx)
+                                    .map(MappingContext::getSource)
+                                    .map(SectorCharacteristicsTypeImpl.class::cast)
+                                    .map(SectorCharacteristicsTypeImpl::getLightSectors)
+                                    .map(List::getFirst)
+                                    .map(lightSector -> modelMapper.map(lightSector, LightSector.class))
+                                    .orElse(null))
+                            .map(src -> src, SectorCharacteristics::setLightSector);
+                });
         // Create the Aggregation/Association type maps
         modelMapper.createTypeMap(AtonAggregationImpl.class, AtonAggregation.class)
                 .implicitMappings()

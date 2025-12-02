@@ -16,6 +16,8 @@
 
 package org.grad.eNav.atonAdminService.components;
 
+import _int.iho.s_201.gml.cs0._2.ColourType;
+import _int.iho.s_201.gml.cs0._2.LightVisibilityType;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.io.IOUtils;
 import org.geotools.api.data.DataStore;
@@ -55,6 +57,7 @@ import org.springframework.messaging.Message;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -377,5 +380,56 @@ class S201GDSListenerTest {
         assertEquals(1, aidsToNavigation.getFirst().getPeerAtonAggregations().size());
         assertNotNull(aidsToNavigation.getFirst().getPeerAtonAggregations().stream().findFirst().map(AtonAggregation::getAtonAggregationBies).orElse(null));
         assertEquals(1, aidsToNavigation.getFirst().getPeerAtonAggregations().stream().findFirst().map(AtonAggregation::getAtonAggregationBies).stream().count());
+    }
+
+    /**
+     * Also perform a more complex test of parsing an S201 dataset with more
+     * elaborate light information such as different sectors with various
+     * light characteristics.
+     */
+    @Test
+    void testParseS201DatasetWithLight() throws Exception {
+        // Init and perform the component call
+        this.s201GDSListener.init(this.consumer, this.geomesaData, this.geometry);
+        this.s201GDSListener.modelMapper = new GlobalConfig().modelMapper();
+
+        // In this test read a S-201 content with complex light information
+        InputStream in = new ClassPathResource("s201-msg-light.xml").getInputStream();
+        String xml = IOUtils.toString(in, StandardCharsets.UTF_8);
+
+        // Also create a GeoJSON point geometry for our S-201 message
+        JsonNode point = GeoJSONUtils.createGeoJSON(50.9134333, 0.976);
+
+        // Now create the S201Node object and populate the data
+        this.s201Node = new S201Node("dungeness", point, xml);
+
+        // Parse the S-201 dataset
+        List<? extends AidsToNavigation> aidsToNavigation = this.s201GDSListener.parseS201Dataset(this.s201Node)
+                .toList();
+
+        // Make sure it looks fine
+        assertNotNull(aidsToNavigation);
+        assertFalse(aidsToNavigation.isEmpty());
+        assertEquals(6, aidsToNavigation.size());
+        assertEquals(Lighthouse.class, aidsToNavigation.get(0).getClass());
+        assertEquals(FogSignal.class, aidsToNavigation.get(1).getClass());
+        assertEquals(RadioStation.class, aidsToNavigation.get(2).getClass());
+        assertEquals(LightSectored.class, aidsToNavigation.get(3).getClass());
+        assertEquals(LightAllAround.class, aidsToNavigation.get(4).getClass());
+        assertEquals(PhysicalAISAidToNavigation.class, aidsToNavigation.get(5).getClass());
+
+        // Test the light Sectored Item
+        Set<SectorCharacteristics> sectorCharacteristics = ((LightSectored) aidsToNavigation.get(3)).getSectorCharacteristics();
+        assertNotNull(sectorCharacteristics);
+        assertEquals(1, sectorCharacteristics.size());
+        assertTrue(sectorCharacteristics.stream().findFirst().isPresent());
+        SectorCharacteristics sectorCharacteristic = sectorCharacteristics.stream().findFirst().orElse(null);
+        assertNotNull(sectorCharacteristic);
+        assertNotNull(sectorCharacteristic.getLightSector());
+        assertEquals(Collections.singleton(LightVisibilityType.VISIBLE_IN_LINE_OF_RANGE), sectorCharacteristic.getLightSector().getLightVisibilities());
+        assertEquals(Collections.singleton(ColourType.GREEN), sectorCharacteristic.getLightSector().getColours());
+        assertEquals(BigDecimal.valueOf(73.0), sectorCharacteristic.getLightSector().getSectorLimit().getSectorLimitOne().getSectorBearing());
+        assertEquals(BigDecimal.valueOf(78.0), sectorCharacteristic.getLightSector().getSectorLimit().getSectorLimitTwo().getSectorBearing());
+        assertEquals(BigDecimal.valueOf(10.0), sectorCharacteristic.getLightSector().getValueOfNominalRange());
     }
 }

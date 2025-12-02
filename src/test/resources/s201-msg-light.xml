@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:Dataset xmlns:ns0="http://www.iho.int/S-201/gml/cs0/2.0" xmlns:ns1="http://www.opengis.net/gml/3.2" ns1:id="FME_TH_Dataset">
+    <ns1:boundedBy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:BoundingShapeType">
+        <ns1:Envelope srsName="EPSG:4326" srsDimension="1" xsi:type="ns1:EnvelopeType">
+            <ns1:lowerCorner>50.9134333 0.976</ns1:lowerCorner>
+            <ns1:upperCorner>50.9134333 0.976</ns1:upperCorner>
+        </ns1:Envelope>
+    </ns1:boundedBy>
+    <ns2:DatasetIdentificationInformation xmlns:ns2="http://www.iho.int/s100gml/5.0">
+        <ns2:encodingSpecification>S-100 Part 10b</ns2:encodingSpecification>
+        <ns2:encodingSpecificationEdition>1.0</ns2:encodingSpecificationEdition>
+        <ns2:productIdentifier>S-201</ns2:productIdentifier>
+        <ns2:productEdition>0.0.1</ns2:productEdition>
+        <ns2:applicationProfile>test</ns2:applicationProfile>
+        <ns2:datasetFileIdentifier>s201_test_dataset</ns2:datasetFileIdentifier>
+        <ns2:datasetTitle>S-201 Test Dataset</ns2:datasetTitle>
+        <ns2:datasetReferenceDate>2001-01-01</ns2:datasetReferenceDate>
+        <ns2:datasetLanguage>eng</ns2:datasetLanguage>
+        <ns2:datasetAbstract>S-201 dataset only for test purposes - DO NOT USE FOR NAVIGATION</ns2:datasetAbstract>
+        <ns2:datasetTopicCategory>oceans</ns2:datasetTopicCategory>
+        <ns2:datasetPurpose>base</ns2:datasetPurpose>
+        <ns2:updateNumber>2</ns2:updateNumber>
+    </ns2:DatasetIdentificationInformation>
+    <ns0:members owns="false">
+        <ns0:LightSectored ns1:id="ID-ATON-LIGHT-435">
+            <ns0:iDCode>urn:mrn:gla:th:aton:light:id-aton-light-435</ns0:iDCode>
+            <ns0:featureName>
+                <ns0:displayName>false</ns0:displayName>
+                <ns0:language>eng</ns0:language>
+                <ns0:name>SECTOR MAIN</ns0:name>
+            </ns0:featureName>
+            <ns0:parent xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-15011" xlink:role="parent" xlink:arcrole="urn:IALA:s201:roles:parent"/>
+            <ns0:height>37</ns0:height>
+            <ns0:effectiveIntensity>1070.0</ns0:effectiveIntensity>
+            <ns0:colour>Red</ns0:colour>
+            <ns0:colour>Green</ns0:colour>
+            <ns0:categoryOfLight>Directional Function</ns0:categoryOfLight>
+            <ns0:exhibitionConditionOfLight>Light Shown Without Change of Character</ns0:exhibitionConditionOfLight>
+            <ns0:marksNavigationalSystemOf>IALA A</ns0:marksNavigationalSystemOf>
+            <ns0:sectorCharacteristics>
+                <ns0:lightSector>
+                    <ns0:colour>Green</ns0:colour>
+                    <ns0:lightVisibility>Visible in Line of Range</ns0:lightVisibility>
+                    <ns0:sectorLimit>
+                        <ns0:sectorLimitOne>
+                            <ns0:sectorBearing>73</ns0:sectorBearing>
+                        </ns0:sectorLimitOne>
+                        <ns0:sectorLimitTwo>
+                            <ns0:sectorBearing>78</ns0:sectorBearing>
+                        </ns0:sectorLimitTwo>
+                    </ns0:sectorLimit>
+                    <ns0:valueOfNominalRange>10</ns0:valueOfNominalRange>
+                    <ns0:sectorInformation>
+                        <ns0:language>eng</ns0:language>
+                        <ns0:text>Sector Width: 5°</ns0:text>
+                    </ns0:sectorInformation>
+                </ns0:lightSector>
+            </ns0:sectorCharacteristics>
+            <ns0:geometry>
+                <ns2:pointProperty xmlns:ns2="http://www.iho.int/s100gml/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple">
+                    <ns2:Point>
+                        <ns1:pos srsName="EPSG:4326" srsDimension="1">50.9134333 0.976</ns1:pos>
+                    </ns2:Point>
+                </ns2:pointProperty>
+            </ns0:geometry>
+        </ns0:LightSectored>
+        <ns0:LightAllAround ns1:id="ID-ATON-LIGHT-434">
+            <ns0:iDCode>urn:mrn:gla:th:aton:light:id-aton-light-434</ns0:iDCode>
+            <ns0:featureName>
+                <ns0:displayName>false</ns0:displayName>
+                <ns0:language>eng</ns0:language>
+                <ns0:name>MAIN</ns0:name>
+            </ns0:featureName>
+            <ns0:parent xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-15011" xlink:role="parent" xlink:arcrole="urn:IALA:s201:roles:parent"/>
+            <ns0:height>40</ns0:height>
+            <ns0:effectiveIntensity>210000.0</ns0:effectiveIntensity>
+            <ns0:colour>White</ns0:colour>
+            <ns0:categoryOfLight>Directional Function</ns0:categoryOfLight>
+            <ns0:exhibitionConditionOfLight>Light Shown Without Change of Character</ns0:exhibitionConditionOfLight>
+            <ns0:lightVisibility>High Intensity</ns0:lightVisibility>
+            <ns0:marksNavigationalSystemOf>IALA A</ns0:marksNavigationalSystemOf>
+            <ns0:rhythmOfLight>
+                <ns0:lightCharacteristic>Flashing</ns0:lightCharacteristic>
+                <ns0:signalPeriod>10</ns0:signalPeriod>
+            </ns0:rhythmOfLight>
+            <ns0:geometry>
+                <ns2:pointProperty xmlns:ns2="http://www.iho.int/s100gml/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple">
+                    <ns2:Point>
+                        <ns1:pos srsName="EPSG:4326" srsDimension="1">50.9134333 0.976</ns1:pos>
+                    </ns2:Point>
+                </ns2:pointProperty>
+            </ns0:geometry>
+        </ns0:LightAllAround>
+        <ns0:FogSignal ns1:id="ID-ATON-FOG-SIGNAL-5424">
+            <ns0:iDCode>urn:mrn:gla:th:aton:racon:id-aton-fog-signal-5424</ns0:iDCode>
+            <ns0:information>
+                <ns0:language>eng</ns0:language>
+                <ns0:text>bl 3, si 27.
+                    signal is single frequency onmi directional.
+                    SFH-3</ns0:text>
+            </ns0:information>
+            <ns0:featureName>
+                <ns0:displayName>false</ns0:displayName>
+                <ns0:language>eng</ns0:language>
+                <ns0:name>HAZARD WARNING SIGNAL</ns0:name>
+            </ns0:featureName>
+            <ns0:parent xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-15011" xlink:role="parent" xlink:arcrole="urn:IALA:s201:roles:parent"/>
+            <ns0:categoryOfFogSignal>Horn</ns0:categoryOfFogSignal>
+            <ns0:signalGroup>1</ns0:signalGroup>
+            <ns0:signalPeriod>30</ns0:signalPeriod>
+            <ns0:geometry>
+                <ns2:pointProperty xmlns:ns2="http://www.iho.int/s100gml/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple">
+                    <ns2:Point>
+                        <ns1:pos srsName="EPSG:4326" srsDimension="1">50.9134333 0.976</ns1:pos>
+                    </ns2:Point>
+                </ns2:pointProperty>
+            </ns0:geometry>
+        </ns0:FogSignal>
+        <ns0:RadioStation ns1:id="ID-ATON-ENAV-5749">
+            <ns0:iDCode>urn:mrn:gla:th:aton:racon:id-aton-enav-5749</ns0:iDCode>
+            <ns0:information>
+                <ns0:language>eng</ns0:language>
+                <ns0:text>MMSI: 992351111</ns0:text>
+            </ns0:information>
+            <ns0:featureName>
+                <ns0:displayName>false</ns0:displayName>
+                <ns0:language>eng</ns0:language>
+                <ns0:name>AIS BASE</ns0:name>
+            </ns0:featureName>
+            <ns0:parent xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-15011" xlink:role="broadcastby" xlink:arcrole="urn:IALA:s201:roles:broadcastby"/>
+            <ns0:physicalAISbroadcastBy xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-ENAV-5749"/>
+            <ns0:geometry>
+                <ns2:pointProperty xmlns:ns2="http://www.iho.int/s100gml/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple">
+                    <ns2:Point>
+                        <ns1:pos srsName="EPSG:4326" srsDimension="1">50.9134333 0.976</ns1:pos>
+                    </ns2:Point>
+                </ns2:pointProperty>
+            </ns0:geometry>
+        </ns0:RadioStation>
+        <ns0:PhysicalAISAidToNavigation ns1:id="ID-ATON-AIS-5749">
+            <ns0:iDCode>urn:mrn:gla:th:aton:racon:id-aton-ais-5749</ns0:iDCode>
+            <ns0:featureName>
+                <ns0:displayName>false</ns0:displayName>
+                <ns0:language>eng</ns0:language>
+                <ns0:name>AIS BASE</ns0:name>
+            </ns0:featureName>
+            <ns0:mMSICode>992351111</ns0:mMSICode>
+            <ns0:physicalAISbroadcasts xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-AIS-5749" xlink:role="broadcasts" xlink:arcrole="urn:IALA:s201:roles:broadcasts"/>
+            <ns0:geometry>
+                <ns2:pointProperty xmlns:ns2="http://www.iho.int/s100gml/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple">
+                    <ns2:Point>
+                        <ns1:pos srsName="EPSG:4326" srsDimension="1">50.9134333 0.976</ns1:pos>
+                    </ns2:Point>
+                </ns2:pointProperty>
+            </ns0:geometry>
+        </ns0:PhysicalAISAidToNavigation>
+        <ns0:Lighthouse ns1:id="ID-ATON-15011">
+            <ns0:iDCode>urn:mrn:gla:th:aton:15011</ns0:iDCode>
+            <ns0:featureName>
+                <ns0:displayName>true</ns0:displayName>
+                <ns0:language>eng</ns0:language>
+                <ns0:name>DUNGENESS</ns0:name>
+            </ns0:featureName>
+            <ns0:AtoNNumber>15011</ns0:AtoNNumber>
+            <ns0:child xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-LIGHT-434" xlink:role="child" xlink:arcrole="urn:IALA:s201:roles:child"/>
+            <ns0:child xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-LIGHT-435" xlink:role="child" xlink:arcrole="urn:IALA:s201:roles:child"/>
+            <ns0:child xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-ENAV-5749" xlink:role="child" xlink:arcrole="urn:IALA:s201:roles:child"/>
+            <ns0:child xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-ENAV-5749" xlink:role="child" xlink:arcrole="urn:IALA:s201:roles:child"/>
+            <ns0:child xmlns:xlink="http://www.w3.org/1999/xlink" owns="false" xlink:type="simple" xlink:href="ID-ATON-FOG-SIGNAL-5424" xlink:role="child" xlink:arcrole="urn:IALA:s201:roles:child"/>
+            <ns0:status>Fully Operational</ns0:status>
+            <ns0:geometry>
+                <ns2:pointProperty xmlns:ns2="http://www.iho.int/s100gml/5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple">
+                    <ns2:Point>
+                        <ns1:pos srsName="EPSG:4326" srsDimension="1">50.9134333 0.976</ns1:pos>
+                    </ns2:Point>
+                </ns2:pointProperty>
+            </ns0:geometry>
+        </ns0:Lighthouse>
+    </ns0:members>
+</ns0:Dataset>
