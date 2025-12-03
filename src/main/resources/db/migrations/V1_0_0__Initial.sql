@@ -1247,7 +1247,7 @@ CREATE TABLE public.sector_characteristics (
 CREATE TABLE public.sector_characteristics_colours (
     sector_characteristics_id numeric(38,0) NOT NULL,
     colours character varying(255),
-    CONSTRAINT sector_characteristics_colours_colours_check CHECK (((colours)::text = ANY ((ARRAY['DIRECTIONAL_FUNCTION'::character varying, 'LEADING_LIGHT'::character varying, 'AERO_LIGHT'::character varying, 'AIR_OBSTRUCTION_LIGHT'::character varying, 'FLOOD_LIGHT'::character varying, 'STRIP_LIGHT'::character varying, 'SUBSIDIARY_LIGHT'::character varying, 'SPOTLIGHT'::character varying, 'FRONT'::character varying, 'REAR'::character varying, 'LOWER'::character varying, 'UPPER'::character varying, 'EMERGENCY'::character varying, 'BEARING_LIGHT'::character varying, 'HORIZONTALLY_DISPOSED'::character varying, 'VERTICALLY_DISPOSED'::character varying])::text[])))
+    CONSTRAINT sector_characteristics_colours_colours_check CHECK (((colours)::text = ANY ((ARRAY['WHITE'::character varying, 'BLACK'::character varying, 'RED'::character varying, 'GREEN'::character varying, 'BLUE'::character varying, 'YELLOW'::character varying, 'GREY'::character varying, 'BROWN'::character varying, 'AMBER'::character varying, 'VIOLET'::character varying, 'ORANGE'::character varying, 'MAGENTA'::character varying, 'PINK'::character varying, 'GREEN_A'::character varying, 'GREEN_B'::character varying, 'WHITE_TEMPORARY'::character varying, 'RED_TEMPORARY'::character varying, 'YELLOW_TEMPORARY'::character varying, 'GREEN_PREFERRED'::character varying, 'GREEN_TEMPORARY'::character varying])::text[])))
 );
 
 
