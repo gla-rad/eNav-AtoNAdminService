@@ -21,6 +21,7 @@ import jakarta.xml.bind.DatatypeConverter;
 import jakarta.xml.bind.JAXBException;
 import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
+import org.grad.eNav.atonAdminService.components.HibernateSearchInit;
 import org.grad.eNav.atonAdminService.components.SecomV2CertificateProviderImpl;
 import org.grad.eNav.atonAdminService.components.SecomV2SignatureProviderImpl;
 import org.grad.eNav.atonAdminService.controllers.secom.SecomRequestHeaders;
@@ -142,6 +143,14 @@ class SecomV2ControllerTest {
      */
     @MockitoBean
     SecomV2SignatureProviderImpl secomSignatureProvider;
+
+    /**
+     * The Hibernate Search Init mock.
+     * <p/>
+     * This mock will stop the indexer from loading and will allow the testing.
+     */
+    @MockitoBean
+    private HibernateSearchInit hibernateSearchInit;
 
     /**
      * The Secom Signature Filter mock.

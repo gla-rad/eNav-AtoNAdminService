@@ -39,6 +39,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 /**
@@ -88,6 +89,10 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
 
             // Once the application has booted up, access the search session
             EntityManager em = this.emf.createEntityManager();
+            // Sanity check
+            if(Objects.isNull(em)) {
+                return Boolean.FALSE;
+            }
             SearchSession searchSession = Search.session(em);
 
             // Create a mass indexer
@@ -101,7 +106,7 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
                     .threadsToLoadObjects(7);
 
             indexer.startAndWait();
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             return Boolean.FALSE;
         }
@@ -126,6 +131,9 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
 
         // Try multiple times to index if it fails
         while (!indexed && attempt < indexingMaxRetries) {
+            //Count the attempt
+            attempt++;
+
             // Create an executor service with virtual threads
             try(ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
                 // Run the indexing operation in a separate thread
@@ -133,9 +141,6 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
 
                 // And wait for the result
                 indexed = (Boolean) future.get();
-
-                //Count the attempt
-                attempt++;
             } catch (Exception ex) {
                 log.error("Indexing attempt {} failed: {}", attempt, ex.getMessage(), ex);
             }
