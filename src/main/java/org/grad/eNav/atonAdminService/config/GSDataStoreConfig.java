@@ -56,6 +56,18 @@ public class GSDataStoreConfig {
     private Integer noKafkaConsumers;
 
     /**
+     * The maximum retries to index the database.
+     */
+    @Value("${gla.rad.aton-service.datastore.max-retries:3}")
+    int datastoreMaxRetries;
+
+    /**
+     * The retry back off tim ein millis to index the database.
+     */
+    @Value("${gla.rad.aton-service.datastore.back-off:300}")
+    int datastoreBackOffMillis;
+
+    /**
      * Returns the Geomesa Data Store as a bean so that we can easily call it
      * anywhere we want.
      *
@@ -64,17 +76,29 @@ public class GSDataStoreConfig {
     @Bean
     DataStore gsDataStore() {
         // The connection parameters
+        DataStore dataStore = null;
         Map<String, String> params = new HashMap<>();
-        params.put("kafka.brokers", kafkaBrokers);
+        params.put("kafka.brokers", this.kafkaBrokers);
         params.put("kafka.consumer.config", String.format("%s=%d", ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 10485760));
-        params.put("kafka.consumer.count", Objects.toString(noKafkaConsumers));
+        params.put("kafka.consumer.count", Objects.toString(this.noKafkaConsumers));
 
-        // And construct the data store
-        try {
-            return DataStoreFinder.getDataStore(params);
-        } catch (IOException ex) {
-            log.error(ex.getMessage());
-            return null;
+        // Add some retries in case this failed - mainly for K8s
+        int attempt = 0;
+
+        // Try multiple times to index if it fails
+        while (dataStore == null && attempt < this.datastoreMaxRetries) {
+            // Increase the attempt counter
+            attempt++;
+
+            // And construct the data store
+            try {
+                dataStore = DataStoreFinder.getDataStore(params);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         }
+
+        // Return the result
+        return dataStore;
     }
 }
