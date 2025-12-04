@@ -56,11 +56,8 @@ import java.util.concurrent.*;
 public class HibernateSearchInit implements ApplicationListener<ApplicationReadyEvent> {
 
     /**
-     * The Entity Manager.
+     * The Entity Manager Factory.
      */
-    @PersistenceContext
-    EntityManager entityManager;
-
     @PersistenceUnit
     EntityManagerFactory emf;
 
@@ -82,7 +79,7 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
     Callable<Boolean> indexingTask = () -> {
         // Start the indexer
         try {
-            log.debug("Trying to index in {} ms...", indexingBackOffMillis);
+            log.info("Trying to index in {} ms...", indexingBackOffMillis);
 
             // Allow some waiting time to make sure the database connection is up
             Thread.sleep(this.indexingBackOffMillis);
@@ -111,8 +108,7 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
             return Boolean.FALSE;
         }
 
-        // Log the success and return
-        log.info("Hibernate Search indexing completed successfully");
+        // Return success
         return Boolean.TRUE;
     };
 
@@ -125,6 +121,9 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
     @Transactional
     public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
         Boolean indexed = Boolean.FALSE;
+
+        // Log the indexing process commencing
+        log.info("Hibernate Search indexing commencing...");
 
         // Add some retries in case this failed - mainly for K8s
         int attempt = 0;
@@ -144,6 +143,11 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
             } catch (Exception ex) {
                 log.error("Indexing attempt {} failed: {}", attempt, ex.getMessage(), ex);
             }
+        }
+
+        // Log the success
+        if(indexed) {
+            log.info("Hibernate Search indexing completed successfully");
         }
     }
 }
