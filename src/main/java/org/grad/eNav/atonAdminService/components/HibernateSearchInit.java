@@ -21,6 +21,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceUnit;
 import jakarta.validation.constraints.NotNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContent;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContentLog;
@@ -35,6 +36,9 @@ import org.hibernate.search.util.common.SearchException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +55,7 @@ import java.util.concurrent.*;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Profile("!test")
 @Component()
 @Slf4j
 public class HibernateSearchInit implements ApplicationListener<ApplicationReadyEvent> {
@@ -58,59 +63,8 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
     /**
      * The Entity Manager Factory.
      */
-    @PersistenceUnit
-    EntityManagerFactory emf;
-
-    /**
-     * The maximum retries to index the database.
-     */
-    @Value("${gla.rad.aton-service.indexing.max-retries:3}")
-    int indexingMaxRetries;
-
-    /**
-     * The retry back off tim ein millis to index the database.
-     */
-    @Value("${gla.rad.aton-service.indexing.back-off:300}")
-    int indexingBackOffMillis;
-
-    /**
-     * The Indexing Task - To be run in a separate thread
-     */
-    Callable<Boolean> indexingTask = () -> {
-        // Start the indexer
-        try {
-            log.info("Trying to index in {} ms...", indexingBackOffMillis);
-
-            // Allow some waiting time to make sure the database connection is up
-            Thread.sleep(this.indexingBackOffMillis);
-
-            // Once the application has booted up, access the search session
-            EntityManager em = this.emf.createEntityManager();
-            // Sanity check
-            if(Objects.isNull(em)) {
-                return Boolean.FALSE;
-            }
-            SearchSession searchSession = Search.session(em);
-
-            // Create a mass indexer
-            MassIndexer indexer = searchSession.massIndexer(Arrays.asList(
-                            S201Dataset.class,
-                            S201DatasetIdentification.class,
-                            DatasetContent.class,
-                            AidsToNavigation.class,
-                            SubscriptionRequest.class,
-                            DatasetContentLog.class))
-                    .threadsToLoadObjects(7);
-
-            indexer.startAndWait();
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            return Boolean.FALSE;
-        }
-
-        // Return success
-        return Boolean.TRUE;
-    };
+    @PersistenceContext
+    EntityManager em;
 
     /**
      * Override the application event handler to index the database.
@@ -120,34 +74,33 @@ public class HibernateSearchInit implements ApplicationListener<ApplicationReady
     @Override
     @Transactional
     public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
-        Boolean indexed = Boolean.FALSE;
-
         // Log the indexing process commencing
         log.info("Hibernate Search indexing commencing...");
 
-        // Add some retries in case this failed - mainly for K8s
-        int attempt = 0;
+        // Perform the indexing
+        runMassIndex();
+    }
 
-        // Try multiple times to index if it fails
-        while (!indexed && attempt < indexingMaxRetries) {
-            //Count the attempt
-            attempt++;
+    /**
+     * Running the actual indexing operation asynchronously to
+     * allow the service to continue.
+     */
+    @SneakyThrows
+    @Async
+    @Transactional
+    public void runMassIndex() {
+        Search.session(em)
+                .massIndexer(Arrays.asList(
+                        S201Dataset.class,
+                        S201DatasetIdentification.class,
+                        DatasetContent.class,
+                        AidsToNavigation.class,
+                        SubscriptionRequest.class,
+                        DatasetContentLog.class))
+                .threadsToLoadObjects(7)
+                .startAndWait();
 
-            // Create an executor service with virtual threads
-            try(ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-                // Run the indexing operation in a separate thread
-                Future<?> future = executor.submit(this.indexingTask);
-
-                // And wait for the result
-                indexed = (Boolean) future.get();
-            } catch (Exception ex) {
-                log.error("Indexing attempt {} failed: {}", attempt, ex.getMessage(), ex);
-            }
-        }
-
-        // Log the success
-        if(indexed) {
-            log.info("Hibernate Search indexing completed successfully");
-        }
+        // And log the result
+        log.info("Hibernate Search indexing completed successfully");
     }
 }

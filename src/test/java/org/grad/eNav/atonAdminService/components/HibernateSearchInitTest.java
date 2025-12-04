@@ -32,6 +32,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import java.util.concurrent.Callable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -49,10 +50,9 @@ class HibernateSearchInitTest {
      * The Entity Manager mock.
      */
     @Mock
-    EntityManagerFactory entityManagerFactory;
+    EntityManager entityManager;
 
     // Test Variables
-    private EntityManager entityManager;
     private SearchSession searchSession;
     private MassIndexer massIndexer;
 
@@ -61,29 +61,25 @@ class HibernateSearchInitTest {
      */
     @BeforeEach
     void setup() {
-        this.hibernateSearchInit.indexingMaxRetries = 3;
-        this.hibernateSearchInit.indexingBackOffMillis = 100;
-        this.entityManager = mock(EntityManager.class);
         this.searchSession = mock(SearchSession.class);
         this.massIndexer = mock(MassIndexer.class);
     }
 
     /**
-     * Test that the indexing task can be called successfully and perform the
-     * mass indexer operation.
+     * Test that the hibernate search will initialise correctly on the
+     * application events.
      */
     @Test
-    void testIndexingTask() throws Exception {
+    void testOnApplicationEvent() throws InterruptedException {
         try (MockedStatic<Search> mockedSearch = Mockito.mockStatic(Search.class)) {
-            doReturn(this.entityManager).when(this.entityManagerFactory).createEntityManager();
             mockedSearch.when(() -> Search.session(this.entityManager)).thenReturn(this.searchSession);
 
             doReturn(this.massIndexer).when(this.searchSession).massIndexer(anyCollection());
             doReturn(this.massIndexer).when(this.massIndexer).threadsToLoadObjects(anyInt());
             doNothing().when(this.massIndexer).startAndWait();
 
-            // Perform the indexing task
-            assertEquals(Boolean.TRUE, this.hibernateSearchInit.indexingTask.call());
+            // Perform the component call
+            this.hibernateSearchInit.onApplicationEvent(mock(ApplicationReadyEvent.class));
         }
 
         // Verify the indexing initialisation was performed
@@ -91,61 +87,22 @@ class HibernateSearchInitTest {
     }
 
     /**
-     * Test that if the indexing task fails, it will return an un-successful
-     * result.
+     * Test that when the hibernate search will fail to initialise we can
+     * still boot the service without an error.
      */
     @Test
-    void tesIndexingTaskFailed() throws Exception {
+    void testOnApplicationEventFailed() throws InterruptedException {
         try (MockedStatic<Search> mockedSearch = Mockito.mockStatic(Search.class)) {
-            doReturn(this.entityManager).when(this.entityManagerFactory).createEntityManager();
             mockedSearch.when(() -> Search.session(this.entityManager)).thenReturn(this.searchSession);
 
             doReturn(this.massIndexer).when(this.searchSession).massIndexer(anyCollection());
             doReturn(this.massIndexer).when(this.massIndexer).threadsToLoadObjects(anyInt());
             doThrow(InterruptedException.class).when(this.massIndexer).startAndWait();
 
-            // Perform the indexing task
-            assertEquals(Boolean.FALSE, this.hibernateSearchInit.indexingTask.call());
+            // Perform the component call
+            assertThrows(InterruptedException.class, () ->
+                    this.hibernateSearchInit.onApplicationEvent(mock(ApplicationReadyEvent.class)));
         }
-
-        // Verify the indexing initialisation was performed
-        verify(massIndexer, times(1)).startAndWait();
-    }
-
-    /**
-     * Test that on an application event the hibernate search init component
-     * will attempt to run the indexing task as a future callable. This should
-     * only take one if successful.
-     */
-    @Test
-    void testOnApplicationEvent() throws Exception {
-        // Set a mock indexing task to verify the operation
-        Callable<Boolean> indexingTaskMock = mock(Callable.class);
-        doReturn(Boolean.TRUE).when(indexingTaskMock).call();
-        this.hibernateSearchInit.indexingTask = indexingTaskMock;
-
-        // Perform the component call
-        this.hibernateSearchInit.onApplicationEvent(mock(ApplicationReadyEvent.class));
-
-        verify(indexingTaskMock, times(1)).call();
-    }
-
-    /**
-     * Test that on an application event the hibernate search init component
-     * will attempt to run the indexing task as a future callable. This should
-     * only take a number of times (e.g. 3) if not successful./
-     */
-    @Test
-    void testOnApplicationEventFailed() throws Exception {
-        // Set a mock indexing task to verify the operation
-        Callable<Boolean> indexingTaskMock = mock(Callable.class);
-        doReturn(Boolean.FALSE).when(indexingTaskMock).call();
-        this.hibernateSearchInit.indexingTask = indexingTaskMock;
-
-        // Perform the component call
-        this.hibernateSearchInit.onApplicationEvent(mock(ApplicationReadyEvent.class));
-
-        verify(indexingTaskMock, times(3)).call();
     }
 
 }
