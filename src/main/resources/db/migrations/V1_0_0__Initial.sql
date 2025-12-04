@@ -1258,7 +1258,7 @@ CREATE TABLE public.sector_characteristics_colours (
 CREATE TABLE public.sector_characteristics_light_visibilities (
     sector_characteristics_id numeric(38,0) NOT NULL,
     light_visibilities character varying(255),
-    CONSTRAINT sector_characteristics_light_visibilit_light_visibilities_check CHECK (((light_visibilities)::text = ANY ((ARRAY['DIRECTIONAL_FUNCTION'::character varying, 'LEADING_LIGHT'::character varying, 'AERO_LIGHT'::character varying, 'AIR_OBSTRUCTION_LIGHT'::character varying, 'FLOOD_LIGHT'::character varying, 'STRIP_LIGHT'::character varying, 'SUBSIDIARY_LIGHT'::character varying, 'SPOTLIGHT'::character varying, 'FRONT'::character varying, 'REAR'::character varying, 'LOWER'::character varying, 'UPPER'::character varying, 'EMERGENCY'::character varying, 'BEARING_LIGHT'::character varying, 'HORIZONTALLY_DISPOSED'::character varying, 'VERTICALLY_DISPOSED'::character varying])::text[])))
+    CONSTRAINT sector_characteristics_light_visibilit_light_visibilities_check CHECK (((light_visibilities)::text = ANY ((ARRAY['HIGH_INTENSITY'::character varying, 'LOW_INTENSITY'::character varying, 'FAINT'::character varying, 'INTENSIFIED'::character varying, 'UNINTENSIFIED'::character varying, 'VISIBILITY_DELIBERATELY_RESTRICTED'::character varying, 'OBSCURED'::character varying, 'PARTIALLY_OBSCURED'::character varying, 'VISIBLE_IN_LINE_OF_RANGE'::character varying])::text[])))
 );
 
 

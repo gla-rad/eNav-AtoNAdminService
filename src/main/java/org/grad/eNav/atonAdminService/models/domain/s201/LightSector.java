@@ -48,7 +48,7 @@ public class LightSector implements Serializable {
     private DirectionalCharacter directionalCharacter;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = CategoryOfLightType.class)
+    @ElementCollection(targetClass = LightVisibilityType.class)
     private Set<LightVisibilityType> lightVisibilities;
 
     private SectorLimit sectorLimit;
