@@ -43,7 +43,6 @@ import java.io.IOException;
  */
 @Slf4j
 @Service
-@DependsOn(value="gsDataStore")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class S201GDSService {
 
