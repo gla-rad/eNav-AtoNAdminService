@@ -265,6 +265,18 @@ public class GlobalConfig {
                                     .orElse(null))
                             .map(src -> src, SectorCharacteristics::setLightSector);
                 });
+        modelMapper.createTypeMap(SectorCharacteristics.class, SectorCharacteristicsTypeImpl.class)
+                .implicitMappings()
+                .addMappings(mapper -> {
+                    mapper.using(ctx -> Optional.of(ctx)
+                                    .map(MappingContext::getSource)
+                                    .map(SectorCharacteristics.class::cast)
+                                    .map(SectorCharacteristics::getLightSector)
+                                    .map(Collections::singletonList)
+                                    .map(lightSector -> modelMapper.map(lightSector, LightSectorTypeImpl.class))
+                                    .orElse(null))
+                            .map(src -> src, SectorCharacteristicsTypeImpl::setLightSectors);
+                });
         // Create the Aggregation/Association type maps
         modelMapper.createTypeMap(AtonAggregationImpl.class, AtonAggregation.class)
                 .implicitMappings()
