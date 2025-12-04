@@ -105,7 +105,11 @@ public class S201WebSocketService implements MessageHandler {
     @Override
     public void handleMessage(Message<?> message) throws MessagingException {
         // Get the headers of the incoming message
-        SECOM_DataProductType contentType = message.getHeaders().get(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.class);
+        SECOM_DataProductType contentType = Optional.of(message)
+                .map(Message::getHeaders)
+                .map(headers -> headers.get(MessageHeaders.CONTENT_TYPE, String.class))
+                .map(SECOM_DataProductType::valueOf)
+                .orElse(null);
         DatasetOperation datasetOperation = Optional.of(message)
                 .map(Message::getHeaders)
                 .map(headers -> headers.get("operation", DatasetOperation.class))

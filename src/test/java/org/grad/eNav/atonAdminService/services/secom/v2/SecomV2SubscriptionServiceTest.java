@@ -242,7 +242,7 @@ class SecomV2SubscriptionServiceTest {
 
         // Create a message to be handled
         Message<S201Dataset> message = Optional.of(this.s201Dataset).map(MessageBuilder::withPayload)
-                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201))
+                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201.name()))
                 .map(builder -> builder.setHeader("operation", DatasetOperation.CREATED))
                 .map(MessageBuilder::build)
                 .orElse(null);
@@ -305,7 +305,7 @@ class SecomV2SubscriptionServiceTest {
 
         // Create a message to be handled
         Message<S201Dataset> message = Optional.of(this.s201Dataset).map(MessageBuilder::withPayload)
-                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201))
+                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201.name()))
                 .map(builder -> builder.setHeader("operation", DatasetOperation.DELETED))
                 .map(MessageBuilder::build)
                 .orElse(null);
@@ -355,7 +355,7 @@ class SecomV2SubscriptionServiceTest {
     void testHandleMessageWrongFormat() {
         // Create a message to be handled
         Message message = Optional.of(this.s201Dataset).map(MessageBuilder::withPayload)
-                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.OTHER))
+                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.OTHER.name()))
                 .map(builder -> builder.setHeader("operation", DatasetOperation.CREATED))
                 .map(MessageBuilder::build)
                 .orElse(null);

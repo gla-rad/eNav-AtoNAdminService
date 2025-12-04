@@ -190,7 +190,8 @@ public class SecomV2SubscriptionService implements MessageHandler {
         // Get the headers of the incoming message
         final SECOM_DataProductType contentType = Optional.of(message)
                 .map(Message::getHeaders)
-                .map(headers -> headers.get(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.class))
+                .map(headers -> headers.get(MessageHeaders.CONTENT_TYPE, String.class))
+                .map(SECOM_DataProductType::valueOf)
                 .orElse(null);
         final DatasetOperation datasetOperation = Optional.of(message)
                 .map(Message::getHeaders)

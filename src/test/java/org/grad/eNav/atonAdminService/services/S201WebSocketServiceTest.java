@@ -133,7 +133,7 @@ class S201WebSocketServiceTest {
     void testHandleAidsToNavigationMessage() throws IOException {
         // Create a message to be handled
         Message<?> message = Optional.of(this.aidsToNavigation).map(MessageBuilder::withPayload)
-                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201))
+                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201.name()))
                 .map(builder -> builder.setHeader("operation", DatasetOperation.CREATED))
                 .map(MessageBuilder::build)
                 .orElse(null);
@@ -179,7 +179,7 @@ class S201WebSocketServiceTest {
     void testHandleStringMessage() throws IOException {
         /// Create a message to be handled
         Message<?> message = Optional.of(this.aidsToNavigation).map(MessageBuilder::withPayload)
-                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201))
+                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201.name()))
                 .map(builder -> builder.setHeader("operation", DatasetOperation.DELETED))
                 .map(MessageBuilder::build)
                 .orElse(null);
@@ -224,7 +224,7 @@ class S201WebSocketServiceTest {
     void testHandleMessageWrongPayload() throws IOException {
         // Change the message content type to something else
         Message<?> message = Optional.of(Integer.MAX_VALUE).map(MessageBuilder::withPayload)
-                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201))
+                .map(builder -> builder.setHeader(MessageHeaders.CONTENT_TYPE, SECOM_DataProductType.S201.name()))
                 .map(MessageBuilder::build)
                 .orElse(null);
 
