@@ -48,9 +48,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.beans.PropertyDescriptor;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -125,16 +123,56 @@ public class GlobalConfig {
                 .implicitMappings();
 
         // For interface fields that don't have constructors, use converters
-        modelMapper.addConverter(ctx -> new FeatureNameTypeImpl(),
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, FeatureNameTypeImpl.class))
+                        .orElse(null),
                 FeatureName.class, FeatureNameType.class);
-        modelMapper.addConverter(ctx -> new SignalSequenceTypeImpl(),
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, SignalSequenceTypeImpl.class))
+                        .orElse(null),
                 SignalSequence.class, SignalSequenceType.class);
-        modelMapper.addConverter(ctx -> new RhythmOfLightTypeImpl(),
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, RhythmOfLightTypeImpl.class))
+                        .orElse(null),
                 RhythmOfLight.class, RhythmOfLightType.class);
-        modelMapper.addConverter(ctx -> new MultiplicityOfFeaturesTypeImpl(),
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, MultiplicityOfFeaturesTypeImpl.class))
+                        .orElse(null),
                 MultiplicityOfFeatures.class, MultiplicityOfFeaturesType.class);
-        modelMapper.addConverter(ctx -> new SectorCharacteristicsTypeImpl(),
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, SectorCharacteristicsTypeImpl.class))
+                        .orElse(null),
                 SectorCharacteristics.class, SectorCharacteristicsType.class);
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, LightSectorTypeImpl.class))
+                        .orElse(null),
+                LightSector.class, LightSectorType.class);
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, SectorInformationTypeImpl.class))
+                        .orElse(null),
+                SectorInformation.class, SectorInformationType.class);
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, SectorLimitTypeImpl.class))
+                        .orElse(null),
+                SectorLimit.class, SectorLimitType.class);
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, SectorLimitOneTypeImpl.class))
+                        .orElse(null),
+                SectorLimitDetails.class, SectorLimitOneType.class);
+        modelMapper.addConverter(ctx -> Optional.ofNullable(ctx)
+                        .map(MappingContext::getSource)
+                        .map(src -> modelMapper.map(src, SectorLimitTwoTypeImpl.class))
+                        .orElse(null),
+                SectorLimitDetails.class, SectorLimitTwoType.class);
 
         // Loop all the mapped S-201 AtoN types and configure the model mapper
         // to translate correctly from the S-201 onto the local classes and
@@ -264,18 +302,6 @@ public class GlobalConfig {
                                     .map(lightSector -> modelMapper.map(lightSector, LightSector.class))
                                     .orElse(null))
                             .map(src -> src, SectorCharacteristics::setLightSector);
-                });
-        modelMapper.createTypeMap(SectorCharacteristics.class, SectorCharacteristicsTypeImpl.class)
-                .implicitMappings()
-                .addMappings(mapper -> {
-                    mapper.using(ctx -> Optional.of(ctx)
-                                    .map(MappingContext::getSource)
-                                    .map(SectorCharacteristics.class::cast)
-                                    .map(SectorCharacteristics::getLightSector)
-                                    .map(Collections::singletonList)
-                                    .map(lightSector -> modelMapper.map(lightSector, LightSectorTypeImpl.class))
-                                    .orElse(null))
-                            .map(src -> src, SectorCharacteristicsTypeImpl::setLightSectors);
                 });
         // Create the Aggregation/Association type maps
         modelMapper.createTypeMap(AtonAggregationImpl.class, AtonAggregation.class)

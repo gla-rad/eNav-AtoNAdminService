@@ -29,8 +29,8 @@
 		<pact-version>4.6.3</pact-version>
 		<secomlib-version>0.0.54-SNAPSHOT</secomlib-version>
 		<secomv2lib-version>0.0.1-SNAPSHOT</secomv2lib-version>
-		<hibernate.search-orm.version>7.1.1.Final</hibernate.search-orm.version>
-		<hibernate.spatial.version>6.4.4.Final</hibernate.spatial.version>
+		<hibernate.search-orm.version>7.2.4.Final</hibernate.search-orm.version>
+		<hibernate.spatial.version>6.6.29.Final</hibernate.spatial.version>
 		<lucene.spatial.version>9.8.0</lucene.spatial.version>
 	</properties>
 

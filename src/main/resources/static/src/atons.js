@@ -22,13 +22,21 @@ var nodesColumnDefs = [
      title: "ID Code",
      hoverMsg: "The AtoN ID Code",
      placeholder: "The AtoN ID Code",
- }, {
-     data: "atonType",
+ }, {     data: "atonType",
      title: "Type",
      hoverMsg: "The AtoN Type",
      placeholder: "The AtoN Type",
  }, {
-    data: ( row, type, val, meta ) => row.featureNames && row.featureNames.length > 0 ? row.featureNames.find(fn => fn.displayName).name : '',
+    data: ( row, type, val, meta ) => {
+        if(row.featureNames && row.featureNames.length > 0) {
+            displayEntry = row.featureNames.find(fn => fn.displayName);
+            if(displayEntry) {
+                return displayEntry.name;
+            }
+            return row.featureNames[0].name;
+        }
+        return '';
+      },
     title: "Name",
     hoverMsg: "The AtoN Name",
     placeholder: "The AtoN Name",

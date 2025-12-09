@@ -23,6 +23,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -102,6 +104,18 @@ public class SectorCharacteristics implements Serializable {
      */
     public LightSector getLightSector() {
         return lightSector;
+    }
+
+    /**
+     * Gets the light sector into a list.
+     * <p/>
+     * This function is primarity used in the mapping since the S201
+     * light sector entries are modelled into a list.
+     *
+     * @return the light sectors list
+     */
+    public List<LightSector> getLightSectors() {
+        return Collections.singletonList(this.lightSector);
     }
 
     /**
