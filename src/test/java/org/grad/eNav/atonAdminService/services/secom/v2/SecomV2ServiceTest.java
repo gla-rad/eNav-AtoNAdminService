@@ -18,8 +18,8 @@ package org.grad.eNav.atonAdminService.services.secom.v2;
 
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.ResponseSearchObject;
-import org.grad.secomv2.core.models.SearchObjectResult;
-import org.grad.secomv2.springboot3.components.SecomClient;
+import org.grad.secomv2.core.models.ServiceInstanceObject;
+import org.grad.secomv2.springboot4.components.SecomClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +57,7 @@ class SecomV2ServiceTest {
 
     // Test Variables
     ResponseSearchObject responseSearchObject;
-    List<SearchObjectResult> instances;
+    List<ServiceInstanceObject> instances;
 
     /**
      * Common setup for all the tests.
@@ -68,13 +68,13 @@ class SecomV2ServiceTest {
         this.secomV2Service.discoveryServiceUrl = "http://localhost:8444/v1/searchService";
 
         // Create a set of retrieved instances
-        SearchObjectResult searchObjectResult1 = new SearchObjectResult();
-        searchObjectResult1.setVersion("0.0.1");
-        searchObjectResult1.setEndpointUri("http://localhost/");
-        SearchObjectResult searchObjectResult2 = new SearchObjectResult();
-        searchObjectResult2.setVersion("0.0.2");
-        searchObjectResult2.setEndpointUri("http://localhost/");
-        this.instances = Arrays.asList(searchObjectResult1, searchObjectResult2);
+        ServiceInstanceObject serviceInstanceObject1 = new ServiceInstanceObject();
+        serviceInstanceObject1.setVersion("0.0.1");
+        serviceInstanceObject1.setEndpointUri("http://localhost/");
+        ServiceInstanceObject serviceInstanceObject2 = new ServiceInstanceObject();
+        serviceInstanceObject2.setVersion("0.0.2");
+        serviceInstanceObject2.setEndpointUri("http://localhost/");
+        this.instances = Arrays.asList(serviceInstanceObject1, serviceInstanceObject2);
 
         // Create the response search object
         this.responseSearchObject = new ResponseSearchObject();

@@ -36,7 +36,7 @@ import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.grad.secom.core.models.enums.SubscriptionEventEnum;
-import org.grad.secom.springboot3.components.SecomClient;
+import org.grad.secom.springboot4.components.SecomClient;
 import org.hibernate.search.engine.search.query.SearchQuery;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.query.SearchResultTotal;

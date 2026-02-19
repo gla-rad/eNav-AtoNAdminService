@@ -42,22 +42,6 @@ public class WebConfig implements WebMvcConfigurer {
     GeoJsonStringToGeometryConverter geoJsonStringToGeometryConverter;
 
     /**
-     * As of Spring Framework 6.0, the trailing slash matching configuration
-     * option has been deprecated and its default value set to false. This
-     * means that previously, the following controller would match both
-     * "GET /some/greeting" and "GET /some/greeting/". To disable this
-     * functionality and mirror the previous version behaviour we need to
-     * do this. Note that this functionality has been deprecated so we need
-     * to be careful.
-     *
-     * @param pathMatchConfigurer   the path match configurer
-     */
-    @Override
-    public void configurePathMatch(PathMatchConfigurer pathMatchConfigurer) {
-        pathMatchConfigurer.setUseTrailingSlashMatch(true);
-    }
-
-    /**
      * Add the static resources and webjars to the web resources.
      *
      * @param registry the resource handler registry

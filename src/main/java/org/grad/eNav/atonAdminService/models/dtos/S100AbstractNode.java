@@ -38,7 +38,7 @@ import java.util.Objects;
 public abstract class S100AbstractNode implements IJsonSerializable {
 
     // Class Variables
-    @JsonSerialize(using = GeometryAsGeoJSONSerializer.class)
+    @JsonSerialize
     private Geometry geometry;
     private String content;
 

@@ -39,7 +39,7 @@ import java.util.Locale;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Entity
+@Entity(name = "s201dataset_identification")
 @EntityListeners(AuditingEntityListener.class)
 @Cacheable
 @Indexed

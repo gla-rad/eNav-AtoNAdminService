@@ -7,7 +7,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
-import org.grad.secomv2.springboot3.openapi.SecomV2OpenApiInfoProvider;
+import org.grad.secomv2.springboot4.openapi.SecomV2OpenApiInfoProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

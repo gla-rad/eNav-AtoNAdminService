@@ -451,7 +451,7 @@ public class DatasetService {
         return searchSession.search( scope )
                 .extension(LuceneExtension.get())
                 .where(f -> {
-                    BooleanPredicateClausesStep<?> step = f.bool()
+                    BooleanPredicateClausesStep<?,?> step = f.bool()
                             .must(Optional.ofNullable(includeCancelled)
                                     .filter(Boolean.TRUE::equals)
                                     .map(c -> f.matchAll()
@@ -499,7 +499,7 @@ public class DatasetService {
         SearchScope<S201Dataset> scope = searchSession.scope( S201Dataset.class );
         return searchSession.search( scope )
                 .where( f -> {
-                    BooleanPredicateClausesStep<?> step = f.bool()
+                    BooleanPredicateClausesStep<?,?> step = f.bool()
                             .must(Optional.ofNullable(includeCancelled)
                                     .filter(Boolean.TRUE::equals)
                                     .map(c -> f.matchAll()

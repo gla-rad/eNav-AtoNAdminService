@@ -19,7 +19,7 @@ package org.grad.eNav.atonAdminService.services.secom.v2;
 import org.grad.secomv2.core.models.SubscriptionNotificationObject;
 import org.grad.secomv2.core.models.SubscriptionNotificationResponseObject;
 import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
-import org.grad.secomv2.springboot3.components.SecomClient;
+import org.grad.secomv2.springboot4.components.SecomClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

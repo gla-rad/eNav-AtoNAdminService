@@ -21,12 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.ResponseSearchObject;
-import org.grad.secomv2.core.models.SearchFilterObject;
-import org.grad.secomv2.core.models.SearchObjectResult;
-import org.grad.secomv2.core.models.SearchParameters;
-import org.grad.secomv2.springboot3.components.SecomClient;
-import org.grad.secomv2.springboot3.components.SecomConfigProperties;
+import org.grad.secomv2.core.models.*;
+import org.grad.secomv2.springboot4.components.SecomClient;
+import org.grad.secomv2.springboot4.components.SecomConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -129,19 +126,21 @@ public class SecomV2Service {
 
         // Create the discovery service search filter object for the provided MRN
         final SearchFilterObject searchFilterObject = new SearchFilterObject();
+        final EnvelopeSearchFilterObject envelopeSearchFilterObject = new EnvelopeSearchFilterObject();
         final SearchParameters searchParameters = new SearchParameters();
         searchParameters.setInstanceId(mrn);
-        searchFilterObject.setQuery(searchParameters);
+        envelopeSearchFilterObject.setQuery(searchParameters);
+        searchFilterObject.setEnvelope(envelopeSearchFilterObject);
 
         // Lookup the endpoints of the clients from the SECOM discovery service
-        final List<SearchObjectResult> instances = Optional.ofNullable(this.discoveryService)
+        final List<ServiceInstanceObject> instances = Optional.ofNullable(this.discoveryService)
                 .flatMap(ds -> ds.searchService(searchFilterObject, 0, Integer.MAX_VALUE))
                 .map(ResponseSearchObject::getSearchServiceResult)
                 .orElse(Collections.emptyList());
 
         // Extract the latest matching instance
-        final SearchObjectResult instance = instances.stream()
-                .max(Comparator.comparing(SearchObjectResult::getVersion))
+        final ServiceInstanceObject instance = instances.stream()
+                .max(Comparator.comparing(ServiceInstanceObject::getVersion))
                 .orElseThrow(() -> new SecomNotFoundException(mrn));
 
         // Now construct and return a SECOM client for the discovered URI

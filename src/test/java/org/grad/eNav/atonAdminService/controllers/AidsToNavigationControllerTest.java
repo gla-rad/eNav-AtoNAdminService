@@ -29,16 +29,16 @@ import org.grad.eNav.atonAdminService.models.dtos.s201.FeatureNameDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.InformationDto;
 import org.grad.eNav.atonAdminService.services.AidsToNavigationService;
 import org.grad.eNav.atonAdminService.services.DatasetService;
+import org.grad.eNav.atonAdminService.utils.PageDeserializerModule;
+import org.grad.eNav.atonAdminService.utils.SortDeserializerModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.cloud.openfeign.support.PageJacksonModule;
-import org.springframework.cloud.openfeign.support.SortJacksonModule;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -105,8 +105,8 @@ class AidsToNavigationControllerTest {
         this.factory = new GeometryFactory(new PrecisionModel(), 4326);
 
         // Allow the object mapper to deserialize pages
-        this.objectMapper.registerModule(new PageJacksonModule());
-        this.objectMapper.registerModule(new SortJacksonModule());
+        this.objectMapper.registerModule(new PageDeserializerModule());
+        this.objectMapper.registerModule(new SortDeserializerModule());
 
         // Initialise the station nodes list
         this.aidsToNavigationList = new ArrayList<>();

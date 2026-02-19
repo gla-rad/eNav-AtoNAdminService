@@ -32,8 +32,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
 import org.springframework.cloud.openfeign.support.SortJacksonModule;
 import org.springframework.context.annotation.Import;
@@ -97,9 +97,9 @@ class DatasetContentLogControllerTest {
         // Create a temp geometry factory to get a test geometries
         this.factory = new GeometryFactory(new PrecisionModel(), 4326);
 
-        // Allow the object mapper to deserialize pages
-        this.objectMapper.registerModule(new PageJacksonModule());
-        this.objectMapper.registerModule(new SortJacksonModule());
+//        // Allow the object mapper to deserialize pages
+//        this.objectMapper.registerModule(new PageJacksonModule());
+//        this.objectMapper.registerModule(new SortJacksonModule());
 
         // Create a pageable definition
         this.pageable = PageRequest.of(0, 5);
