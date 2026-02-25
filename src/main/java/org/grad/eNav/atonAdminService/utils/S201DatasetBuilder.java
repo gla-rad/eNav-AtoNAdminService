@@ -183,7 +183,8 @@ public class S201DatasetBuilder {
         // And create the bounding by envelope
         BoundingShapeType boundingShapeType = new BoundingShapeTypeImpl();
         EnvelopeType envelopeType = new EnvelopeTypeImpl();
-        envelopeType.setSrsName("EPSG:4326");
+        envelopeType.setSrsName("http://www.opengis.net/def/crs/EPSG/0/4326");
+        envelopeType.setSrsDimension(BigInteger.valueOf(2));
         envelopeType.setLowerCorner(lowerCorner);
         envelopeType.setUpperCorner(upperCorner);
         boundingShapeType.setEnvelope(envelopeType);
