@@ -176,7 +176,7 @@ public class S201DatasetBuilder {
                 .forEach(g -> this.enclosingEnvelopeFromGeometry(envelope, g));
 
         Pos lowerCorner = new PosImpl();
-        lowerCorner.setValue(new Double[]{envelope.getMinX(), envelope.getMaxY()});
+        lowerCorner.setValue(new Double[]{envelope.getMinX(), envelope.getMinY()});
         Pos upperCorner = new PosImpl();
         upperCorner.setValue(new Double[]{envelope.getMaxX(), envelope.getMaxY()});
 
