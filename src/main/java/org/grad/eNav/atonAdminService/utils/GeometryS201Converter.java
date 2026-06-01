@@ -37,6 +37,7 @@ import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.s201.utils.S201Utils;
 import org.locationtech.jts.geom.*;
 
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -301,6 +302,8 @@ public class GeometryS201Converter {
 
         // Populate the elements
         surfaceType.setPatches(patches);
+        surfaceType.setSrsName("http://www.opengis.net/def/crs/EPSG/0/4326");
+        surfaceType.setSrsDimension(BigInteger.valueOf(2));
         surfaceProperty.setSurface(surfaceType);
 
         // And return the output
@@ -320,6 +323,8 @@ public class GeometryS201Converter {
 
         // Populate the elements
         curveType.setSegments(segments);
+        curveType.setSrsName("http://www.opengis.net/def/crs/EPSG/0/4326");
+        curveType.setSrsDimension(BigInteger.valueOf(2));
         curveProperty.setCurve(curveType);
 
         // And return the output
@@ -337,6 +342,8 @@ public class GeometryS201Converter {
         PointType pointType = new PointTypeImpl();
 
         // Populate the elements
+        pointType.setSrsName("http://www.opengis.net/def/crs/EPSG/0/4326");
+        pointType.setSrsDimension(BigInteger.valueOf(2));
         pointProperty.setPoint(pointType);
 
         // And return the output
