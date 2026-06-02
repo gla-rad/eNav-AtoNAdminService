@@ -18,7 +18,7 @@ package org.grad.eNav.atonAdminService.components;
 
 import _int.iho.s_201.gml.cs0._2.ColourType;
 import _int.iho.s_201.gml.cs0._2.LightVisibilityType;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.apache.commons.io.IOUtils;
 import org.geotools.api.data.DataStore;
 import org.geotools.api.data.FeatureEvent;

@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.services.secom.v2;
 
 import lombok.extern.slf4j.Slf4j;
+import org.grad.secomv2.core.models.EnvelopeSubscriptionNotificationObject;
 import org.grad.secomv2.core.models.SubscriptionNotificationObject;
 import org.grad.secomv2.core.models.SubscriptionNotificationResponseObject;
 import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
@@ -67,8 +68,10 @@ public class SecomV2SubscriptionNotificationService {
 
         // Create the subscription notification response object
         SubscriptionNotificationObject subscriptionNotificationObject = new SubscriptionNotificationObject();
-        subscriptionNotificationObject.setSubscriptionIdentifier(subscriptionIdentifier);
-        subscriptionNotificationObject.setEventEnum(subscriptionEventEnum);
+        EnvelopeSubscriptionNotificationObject envelopeSubscriptionNotificationObject = new EnvelopeSubscriptionNotificationObject();
+        envelopeSubscriptionNotificationObject.setSubscriptionIdentifier(subscriptionIdentifier);
+        envelopeSubscriptionNotificationObject.setEventEnum(subscriptionEventEnum);
+        subscriptionNotificationObject.setEnvelope(envelopeSubscriptionNotificationObject);
 
         // Send the object the return the response
         return CompletableFuture.completedFuture(secomClient.subscriptionNotification(subscriptionNotificationObject)
@@ -95,8 +98,10 @@ public class SecomV2SubscriptionNotificationService {
 
         // Create the subscription notification response object
         SubscriptionNotificationObject subscriptionNotificationObject = new SubscriptionNotificationObject();
-        subscriptionNotificationObject.setSubscriptionIdentifier(subscriptionIdentifier);
-        subscriptionNotificationObject.setEventEnum(subscriptionEventEnum);
+        EnvelopeSubscriptionNotificationObject envelopeSubscriptionNotificationObject = new EnvelopeSubscriptionNotificationObject();
+        envelopeSubscriptionNotificationObject.setSubscriptionIdentifier(subscriptionIdentifier);
+        envelopeSubscriptionNotificationObject.setEventEnum(subscriptionEventEnum);
+        subscriptionNotificationObject.setEnvelope(envelopeSubscriptionNotificationObject);
 
         // Send the object the return the response
         return CompletableFuture.completedFuture(secomClient.subscriptionNotification(subscriptionNotificationObject)

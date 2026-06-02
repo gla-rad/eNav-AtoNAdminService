@@ -17,8 +17,8 @@
 package org.grad.eNav.atonAdminService.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.annotation.JsonSerialize;
 import org.grad.eNav.atonAdminService.models.IJsonSerializable;
 import org.grad.eNav.atonAdminService.utils.GeometryJSONConverter;
 import org.locationtech.jts.geom.Geometry;

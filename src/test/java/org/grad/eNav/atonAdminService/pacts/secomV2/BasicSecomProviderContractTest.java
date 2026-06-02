@@ -22,20 +22,20 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
+import org.grad.eNav.atonAdminService.TestSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.feign.CKeeperClient;
 import org.grad.eNav.atonAdminService.services.DatasetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
-import org.grad.secomv2.core.components.SecomSignatureFilter;
+import org.grad.secomv2.core.components.SecomSignatureAdvice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -61,8 +61,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
+@EnableAutoConfiguration(exclude = {OAuth2ClientWebSecurityAutoConfiguration.class})
+@Import({TestingConfiguration.class, TestSecurityConfig.class})
 @IgnoreNoPactsToVerify
 @PactBroker
 @Provider("SecomV2Service")
@@ -88,7 +88,7 @@ public class BasicSecomProviderContractTest implements
      * SECOM requests and will allow testing pacts, without security on.
      */
     @MockitoBean
-    SecomSignatureFilter secomSignatureFilter;
+    SecomSignatureAdvice secomSignatureFilter;
 
     /**
      * A geometry factory to facilitate testing.
@@ -134,6 +134,7 @@ public class BasicSecomProviderContractTest implements
      */
     @BeforeEach
     void setupTestTarget(PactVerificationContext context) {
+        if (context == null) return;
         context.setTarget(new HttpTestTarget("localhost", this.serverPort, "/api/secom"));
     }
 
@@ -147,6 +148,7 @@ public class BasicSecomProviderContractTest implements
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
+        if (context == null) return;
         context.verifyInteraction();
     }
 

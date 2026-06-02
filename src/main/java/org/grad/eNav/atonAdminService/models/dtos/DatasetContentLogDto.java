@@ -16,8 +16,8 @@
 
 package org.grad.eNav.atonAdminService.models.dtos;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.models.enums.DatasetType;
 import org.grad.eNav.atonAdminService.utils.GeometryJSONDeserializer;

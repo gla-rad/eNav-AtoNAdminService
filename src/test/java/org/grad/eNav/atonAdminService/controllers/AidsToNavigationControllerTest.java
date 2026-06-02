@@ -17,9 +17,10 @@
 package org.grad.eNav.atonAdminService.controllers;
 
 import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
+import org.springframework.cloud.openfeign.support.PageJacksonModule;
+import org.springframework.cloud.openfeign.support.SortJacksonModule;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
@@ -29,8 +30,6 @@ import org.grad.eNav.atonAdminService.models.dtos.s201.FeatureNameDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.InformationDto;
 import org.grad.eNav.atonAdminService.services.AidsToNavigationService;
 import org.grad.eNav.atonAdminService.services.DatasetService;
-import org.grad.eNav.atonAdminService.utils.PageDeserializerModule;
-import org.grad.eNav.atonAdminService.utils.SortDeserializerModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
@@ -38,6 +37,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
@@ -48,6 +48,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -62,8 +63,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AidsToNavigationController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
+@WebMvcTest(controllers = AidsToNavigationController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
+@Import({TestingConfiguration.class})
 class AidsToNavigationControllerTest {
 
     /**
@@ -105,8 +106,8 @@ class AidsToNavigationControllerTest {
         this.factory = new GeometryFactory(new PrecisionModel(), 4326);
 
         // Allow the object mapper to deserialize pages
-        this.objectMapper.registerModule(new PageDeserializerModule());
-        this.objectMapper.registerModule(new SortDeserializerModule());
+//        this.objectMapper.registerModule(new PageDeserializerModule());
+//        this.objectMapper.registerModule(new SortDeserializerModule());
 
         // Initialise the station nodes list
         this.aidsToNavigationList = new ArrayList<>();
@@ -208,7 +209,8 @@ class AidsToNavigationControllerTest {
                 .andReturn();
 
         // Parse and validate the response
-        Page<AidsToNavigationDto> result = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
+        ObjectMapper pageMapper = JsonMapper.builder().addModule(new PageJacksonModule()).addModule(new SortJacksonModule()).build();
+        Page<AidsToNavigationDto> result = pageMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
         assertEquals(page.getSize(), result.getContent().size());
 
         // Validate the entries one by one

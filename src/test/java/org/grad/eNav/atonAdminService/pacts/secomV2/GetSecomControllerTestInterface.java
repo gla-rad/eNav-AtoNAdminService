@@ -24,7 +24,7 @@ import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.dtos.SignatureCertificateDto;
 import org.grad.eNav.atonAdminService.services.DatasetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
-import org.grad.secom.core.utils.SecomPemUtils;
+import org.grad.secomv2.core.utils.SecomPemUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.core.io.ClassPathResource;

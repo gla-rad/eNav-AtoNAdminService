@@ -16,12 +16,11 @@
 
 package org.grad.eNav.atonAdminService;
 
-import org.jboss.resteasy.springboot.ResteasyAutoConfiguration;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -29,7 +28,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@SpringBootApplication(exclude = {ResteasyAutoConfiguration.class, FeignAutoConfiguration.class})
+@SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableScheduling

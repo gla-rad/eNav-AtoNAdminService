@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.config;
 
 import org.grad.eNav.atonAdminService.components.GeoJsonStringToGeometryConverter;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -88,6 +89,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(geoJsonStringToGeometryConverter);
+        registry.addConverter(String.class, SECOM_DataProductType.class, SECOM_DataProductType::fromString);
     }
 
 }

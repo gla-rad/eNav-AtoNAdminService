@@ -17,7 +17,7 @@
 package org.grad.eNav.atonAdminService.services;
 
 import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;

@@ -16,9 +16,9 @@
 
 package org.grad.eNav.atonAdminService.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
@@ -33,6 +33,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
 import org.springframework.cloud.openfeign.support.SortJacksonModule;
@@ -58,8 +59,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = DatasetController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
+@WebMvcTest(controllers = DatasetController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
+@Import({TestingConfiguration.class})
 class DatasetControllerTest {
 
     /**
@@ -95,9 +96,6 @@ class DatasetControllerTest {
         // Create a temp geometry factory to get a test geometries
         this.factory = new GeometryFactory(new PrecisionModel(), 4326);
 
-//        // Allow the object mapper to deserialize pages
-//        this.objectMapper.registerModule(new PageJacksonModule());
-//        this.objectMapper.registerModule(new SortJacksonModule());
 
         // Initialise the dataset list
         this.datasetList = new ArrayList<>();
@@ -140,7 +138,8 @@ class DatasetControllerTest {
                 .andReturn();
 
         // Parse and validate the response
-        Page<S201DataSetDto> result = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
+        ObjectMapper pageMapper = JsonMapper.builder().addModule(new PageJacksonModule()).addModule(new SortJacksonModule()).build();
+        Page<S201DataSetDto> result = pageMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
         assertEquals(page.getSize(), result.getContent().size());
 
         // Validate the entries one by one

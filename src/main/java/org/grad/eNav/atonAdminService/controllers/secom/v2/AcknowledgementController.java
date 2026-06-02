@@ -17,7 +17,6 @@ package org.grad.eNav.atonAdminService.controllers.secom.v2;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
@@ -25,6 +24,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface;
 import org.grad.secomv2.core.models.AcknowledgementObject;
 import org.grad.secomv2.core.models.AcknowledgementResponseObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -37,7 +37,6 @@ import java.util.Optional;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Component
-@Path("/")
 @Validated
 @Slf4j
 public class AcknowledgementController implements AcknowledgementServiceInterface {
@@ -54,7 +53,7 @@ public class AcknowledgementController implements AcknowledgementServiceInterfac
      * @return the acknowledgement response object
      */
     @Tag(name = "SECOM")
-    public AcknowledgementResponseObject acknowledgment(@Valid AcknowledgementObject acknowledgementObject) {
+    public ResponseEntity<AcknowledgementResponseObject> acknowledgment(@Valid AcknowledgementObject acknowledgementObject) {
         log.debug("SECOM acknowledgement received");
 
         // Handle errors - dummy field check
@@ -79,7 +78,7 @@ public class AcknowledgementController implements AcknowledgementServiceInterfac
         acknowledgementResponseObject.setSECOM_ResponseCode(null);
 
         // Return the response
-        return acknowledgementResponseObject;
+        return ResponseEntity.ok(acknowledgementResponseObject);
     }
 
 }

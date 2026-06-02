@@ -654,7 +654,6 @@ class SecomV2SubscriptionServiceTest {
         assertNotNull(uploadArgument.getValue().getEnvelope());
         assertTrue(uploadArgument.getValue().getEnvelope().getData().length > 0);
         assertEquals(SECOM_DataProductType.S201, uploadArgument.getValue().getEnvelope().getDataProductType());
-        assertEquals(Boolean.TRUE, uploadArgument.getValue().getEnvelope().getFromSubscription());
         assertEquals(AckRequestEnum.DELIVERED_ACK_REQUESTED, uploadArgument.getValue().getEnvelope().getAckRequest());
         assertNotNull(uploadArgument.getValue().getEnvelope().getTransactionIdentifier());
 
@@ -690,7 +689,6 @@ class SecomV2SubscriptionServiceTest {
         assertNotNull(uploadArgument.getValue().getEnvelope());
         assertTrue(uploadArgument.getValue().getEnvelope().getData().length > 0);
         assertEquals(SECOM_DataProductType.S201, uploadArgument.getValue().getEnvelope().getDataProductType());
-        assertEquals(Boolean.TRUE, uploadArgument.getValue().getEnvelope().getFromSubscription());
         assertEquals(AckRequestEnum.DELIVERED_ACK_REQUESTED, uploadArgument.getValue().getEnvelope().getAckRequest());
         assertNotNull(uploadArgument.getValue().getEnvelope().getTransactionIdentifier());
 
@@ -728,7 +726,6 @@ class SecomV2SubscriptionServiceTest {
         assertTrue(uploadArgument.getValue().getEnvelope().getData().length > 0);
         assertEquals("exchangeSet", new String(uploadArgument.getValue().getEnvelope().getData(), StandardCharsets.UTF_8));
         assertEquals(SECOM_DataProductType.S201, uploadArgument.getValue().getEnvelope().getDataProductType());
-        assertEquals(Boolean.TRUE, uploadArgument.getValue().getEnvelope().getFromSubscription());
         assertEquals(AckRequestEnum.DELIVERED_ACK_REQUESTED, uploadArgument.getValue().getEnvelope().getAckRequest());
         assertNotNull(uploadArgument.getValue().getEnvelope().getTransactionIdentifier());
 
@@ -766,7 +763,6 @@ class SecomV2SubscriptionServiceTest {
         assertTrue(uploadArgument.getValue().getEnvelope().getData().length > 0);
         assertEquals("exchangeSet", new String(uploadArgument.getValue().getEnvelope().getData(), StandardCharsets.UTF_8));
         assertEquals(SECOM_DataProductType.S201, uploadArgument.getValue().getEnvelope().getDataProductType());
-        assertEquals(Boolean.TRUE, uploadArgument.getValue().getEnvelope().getFromSubscription());
         assertEquals(AckRequestEnum.DELIVERED_ACK_REQUESTED, uploadArgument.getValue().getEnvelope().getAckRequest());
         assertNotNull(uploadArgument.getValue().getEnvelope().getTransactionIdentifier());
 

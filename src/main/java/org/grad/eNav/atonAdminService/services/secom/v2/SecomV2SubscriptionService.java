@@ -449,7 +449,6 @@ public class SecomV2SubscriptionService implements MessageHandler {
         // Build the data envelope
         EnvelopeUploadObject envelopeUploadObject = new EnvelopeUploadObject();
         envelopeUploadObject.setDataProductType(SECOM_DataProductType.S201);
-        envelopeUploadObject.setFromSubscription(true);
         envelopeUploadObject.setAckRequest(AckRequestEnum.DELIVERED_ACK_REQUESTED);
         envelopeUploadObject.setTransactionIdentifier(UUID.randomUUID());
 

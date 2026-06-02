@@ -18,7 +18,7 @@ package org.grad.eNav.atonAdminService.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Should be implemented by value objects that will be serialized as JSON.
