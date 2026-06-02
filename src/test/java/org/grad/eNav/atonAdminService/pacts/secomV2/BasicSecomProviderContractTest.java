@@ -71,6 +71,8 @@ public class BasicSecomProviderContractTest implements
         CapabilitySecomControllerTestInterface,
         GetSummarySecomControllerTestInterface,
         GetSecomControllerTestInterface,
+        PostGetSummarySecomV2ControllerTestInterface,
+        PostGetSecomV2ControllerTestInterface,
         AcknowledgementSecomControllerTestInterface,
         SubscriptionSecomControllerTestInterface,
         RemoveSubscriptionSecomControllerTestInterface
