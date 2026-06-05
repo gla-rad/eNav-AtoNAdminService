@@ -17,7 +17,9 @@
 package org.grad.eNav.atonAdminService.services.secom.v2;
 
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.EnvelopeSearchResultObject;
 import org.grad.secomv2.core.models.ResponseSearchObject;
+import org.grad.secomv2.core.models.SearchResult;
 import org.grad.secomv2.core.models.ServiceInstanceObject;
 import org.grad.secomv2.springboot3.components.SecomClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +58,7 @@ class SecomV2ServiceTest {
     SecomClient discoveryService;
 
     // Test Variables
-    ResponseSearchObject responseSearchObject;
+    SearchResult searchResult;
     List<ServiceInstanceObject> instances;
 
     /**
@@ -77,8 +79,10 @@ class SecomV2ServiceTest {
         this.instances = Arrays.asList(serviceInstanceObject1, serviceInstanceObject2);
 
         // Create the response search object
-        this.responseSearchObject = new ResponseSearchObject();
-        this.responseSearchObject.setSearchServiceResult(this.instances);
+        this.searchResult = new SearchResult();
+        EnvelopeSearchResultObject envelopeSearchResultObject = new EnvelopeSearchResultObject();
+        envelopeSearchResultObject.setServiceInstance(this.instances);
+        this.searchResult.setEnvelope(envelopeSearchResultObject);
     }
 
     /**
@@ -116,7 +120,7 @@ class SecomV2ServiceTest {
     void testGetClient() {
         // And mock a SECOM discovery service client
         this.secomV2Service.discoveryService = mock(SecomClient.class);
-        doReturn(Optional.of(this.responseSearchObject)).when(this.secomV2Service.discoveryService).searchService(any(), any(), any());
+        doReturn(Optional.of(this.searchResult)).when(this.secomV2Service.discoveryService).searchService(any());
 
         // Perform the service call
         SecomClient result = this.secomV2Service.getClient("urn:mrn:org:test");
@@ -149,11 +153,11 @@ class SecomV2ServiceTest {
     @Test
     void testGetClientWithBrokenUrl() {
         // Break the URL of the latest instance
-        this.responseSearchObject.getSearchServiceResult().get(1).setEndpointUri("a broken URL");
+        this.searchResult.getEnvelope().getServiceInstance().get(1).setEndpointUri("a broken URL");
 
         // And mock a SECOM discovery service client
         this.secomV2Service.discoveryService = mock(SecomClient.class);
-        doReturn(Optional.of(this.responseSearchObject)).when(this.secomV2Service.discoveryService).searchService(any(), any(), any());
+        doReturn(Optional.of(this.searchResult)).when(this.secomV2Service.discoveryService).searchService(any());
 
         // Perform the service call
         assertThrows(SecomValidationException.class, () -> this.secomV2Service.getClient("urn:mrn:org:test"));

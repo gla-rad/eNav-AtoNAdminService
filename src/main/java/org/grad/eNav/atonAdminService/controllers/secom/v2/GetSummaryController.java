@@ -32,6 +32,7 @@ import org.grad.eNav.atonAdminService.services.DatasetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.eNav.atonAdminService.utils.GeometryUtils;
 import org.grad.eNav.atonAdminService.utils.WKTUtils;
+import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.interfaces.GetSummaryServiceInterface;
 import org.grad.secomv2.core.models.GetSummaryResponseObject;
 import org.grad.secomv2.core.models.PaginationObject;
@@ -103,14 +104,14 @@ public class GetSummaryController implements GetSummaryServiceInterface {
      */
     @Tag(name = "SECOM")
     @Transactional
-    public GetSummaryResponseObject getSummary(@QueryParam("containerType") @Parameter(schema = @Schema(description = "Data Type requested")) ContainerTypeEnum containerType,
-                                               @QueryParam("dataProductType") @Parameter(schema = @Schema(description = "Data product type name See: https://registry.iho.int/productspec/list.do (column 'Product ID')")) SECOM_DataProductType dataProductType,
+    public GetSummaryResponseObject getSummary(@QueryParam("containerType") @Parameter(schema = @Schema(description = "Data Type requested")) @SecomV2Param ContainerTypeEnum containerType,
+                                               @QueryParam("dataProductType") @Parameter(schema = @Schema(description = "Data product type name See: https://registry.iho.int/productspec/list.do (column 'Product ID')")) @SecomV2Param SECOM_DataProductType dataProductType,
                                                @QueryParam("productVersion") @Parameter(schema = @Schema(description = "S-100 based Product specification version")) String productVersion,
                                                @QueryParam("geometry") @Parameter(schema = @Schema(description = "Geometry condition for geo-located information objects as WKT LineString or Polygon")) String geometry,
-                                               @QueryParam("unlocode") @Parameter(schema = @Schema(description = "See UN web page")) @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") String unlocode,
-                                               @QueryParam("validFrom") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) Instant validFrom,
-                                               @QueryParam("validTo") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) Instant validTo,
-                                               @QueryParam("page") @Min(1) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 0..", defaultValue = "0")) Integer page,
+                                               @QueryParam("unlocode") @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") @Parameter(schema = @Schema(description = "See UN web page")) String unlocode,
+                                               @QueryParam("validFrom") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) @SecomV2Param Instant validFrom,
+                                               @QueryParam("validTo") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) @SecomV2Param Instant validTo,
+                                               @QueryParam("page") @Min(1) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 1..", defaultValue = "1")) Integer page,
                                                @QueryParam("pageSize") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page size. Must be a positive integer >= 0.", defaultValue = "100")) Integer pageSize) {
         log.debug("SECOM request to get page of Dataset Summary");
         Optional.ofNullable(containerType).ifPresent(v -> log.debug("Container Type specified as: {}", containerType));
@@ -188,7 +189,7 @@ public class GetSummaryController implements GetSummaryServiceInterface {
 
         // Start building the response
         final GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
-        getSummaryResponseObject.setInformationSummaryObject(summaryObjectList);
+        getSummaryResponseObject.setSummaryObject(summaryObjectList);
         getSummaryResponseObject.setPagination(new PaginationObject(
                 summaryObjectList.size(),
                 Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)));

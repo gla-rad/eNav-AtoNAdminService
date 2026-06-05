@@ -44,7 +44,7 @@ public class PingController implements PingServiceInterface {
     public PingResponseObject ping() {
 
         PingResponseObject pingResponseObject = new PingResponseObject();
-        pingResponseObject.setLastPrivateInteractionTime(Instant.now());
+        pingResponseObject.setTimestamp(Instant.now());
         log.debug("PingSecomController called");
         return pingResponseObject;
 

@@ -305,42 +305,42 @@ class SecomV2ControllerTest {
                 .when(this.datasetService).findAll(any(), any(), any(), any(), any(), any());
 
          webTestClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/api/secom" + GET_SUMMARY_INTERFACE_PATH)
-                        .queryParam("containerType", this.queryContainerType.getValue())
-                        .queryParam("dataProductType", this.queryDataProductType.getValue())
-                        .queryParam("productVersion", this.queryProductVersion)
-                        .queryParam("geometry", this.queryGeometry)
-                        .queryParam("unlocode", this.queryUnlocode)
-                        .queryParam("validFrom", DateTimeFormatter.ofPattern(SECOM_DATE_TIME_FORMAT).format(this.queryValidFrom))
-                        .queryParam("validTo", DateTimeFormatter.ofPattern(SECOM_DATE_TIME_FORMAT).format(this.queryValidTo))
-                        .queryParam("page", this.queryPage)
-                        .queryParam("pageSize", this.queryPageSize)
-                        .build())
-                .header(SecomRequestHeaders.MRN_HEADER, "mrn")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(GetSummaryResponseObject.class)
-                .consumeWith(response -> {
-                    GetSummaryResponseObject getSummaryResponseObject = response.getResponseBody();
-                    assertNotNull(getSummaryResponseObject);
-                    assertNotNull(getSummaryResponseObject.getInformationSummaryObject());
-                    assertEquals(1, getSummaryResponseObject.getInformationSummaryObject().size());
-                    assertEquals(ContainerTypeEnum.S100_DataSet, getSummaryResponseObject.getInformationSummaryObject().getFirst().getContainerType());
-                    assertEquals(SECOM_DataProductType.S201, getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataProductType());
-                    assertEquals(Boolean.FALSE, getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataCompression());
-                    assertEquals(Boolean.FALSE, getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataProtection());
-                    assertEquals(this.s201DataSet.getUuid(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataReference());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getProductEdition(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_productVersion());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetFileIdentifier(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_identifier());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetTitle(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_name());
-                    assertEquals(InfoStatusEnum.PRESENT.getValue(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_status());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetAbstract(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_description());
-                    assertEquals(this.s201DataSet.getLastUpdatedAt(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_lastModifiedDate());
-                    assertNotNull(getSummaryResponseObject.getPagination());
-                    assertEquals(Integer.MAX_VALUE, getSummaryResponseObject.getPagination().getMaxItemsPerPage());
-                    assertEquals(1, getSummaryResponseObject.getPagination().getTotalItems());
-                });
+                 .uri(uriBuilder -> uriBuilder
+                         .path("/api/secom" + GET_SUMMARY_INTERFACE_PATH)
+                         .queryParam("containerType", this.queryContainerType.getValue())
+                         .queryParam("dataProductType", this.queryDataProductType.getValue())
+                         .queryParam("productVersion", this.queryProductVersion)
+                         .queryParam("geometry", this.queryGeometry)
+                         .queryParam("unlocode", this.queryUnlocode)
+                         .queryParam("validFrom", DateTimeFormatter.ofPattern(SECOM_DATE_TIME_FORMAT).format(this.queryValidFrom))
+                         .queryParam("validTo", DateTimeFormatter.ofPattern(SECOM_DATE_TIME_FORMAT).format(this.queryValidTo))
+                         .queryParam("page", this.queryPage)
+                         .queryParam("pageSize", this.queryPageSize)
+                         .build())
+                 .header(SecomRequestHeaders.MRN_HEADER, "mrn")
+                 .exchange()
+                 .expectStatus().isOk()
+                 .expectBody(GetSummaryResponseObject.class)
+                 .consumeWith(response -> {
+                     GetSummaryResponseObject getSummaryResponseObject = response.getResponseBody();
+                     assertNotNull(getSummaryResponseObject);
+                     assertNotNull(getSummaryResponseObject.getSummaryObject());
+                     assertEquals(1, getSummaryResponseObject.getSummaryObject().size());
+                     assertEquals(ContainerTypeEnum.S100_DataSet, getSummaryResponseObject.getSummaryObject().getFirst().getContainerType());
+                     assertEquals(SECOM_DataProductType.S201, getSummaryResponseObject.getSummaryObject().getFirst().getDataProductType());
+                     assertEquals(Boolean.FALSE, getSummaryResponseObject.getSummaryObject().getFirst().getDataCompression());
+                     assertEquals(Boolean.FALSE, getSummaryResponseObject.getSummaryObject().getFirst().getDataProtection());
+                     assertEquals(this.s201DataSet.getUuid(), getSummaryResponseObject.getSummaryObject().getFirst().getDataReference());
+                     assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getProductEdition(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_productVersion());
+                     assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetFileIdentifier(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_identifier());
+                     assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetTitle(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_name());
+                     assertEquals(InfoStatusEnum.PRESENT.getValue(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_status());
+                     assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetAbstract(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_description());
+                     assertEquals(this.s201DataSet.getLastUpdatedAt(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_lastModifiedDate());
+                     assertNotNull(getSummaryResponseObject.getPagination());
+                     assertEquals(Integer.MAX_VALUE, getSummaryResponseObject.getPagination().getMaxItemsPerPage());
+                     assertEquals(1, getSummaryResponseObject.getPagination().getTotalItems());
+                 });
     }
 
     /**

@@ -85,12 +85,16 @@ public class SecomV2SignatureProviderImpl implements SecomSignatureProvider {
      * provided digital signature certificate information.
      *
      * @param signatureCertificate  The digital signature certificate to be used for the signature generation
-     * @param algorithm             The algorithm to be used for the signature generation
      * @param payload               The payload to be signed, (preferably Base64 encoded)
      * @return The signature generated
      */
     @Override
-    public byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload) {
+    public byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, byte[] payload) {
+        // Get the signing certificate signature algorithm, falling back to the provider default if unrecognised
+        DigitalSignatureAlgorithmEnum algorithm = Optional.ofNullable(
+                        DigitalSignatureAlgorithmEnum.fromValue(signatureCertificate.getCertificate()[0].getSigAlgName()))
+                .orElseGet(this::getSignatureAlgorithm);
+
         // Get the signature generated from cKeeper
         final Response response = this.cKeeperClient.generateCertificateSignature(
                 new BigInteger(signatureCertificate.getCertificateAlias()[0]),
@@ -117,13 +121,12 @@ public class SecomV2SignatureProviderImpl implements SecomSignatureProvider {
      * to validate the content against.
      *
      * @param signatureCertificates The digital signature certificates to be used for the signature generation
-     * @param algorithm             The algorithm used for the signature generation
      * @param content               The context (in Base64 format) to be validated
      * @param signature             The signature to validate the context against
      * @return whether the signature validation was successful or not
      */
     @Override
-    public boolean validateSignature(String[] signatureCertificates, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content) {
+    public boolean validateSignature(String[] signatureCertificates, byte[] signature, byte[] content) {
         // Get the X.509 certificate from the request
         X509Certificate[] certificate = null;
         try {
@@ -143,6 +146,13 @@ public class SecomV2SignatureProviderImpl implements SecomSignatureProvider {
                 .map(IETFUtils::valueToString)
                 .findFirst()
                 .orElse(null);
+
+        // Get the signing certificate signature algorithm, falling back to the provider default if unrecognised
+        DigitalSignatureAlgorithmEnum algorithm = Stream.of(certificate)
+                .map(X509Certificate::getSigAlgName)
+                .findFirst()
+                .map(DigitalSignatureAlgorithmEnum::fromValue)
+                .orElse(getSignatureAlgorithm());
 
         // Construct the signature verification object
         final SignatureVerificationRequestDto verificationRequest = new SignatureVerificationRequestDto();

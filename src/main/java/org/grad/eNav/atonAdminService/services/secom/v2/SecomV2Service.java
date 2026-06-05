@@ -134,8 +134,9 @@ public class SecomV2Service {
 
         // Lookup the endpoints of the clients from the SECOM discovery service
         final List<ServiceInstanceObject> instances = Optional.ofNullable(this.discoveryService)
-                .flatMap(ds -> ds.searchService(searchFilterObject, 0, Integer.MAX_VALUE))
-                .map(ResponseSearchObject::getSearchServiceResult)
+                .flatMap(ds -> ds.searchService(searchFilterObject))
+                .map(SearchResult::getEnvelope)
+                .map(EnvelopeSearchResultObject::getServiceInstance)
                 .orElse(Collections.emptyList());
 
         // Extract the latest matching instance
