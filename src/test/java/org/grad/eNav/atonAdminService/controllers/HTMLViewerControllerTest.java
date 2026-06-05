@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.controllers;
 
+import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.models.domain.s100.ServiceInformationConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @EnableConfigurationProperties(value = ServiceInformationConfig.class)
 @WebMvcTest(controllers = HTMLViewerController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class})
+@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class HTMLViewerControllerTest {
 
     /**

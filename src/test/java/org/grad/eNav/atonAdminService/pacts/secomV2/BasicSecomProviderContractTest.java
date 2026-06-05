@@ -22,7 +22,7 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import org.grad.eNav.atonAdminService.TestSecurityConfig;
+import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.feign.CKeeperClient;
 import org.grad.eNav.atonAdminService.services.DatasetService;
@@ -62,7 +62,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration(exclude = {OAuth2ClientWebSecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class, TestSecurityConfig.class})
+@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 @IgnoreNoPactsToVerify
 @PactBroker
 @Provider("SecomV2Service")

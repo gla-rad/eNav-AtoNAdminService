@@ -27,7 +27,10 @@ import org.grad.eNav.atonAdminService.models.dtos.DatasetContentLogDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.AidsToNavigationDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.S201DataSetDto;
 import org.grad.eNav.atonAdminService.models.dtos.secom.SubscriptionRequestDto;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.cloud.openfeign.support.PageJacksonModule;
+import org.springframework.cloud.openfeign.support.SortJacksonModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -115,6 +118,18 @@ public class TestingConfiguration {
 	@Bean
 	DataStore gsDataStore() {
 		return mock(DataStore.class);
+	}
+
+	/**
+	 * Registers PageJacksonModule and SortJacksonModule with the shared
+	 * ObjectMapper so tests can deserialise Spring Data Page responses
+	 * without creating a local mapper each time.
+	 */
+	@Bean
+	public JsonMapperBuilderCustomizer addPageJacksonModules() {
+		return builder -> builder
+				.addModule(new PageJacksonModule())
+				.addModule(new SortJacksonModule());
 	}
 
 }

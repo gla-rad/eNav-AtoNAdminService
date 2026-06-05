@@ -19,7 +19,7 @@ package org.grad.eNav.atonAdminService.controllers.secom.v2;
 import _int.iho.s_201.gml.cs0._2.Dataset;
 import jakarta.xml.bind.DatatypeConverter;
 import jakarta.xml.bind.JAXBException;
-import org.grad.eNav.atonAdminService.TestSecurityConfig;
+import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.components.SecomV2CertificateProviderImpl;
 import org.grad.eNav.atonAdminService.components.SecomV2SignatureProviderImpl;
@@ -49,7 +49,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
@@ -94,9 +94,9 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {OAuth2ClientWebSecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 @AutoConfigureWebTestClient
-@Import({TestingConfiguration.class, TestSecurityConfig.class})
+@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class SecomV2ControllerTest {
 
     /**

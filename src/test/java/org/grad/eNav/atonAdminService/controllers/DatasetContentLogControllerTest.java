@@ -16,10 +16,10 @@
 
 package org.grad.eNav.atonAdminService.controllers;
 
+import org.grad.eNav.atonAdminService.TestingConfiguration;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.json.JsonMapper;
-import org.grad.eNav.atonAdminService.TestingConfiguration;
+import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContentLog;
 import org.grad.eNav.atonAdminService.models.dtos.DatasetContentLogDto;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.*;
@@ -35,8 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.cloud.openfeign.support.PageJacksonModule;
-import org.springframework.cloud.openfeign.support.SortJacksonModule;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -63,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = DatasetContentLogController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class})
+@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class DatasetContentLogControllerTest {
 
     /**
@@ -192,8 +190,7 @@ class DatasetContentLogControllerTest {
                 .andReturn();
 
         // Parse and validate the response
-        ObjectMapper pageMapper = JsonMapper.builder().addModule(new PageJacksonModule()).addModule(new SortJacksonModule()).build();
-        Page<DatasetContentLogDto> result = pageMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
+        Page<DatasetContentLogDto> result = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
         assertEquals(page.getSize(), result.getContent().size());
 
         // Validate the entries one by one

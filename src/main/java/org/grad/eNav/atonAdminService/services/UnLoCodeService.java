@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.services;
 
+import com.fasterxml.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +63,7 @@ public class UnLoCodeService {
         InputStream s = this.getClass().getClassLoader().getResourceAsStream("UnLoCodeLists.json");
         try {
             this.loadUnLoCodeMapping(s);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             log.error(e.getMessage());
         }
     }
@@ -83,9 +84,9 @@ public class UnLoCodeService {
     /**
      * Fetch lat/lon from json mapping file and populate coverage geometry with it as point
      *
-     * @throws Exception if the unLoCode mapping file could not be found
+     * @throws JacksonException if the unLoCode mapping file could not be found
      */
-    private void loadUnLoCodeMapping(InputStream inStream) throws IOException {
+    private void loadUnLoCodeMapping(InputStream inStream) throws JacksonException {
         this.UnLoCodeMap.clear();
         final JsonNode unLoCodeJson = this.objectMapper.readTree(inStream);
         for (JsonNode entry : unLoCodeJson) {
@@ -93,31 +94,31 @@ public class UnLoCodeService {
             unLoCode.setLatitude(INVALID_COORDINATE);
             unLoCode.setLongitude(INVALID_COORDINATE);
             try {
-                String country = entry.get(JSON_KEY_COUNTRY).textValue();
-                String location = entry.get(JSON_KEY_LOCATION).textValue();
-                String coordinatesCombined = entry.get(JSON_KEY_COORDINATES).textValue();
+                String country = entry.get(JSON_KEY_COUNTRY).stringValue();
+                String location = entry.get(JSON_KEY_LOCATION).stringValue();
+                String coordinatesCombined = entry.get(JSON_KEY_COORDINATES).stringValue();
                 //coordinates are given in the form of "DDMM[N/S] DDDMM[W/E]"
                 if (StringUtils.isNotBlank(coordinatesCombined)) {
                     coordinatesCombined = coordinatesCombined.trim();
-                    if (coordinatesCombined.length() > 0) {
+                    if (!coordinatesCombined.isEmpty()) {
                         String[] c = coordinatesCombined.split("\\s");
                         String latDegrees = c[0].substring(0, 2);
                         String latMinutes = c[0].substring(2, 4);
                         String latDirection = c[0].substring(4, 5);
                         unLoCode.setLatitude(Double.parseDouble(latDegrees + "." + latMinutes));
-                        if (latDirection == "S") {
+                        if (latDirection.equals("S")) {
                             unLoCode.setLatitude(-unLoCode.getLatitude());
                         }
                         String lonDegrees = c[1].substring(0, 3);
                         String lonMinutes = c[1].substring(3, 5);
                         String lonDirection = c[1].substring(5, 6);
                         unLoCode.setLongitude(Double.parseDouble(lonDegrees + "." + lonMinutes));
-                        if (lonDirection == "W") {
+                        if (lonDirection.equals("W")) {
                             unLoCode.setLongitude(-unLoCode.getLongitude());
                         }
                     }
                 }
-                String status = entry.get("Status").textValue();
+                String status = entry.get("Status").stringValue();
 
                 unLoCode.setStatus(status);
                 if (unLoCode.getLatitude() != INVALID_COORDINATE && unLoCode.getLongitude() != INVALID_COORDINATE) {

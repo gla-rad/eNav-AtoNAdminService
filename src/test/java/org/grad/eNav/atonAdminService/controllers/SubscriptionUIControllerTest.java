@@ -16,9 +16,10 @@
 
 package org.grad.eNav.atonAdminService.controllers;
 
+import org.grad.eNav.atonAdminService.TestingConfiguration;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
-import org.grad.eNav.atonAdminService.TestingConfiguration;
+import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.*;
 import org.grad.eNav.atonAdminService.models.dtos.secom.SubscriptionRequestDto;
@@ -32,7 +33,6 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
-import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
@@ -58,8 +58,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@WebMvcTest(controllers = SubscriptionUIController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
-@Import({TestingConfiguration.class})
+@WebMvcTest(controllers = SubscriptionUIController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
+@Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class SubscriptionUIControllerTest {
 
     /**

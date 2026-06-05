@@ -34,7 +34,7 @@ import java.math.BigInteger;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Component
-@FeignClient(name = "ckeeper", configuration = FeignClientConfig.class)
+@FeignClient(name = "ckeeper", /*url = "https://rnavlab.gla-rad.org/enav/ckeeper/",*/ configuration = FeignClientConfig.class)
 public interface CKeeperClient {
 
     @Cacheable(value = "secomCertCache", key="#entityName")

@@ -18,24 +18,31 @@ package org.grad.eNav.atonAdminService;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.mockito.Mockito.mock;
+
 /**
- * A permissive security configuration for full SpringBootTest integration tests.
- * Permits all requests so tests can exercise endpoints without authentication.
- * Import this alongside TestingConfiguration in @SpringBootTest classes.
+ * This is a test configuration for implementing some Feign required security
+ * mocks. Use wisely...
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @TestConfiguration
-public class TestSecurityConfig {
+public class TestFeignSecurityConfig {
 
+    /**
+     * Provides a stub SecurityFilterChain so that
+     * OAuth2ClientWebSecurityAutoConfiguration.OAuth2SecurityFilterChainConfiguration
+     * (which is conditional on no SecurityFilterChain bean being present) is
+     * suppressed. Without this, test contexts that exclude SecurityAutoConfiguration
+     * but include OAuth2 client auto-configuration fail because
+     * oauth2SecurityFilterChain requires an HttpSecurity prototype that is not
+     * available when no @EnableWebSecurity is active.
+     */
     @Bean
-    SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .build();
+    public SecurityFilterChain mockSecurityFilterChain() {
+        return mock(SecurityFilterChain.class);
     }
 
 }
