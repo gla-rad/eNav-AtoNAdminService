@@ -205,8 +205,7 @@ class AidsToNavigationControllerTest {
                 .andReturn();
 
         // Parse and validate the response
-        ObjectMapper pageMapper = JsonMapper.builder().addModule(new PageJacksonModule()).addModule(new SortJacksonModule()).build();
-        Page<AidsToNavigationDto> result = pageMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
+        Page<AidsToNavigationDto> result = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {});
         assertEquals(page.getSize(), result.getContent().size());
 
         // Validate the entries one by one

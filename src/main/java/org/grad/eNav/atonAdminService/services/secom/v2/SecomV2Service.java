@@ -133,8 +133,6 @@ public class SecomV2Service {
         searchFilterObject.setEnvelope(envelopeSearchFilterObject);
 
         // Lookup the endpoints of the clients from the SECOM discovery service
-        // Note: SecomClient.searchService() is declared Optional<SearchResult> but the library
-        // actually returns ResponseSearchObject at runtime — cast via Object to bridge the mismatch.
         final List<ServiceInstanceObject> instances = Optional.ofNullable(this.discoveryService)
                 .flatMap(ds -> ds.searchService(searchFilterObject))
                 .map(SearchResult::getEnvelope)

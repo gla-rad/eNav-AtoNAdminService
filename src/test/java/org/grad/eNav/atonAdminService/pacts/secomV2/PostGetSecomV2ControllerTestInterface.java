@@ -76,6 +76,13 @@ public interface PostGetSecomV2ControllerTestInterface {
     DatasetService getDatasetService();
 
     /**
+     * Provides the mocked S100 exchange set service to the tests.
+     *
+     * @return the mocked S100ExchangeSetService
+     */
+    S100ExchangeSetService getS100ExchangeSetService();
+
+    /**
      * Provides the mocked UnLoCode service to the tests.
      *
      * @return the mocked UnLoCode service
@@ -111,6 +118,9 @@ public interface PostGetSecomV2ControllerTestInterface {
         doReturn(new PageImpl<>(Collections.singletonList(s201Dataset), Pageable.ofSize(1), 1))
                 .when(this.getDatasetService())
                 .findAll(any(), any(), any(), any(), any(), any());
+        doReturn("exampleofbase64encodeddata".getBytes())
+                .when(this.getS100ExchangeSetService())
+                .packageToExchangeSet(any(), any(), any());
 
         // Mock the cKeeper client behaviour
         final SignatureCertificateDto signatureCertificateDto = new SignatureCertificateDto();
@@ -134,7 +144,7 @@ public interface PostGetSecomV2ControllerTestInterface {
                 .generateCertificateSignature(any(), any(), any());
 
         // And proceed with the testing
-        System.out.println("Service now checking the get summary interface with " + data);
+        System.out.println("Service now checking the get POST interface with " + data);
     }
 
 }

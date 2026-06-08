@@ -84,7 +84,7 @@ public interface PostGetSummarySecomV2ControllerTestInterface {
                 .findAll(any(), any(), any(), any(), any(), any());
 
         // And proceed with the testing
-        System.out.println("Service now checking the get summary interface with " + data);
+        System.out.println("Service now checking the get summary POST interface with " + data);
     }
 
 }

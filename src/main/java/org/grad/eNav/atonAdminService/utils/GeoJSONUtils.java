@@ -82,7 +82,7 @@ public class GeoJSONUtils {
         ObjectMapper om = new ObjectMapper();
         try {
             return om.readTree(new GeoJsonWriter().write(point));
-        } catch (Exception e) {
+        } catch (JacksonException e) {
             return null;
         }
     }

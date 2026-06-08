@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @EnableConfigurationProperties(value = ServiceInformationConfig.class)
-@WebMvcTest(controllers = HTMLViewerController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
+@WebMvcTest(controllers = HTMLViewerController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class HTMLViewerControllerTest {
 

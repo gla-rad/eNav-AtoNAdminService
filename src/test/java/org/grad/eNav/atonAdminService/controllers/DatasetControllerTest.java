@@ -57,7 +57,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = DatasetController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientWebSecurityAutoConfiguration.class})
+@WebMvcTest(controllers = DatasetController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class DatasetControllerTest {
 

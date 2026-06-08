@@ -57,7 +57,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
 @WebMvcTest(controllers = SubscriptionUIController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class SubscriptionUIControllerTest {

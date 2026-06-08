@@ -16,6 +16,7 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import org.locationtech.jts.geom.Geometry;
@@ -47,7 +48,7 @@ public class GeometryJSONConverter {
         try {
             JsonNode node = om.readTree(new GeoJsonWriter().write(geometry));
             return node;
-        } catch (Exception e) {
+        } catch (JacksonException e) {
             return om.createObjectNode();
         }
     }

@@ -22,10 +22,13 @@ import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvide
 import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
+import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.feign.CKeeperClient;
 import org.grad.eNav.atonAdminService.services.DatasetService;
+import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.grad.secomv2.core.components.SecomSignatureAdvice;
@@ -61,7 +64,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = {OAuth2ClientWebSecurityAutoConfiguration.class})
+@EnableAutoConfiguration
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 @IgnoreNoPactsToVerify
 @PactBroker
@@ -110,6 +113,12 @@ public class BasicSecomProviderContractTest implements
     DatasetService datasetService;
 
     /**
+     * The S100 Exchange Set Service mock.
+     */
+    @MockitoBean
+    S100ExchangeSetService s100ExchangeSetService;
+
+    /**
      * The UnLoCodeService Service mock.
      */
     @MockitoBean
@@ -130,13 +139,23 @@ public class BasicSecomProviderContractTest implements
     }
 
     /**
+     * Helper method to select the latest version of the pacts
+     * instead of the last ones published from the master branch
+     *
+     * @return SelectorBuilder which defaults to the latest pacts
+     */
+    @PactBrokerConsumerVersionSelectors
+    public static SelectorBuilder consumerVersionSelectors() {
+        return new SelectorBuilder().selector(null, true, null, null);
+    }
+
+    /**
      * Establish the appropriate target to run the pact testing on.
      *
      * @param context the pact testing verification context
      */
     @BeforeEach
     void setupTestTarget(PactVerificationContext context) {
-        if (context == null) return;
         context.setTarget(new HttpTestTarget("localhost", this.serverPort, "/api/secom"));
     }
 
@@ -150,7 +169,6 @@ public class BasicSecomProviderContractTest implements
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
-        if (context == null) return;
         context.verifyInteraction();
     }
 
@@ -182,6 +200,16 @@ public class BasicSecomProviderContractTest implements
     @Override
     public DatasetService getDatasetService() {
         return this.datasetService;
+    }
+
+    /**
+     * Implements the method for returning the mocked S100 Exchange Set service.
+     *
+     * @return the mocked S100ExchangeSetService
+     */
+    @Override
+    public S100ExchangeSetService getS100ExchangeSetService() {
+        return this.s100ExchangeSetService;
     }
 
     /**
