@@ -28,11 +28,11 @@ public class Bridle extends AidsToNavigation {
     private GenericBuoy bridleHolds;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "swivelHolds", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "swivelHolds", cascade = CascadeType.REMOVE)
     private Swivel bridleHangs;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "cableHoldsBridle", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cableHoldsBridle", cascade = CascadeType.REMOVE)
     final private Set<CableSubmarine> bridleAttacheds = new HashSet<>();
 
     /**

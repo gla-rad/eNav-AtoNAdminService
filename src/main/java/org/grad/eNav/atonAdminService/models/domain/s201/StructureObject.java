@@ -62,7 +62,7 @@ public abstract class StructureObject extends AidsToNavigation {
     final private Set<PositioningInformation> positioningMethods = new HashSet<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     final private Set<Equipment> children = new HashSet<>();
 
     /**

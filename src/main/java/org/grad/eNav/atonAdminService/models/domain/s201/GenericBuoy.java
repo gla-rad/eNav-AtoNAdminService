@@ -69,7 +69,7 @@ public abstract class GenericBuoy extends StructureObject {
     private BigDecimal verticalAccuracy;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "buoyPart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "buoyPart", cascade = CascadeType.ALL)
     private final Set<Topmark> topmarkParts = new HashSet<>();
 
     @JsonManagedReference
