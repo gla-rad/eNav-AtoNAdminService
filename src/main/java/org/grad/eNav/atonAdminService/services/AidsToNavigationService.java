@@ -255,6 +255,48 @@ public class AidsToNavigationService {
                                 .forEach(this::delete);
                     }
 
+                    // For generic buoys, we also need to delete all removed connected entries
+                    if(aton instanceof GenericBuoy buoy) {
+                        // Get all the topmark parts of the updated entry
+                        final Set<String> topmarkIdsCodes = ((GenericBuoy)aidsToNavigation).getTopmarkParts()
+                                .stream()
+                                .map(Topmark::getIdCode)
+                                .collect(Collectors.toSet());
+                        // Now find all topmark parts from the old entry that are not included and delete them
+                        buoy.getTopmarkParts()
+                                .stream()
+                                .filter(topmark -> !topmarkIdsCodes.contains(topmark.getIdCode()))
+                                .map(Topmark::getId)
+                                .forEach(this::delete);
+
+                        // Delete the previously connected shackle if it is no longer connected
+                        final String shackleIdCode = Optional.ofNullable(((GenericBuoy)aidsToNavigation).getShackleToBuoyConnected())
+                                .map(MooringShackle::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(buoy.getShackleToBuoyConnected())
+                                .filter(shackle -> !Objects.equals(shackle.getIdCode(), shackleIdCode))
+                                .map(MooringShackle::getId)
+                                .ifPresent(this::delete);
+
+                        // Delete the previously hanging bridle if it is no longer connected
+                        final String bridleIdCode = Optional.ofNullable(((GenericBuoy)aidsToNavigation).getBuoyHangs())
+                                .map(Bridle::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(buoy.getBuoyHangs())
+                                .filter(bridle -> !Objects.equals(bridle.getIdCode(), bridleIdCode))
+                                .map(Bridle::getId)
+                                .ifPresent(this::delete);
+
+                        // Delete the previously attached counter weight if it is no longer connected
+                        final String counterWeightIdCode = Optional.ofNullable(((GenericBuoy)aidsToNavigation).getBuoyAttached())
+                                .map(CounterWeight::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(buoy.getBuoyAttached())
+                                .filter(counterWeight -> !Objects.equals(counterWeight.getIdCode(), counterWeightIdCode))
+                                .map(CounterWeight::getId)
+                                .ifPresent(this::delete);
+                    }
+
                     // Re-sure the object ID for sectored light characteristics
                     if(aton instanceof LightSectored light) {
                         // Re-use the existing sector characteristic IDs
