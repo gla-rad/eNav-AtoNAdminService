@@ -16,19 +16,20 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class GeometryJSONDeserializerTest {
 
@@ -71,7 +72,7 @@ class GeometryJSONDeserializerTest {
     void testDeserialize() throws IOException {
         Geometry result = this.deserializer.deserialize(
                 this.objectMapper.createParser(this.jsonNode.toString()),
-                this.objectMapper.getDeserializationContext());
+                this.objectMapper._deserializationContext());
         assertEquals(this.geometry, result);
     }
 
@@ -84,7 +85,7 @@ class GeometryJSONDeserializerTest {
     void testDeserializeError() throws IOException {
         Geometry result = this.deserializer.deserialize(
                 this.objectMapper.createParser("{\"param\":\"value\"}"),
-                this.objectMapper.getDeserializationContext());
+                this.objectMapper._deserializationContext());
         assertNull(result);
     }
 

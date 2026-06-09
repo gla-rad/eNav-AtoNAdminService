@@ -16,8 +16,8 @@
 
 package org.grad.eNav.atonAdminService.components;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.grad.eNav.atonAdminService.exceptions.InvalidRequestException;
 import org.grad.eNav.atonAdminService.utils.GeometryJSONConverter;
 import org.jetbrains.annotations.NotNull;
@@ -56,14 +56,14 @@ public class GeoJsonStringToGeometryConverter implements Converter<String, Geome
     public Geometry convert(@NotNull String value) {
         return Optional.of(value)
                 .map(json -> {
-                try {
-                    return this.objectMapper.readTree(json);
-                } catch (JsonProcessingException ex) {
-                    throw new InvalidRequestException(ex.getMessage());
-                }
-            })
-            .map(GeometryJSONConverter::convertToGeometry)
-            .orElse(null);
+                    try {
+                        return this.objectMapper.readTree(json);
+                    } catch (JacksonException ex) {
+                        throw new InvalidRequestException(ex.getMessage());
+                    }
+                })
+                .map(GeometryJSONConverter::convertToGeometry)
+                .orElse(null);
     }
 
 }

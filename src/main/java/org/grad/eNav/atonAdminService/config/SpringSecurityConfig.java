@@ -21,8 +21,8 @@ import org.grad.eNav.atonAdminService.config.keycloak.KeycloakGrantedAuthorities
 import org.grad.eNav.atonAdminService.config.keycloak.KeycloakJwtAuthenticationConverter;
 import org.grad.eNav.atonAdminService.config.keycloak.KeycloakLogoutHandler;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
-import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.health.actuate.endpoint.HealthEndpoint;
+import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -262,8 +262,7 @@ class SpringSecurityConfig {
         http.headers(headers -> headers
                 .referrerPolicy(referrer -> referrer
                         .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-                )
-        );
+                ));
 
         // Build and return
         return http.cors(AbstractHttpConfigurer::disable).build();

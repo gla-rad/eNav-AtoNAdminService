@@ -18,7 +18,7 @@ package org.grad.eNav.atonAdminService;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 import static org.mockito.Mockito.mock;
 
@@ -32,13 +32,17 @@ import static org.mockito.Mockito.mock;
 public class TestFeignSecurityConfig {
 
     /**
-     * The HTTP Security mock.
-     *
-     * @return the HTTP security mock
+     * Provides a stub SecurityFilterChain so that
+     * OAuth2ClientWebSecurityAutoConfiguration.OAuth2SecurityFilterChainConfiguration
+     * (which is conditional on no SecurityFilterChain bean being present) is
+     * suppressed. Without this, test contexts that exclude SecurityAutoConfiguration
+     * but include OAuth2 client auto-configuration fail because
+     * oauth2SecurityFilterChain requires an HttpSecurity prototype that is not
+     * available when no @EnableWebSecurity is active.
      */
     @Bean
-    HttpSecurity httpSecurity() {
-        return mock(HttpSecurity.class);
+    public SecurityFilterChain mockSecurityFilterChain() {
+        return mock(SecurityFilterChain.class);
     }
 
 }

@@ -21,7 +21,6 @@ import jakarta.xml.bind.DatatypeConverter;
 import jakarta.xml.bind.JAXBException;
 import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
 import org.grad.eNav.atonAdminService.TestingConfiguration;
-import org.grad.eNav.atonAdminService.components.HibernateSearchInit;
 import org.grad.eNav.atonAdminService.components.SecomV2CertificateProviderImpl;
 import org.grad.eNav.atonAdminService.components.SecomV2SignatureProviderImpl;
 import org.grad.eNav.atonAdminService.controllers.secom.SecomRequestHeaders;
@@ -36,7 +35,7 @@ import org.grad.eNav.atonAdminService.utils.S201DatasetBuilder;
 import org.grad.eNav.s201.utils.S201Utils;
 import org.grad.secomv2.core.base.DigitalSignatureCertificate;
 import org.grad.secomv2.core.base.SecomConstants;
-import org.grad.secomv2.core.components.SecomSignatureFilter;
+import org.grad.secomv2.core.components.SecomSignatureAdvice;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.models.enums.*;
@@ -50,8 +49,9 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -95,6 +95,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
+@AutoConfigureWebTestClient
 @Import({TestingConfiguration.class, TestFeignSecurityConfig.class})
 class SecomV2ControllerTest {
 
@@ -154,7 +155,7 @@ class SecomV2ControllerTest {
      * signatures.
      */
     @MockitoBean
-    SecomSignatureFilter secomSignatureFilter;
+    SecomSignatureAdvice secomSignatureFilter;
 
     // Test Variables
     private UUID queryDataReference;
@@ -324,19 +325,19 @@ class SecomV2ControllerTest {
                 .consumeWith(response -> {
                     GetSummaryResponseObject getSummaryResponseObject = response.getResponseBody();
                     assertNotNull(getSummaryResponseObject);
-                    assertNotNull(getSummaryResponseObject.getInformationSummaryObject());
-                    assertEquals(1, getSummaryResponseObject.getInformationSummaryObject().size());
-                    assertEquals(ContainerTypeEnum.S100_DataSet, getSummaryResponseObject.getInformationSummaryObject().getFirst().getContainerType());
-                    assertEquals(SECOM_DataProductType.S201, getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataProductType());
-                    assertEquals(Boolean.FALSE, getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataCompression());
-                    assertEquals(Boolean.FALSE, getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataProtection());
-                    assertEquals(this.s201DataSet.getUuid(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getDataReference());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getProductEdition(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_productVersion());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetFileIdentifier(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_identifier());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetTitle(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_name());
-                    assertEquals(InfoStatusEnum.PRESENT.getValue(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_status());
-                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetAbstract(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_description());
-                    assertEquals(this.s201DataSet.getLastUpdatedAt(), getSummaryResponseObject.getInformationSummaryObject().getFirst().getInfo_lastModifiedDate());
+                    assertNotNull(getSummaryResponseObject.getSummaryObject());
+                    assertEquals(1, getSummaryResponseObject.getSummaryObject().size());
+                    assertEquals(ContainerTypeEnum.S100_DataSet, getSummaryResponseObject.getSummaryObject().getFirst().getContainerType());
+                    assertEquals(SECOM_DataProductType.S201, getSummaryResponseObject.getSummaryObject().getFirst().getDataProductType());
+                    assertEquals(Boolean.FALSE, getSummaryResponseObject.getSummaryObject().getFirst().getDataCompression());
+                    assertEquals(Boolean.FALSE, getSummaryResponseObject.getSummaryObject().getFirst().getDataProtection());
+                    assertEquals(this.s201DataSet.getUuid(), getSummaryResponseObject.getSummaryObject().getFirst().getDataReference());
+                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getProductEdition(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_productVersion());
+                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetFileIdentifier(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_identifier());
+                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetTitle(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_name());
+                    assertEquals(InfoStatusEnum.PRESENT.getValue(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_status());
+                    assertEquals(this.s201DataSet.getDatasetIdentificationInformation().getDatasetAbstract(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_description());
+                    assertEquals(this.s201DataSet.getLastUpdatedAt(), getSummaryResponseObject.getSummaryObject().getFirst().getInfo_lastModifiedDate());
                     assertNotNull(getSummaryResponseObject.getPagination());
                     assertEquals(Integer.MAX_VALUE, getSummaryResponseObject.getPagination().getMaxItemsPerPage());
                     assertEquals(1, getSummaryResponseObject.getPagination().getTotalItems());
@@ -412,6 +413,7 @@ class SecomV2ControllerTest {
         digitalSignatureCertificate.setRootCertificate(mockRootCertificate);
         doReturn(digitalSignatureCertificate).when(this.secomCertificateProvider).getDigitalSignatureCertificate();
         doReturn(DigitalSignatureAlgorithmEnum.SHA3_384_WITH_ECDSA).when(this.secomSignatureProvider).getSignatureAlgorithm();
+        doReturn("signature".getBytes()).when(this.secomSignatureProvider).generateSignature(any(), any());
         doReturn("signature".getBytes()).when(this.secomSignatureProvider).generateSignature(any(), any(), any());
 
         // Mock the rest
@@ -494,6 +496,7 @@ class SecomV2ControllerTest {
         doReturn(digitalSignatureCertificate).when(this.secomCertificateProvider).getDigitalSignatureCertificate();
         doReturn(DigitalSignatureAlgorithmEnum.SHA3_384_WITH_ECDSA).when(this.secomSignatureProvider).getSignatureAlgorithm();
         doReturn("signature".getBytes()).when(this.secomSignatureProvider).generateSignature(any(), any(), any());
+        doReturn("signature".getBytes()).when(this.secomSignatureProvider).generateSignature(any(), any());
 
         // Mock the rest
         doReturn(new PageImpl<>(Collections.singletonList(this.s201DataSet), Pageable.ofSize(this.queryPageSize), 1))
