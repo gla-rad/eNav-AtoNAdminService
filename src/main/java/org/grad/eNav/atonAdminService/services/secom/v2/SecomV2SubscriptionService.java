@@ -47,7 +47,7 @@ import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
-import org.grad.secomv2.springboot3.components.SecomClient;
+import org.grad.secomv2.springboot4.components.SecomClient;
 import org.hibernate.search.backend.lucene.LuceneExtension;
 import org.hibernate.search.backend.lucene.search.sort.dsl.LuceneSearchSortFactory;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
@@ -449,7 +449,6 @@ public class SecomV2SubscriptionService implements MessageHandler {
         // Build the data envelope
         EnvelopeUploadObject envelopeUploadObject = new EnvelopeUploadObject();
         envelopeUploadObject.setDataProductType(SECOM_DataProductType.S201);
-        envelopeUploadObject.setFromSubscription(true);
         envelopeUploadObject.setAckRequest(AckRequestEnum.DELIVERED_ACK_REQUESTED);
         envelopeUploadObject.setTransactionIdentifier(UUID.randomUUID());
 
@@ -537,7 +536,7 @@ public class SecomV2SubscriptionService implements MessageHandler {
         SearchScope<SubscriptionRequest> scope = searchSession.scope( SubscriptionRequest.class );
         return searchSession.search( scope )
                 .where( f -> {
-                    BooleanPredicateClausesStep<?> step = f.bool()
+                    BooleanPredicateClausesStep<?,?> step = f.bool()
                         .must(f.matchAll());
                     step.must(f.match()
                             .field("secomVersion")

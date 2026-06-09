@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2024 GLA Research and Development Directorate
+ * Copyright (c) 2025 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.grad.eNav.atonAdminService.controllers.secom.v2;
 
-package org.grad.eNav.atonAdminService.controllers.secom.v1;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.models.UnLoCodeMapEntry;
@@ -34,13 +29,10 @@ import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.eNav.atonAdminService.utils.GeometryUtils;
 import org.grad.eNav.atonAdminService.utils.WKTUtils;
-import org.grad.secom.core.interfaces.GetSecomInterface;
-import org.grad.secom.core.models.DataResponseObject;
-import org.grad.secom.core.models.GetResponseObject;
-import org.grad.secom.core.models.PaginationObject;
-import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.interfaces.PostGetServiceInterface;
+import org.grad.secomv2.core.models.*;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
@@ -49,26 +41,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
- * The SECOM v1 Get Interface Controller.
+ * The SECOM v2 Get Service Interface Controller.
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
 @Component
-@Path("/")
 @Validated
 @Slf4j
-public class GetSecomController implements GetSecomInterface {
+public class PostGetController implements PostGetServiceInterface {
 
     /**
      * The Dataset Service.
@@ -92,69 +85,52 @@ public class GetSecomController implements GetSecomInterface {
     private final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(),4326);
 
     /**
-     * GET /api/secom/v1/dataset : Returns the S-201 dataset entries as,
+     * POST /api/secom/v2/object/search : Returns the S-201 dataset entries as,
      * specified by the SECOM standard.
      *
-     * @param dataReference the object data reference
-     * @param containerType the object data container type
-     * @param dataProductType the object data product type
-     * @param productVersion the object data product version
-     * @param geometry the object geometry
-     * @param unlocode the object UNLOCODE
-     * @param validFrom the object valid from time
-     * @param validTo the object valid to time
-     * @param page the page number to be retrieved
-     * @param pageSize the maximum page size
+     * @param getFilterObject the filter options
      * @return the S-201 dataset information
      */
     @Tag(name = "SECOM")
-    @Transactional
-    public GetResponseObject get(@QueryParam("dataReference") UUID dataReference,
-                                 @QueryParam("containerType") ContainerTypeEnum containerType,
-                                 @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
-                                 @QueryParam("productVersion") String productVersion,
-                                 @QueryParam("geometry") String geometry,
-                                 @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                 @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validFrom,
-                                 @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validTo,
-                                 @QueryParam("page") @Min(1) Integer page,
-                                 @QueryParam("pageSize") @Min(0) Integer pageSize) {
+    @Override
+    public ResponseEntity<GetResponseObject> get(@Valid GetFilterObject getFilterObject) {
         log.debug("SECOM request to get page of Dataset");
-        Optional.ofNullable(dataReference).ifPresent(v -> log.debug("Data Reference specified as: {}", dataReference));
-        Optional.ofNullable(containerType).ifPresent(v -> log.debug("Container Type specified as: {}", containerType));
-        Optional.ofNullable(dataProductType).ifPresent(v -> log.debug("Data Product Type specified as: {}", dataProductType));
-        Optional.ofNullable(geometry).ifPresent(v -> log.debug("Geometry specified as: {}", geometry));
-        Optional.ofNullable(unlocode).ifPresent(v -> log.debug("UNLOCODE specified as: {}", unlocode));
-        Optional.ofNullable(validFrom).ifPresent(v -> log.debug("Valid From time specified as: {}", validFrom));
-        Optional.ofNullable(validTo).ifPresent(v -> log.debug("Valid To time specified as: {}", validTo));
+        EnvelopeGetFilterObject envelopeGetFilterObject = getFilterObject.getEnvelope();
+        Optional.ofNullable(envelopeGetFilterObject.getDataReference()).ifPresent(v -> log.debug("Data Reference specified as: {}", envelopeGetFilterObject.getDataReference()));
+        Optional.ofNullable(envelopeGetFilterObject.getContainerType()).ifPresent(v -> log.debug("Container Type specified as: {}", envelopeGetFilterObject.getContainerType()));
+        Optional.ofNullable(envelopeGetFilterObject.getDataProductType()).ifPresent(v -> log.debug("Data Product Type specified as: {}", envelopeGetFilterObject.getDataProductType()));
+        Optional.ofNullable(envelopeGetFilterObject.getGeometry()).ifPresent(v -> log.debug("Geometry specified as: {}", envelopeGetFilterObject.getGeometry()));
+        Optional.ofNullable(envelopeGetFilterObject.getUnlocode()).ifPresent(v -> log.debug("UNLOCODE specified as: {}", envelopeGetFilterObject.getUnlocode()));
+        Optional.ofNullable(envelopeGetFilterObject.getValidFrom()).ifPresent(v -> log.debug("Valid From time specified as: {}", envelopeGetFilterObject.getValidFrom()));
+        Optional.ofNullable(envelopeGetFilterObject.getValidTo()).ifPresent(v -> log.debug("Valid To time specified as: {}", envelopeGetFilterObject.getValidTo()));
 
         // Init local variables
         Geometry jtsGeometry = null;
-        Pageable pageable = Optional.ofNullable(page)
-                .map(p -> PageRequest.of(p - 1, Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)))
+        Pageable pageable = Optional.ofNullable(envelopeGetFilterObject.getPage())
+                .map(p -> PageRequest.of(p - 1, Optional.ofNullable(envelopeGetFilterObject.getPageSize()).orElse(Integer.MAX_VALUE)))
                 .map(Pageable.class::cast)
                 .orElse(Pageable.unpaged());
-        LocalDateTime validFromLdt = Optional.ofNullable(validFrom)
+        LocalDateTime validFromLdt = Optional.ofNullable(envelopeGetFilterObject.getValidFrom())
                 .map(i -> LocalDateTime.ofInstant(i, ZoneId.systemDefault()))
                 .orElse(null);
-        LocalDateTime validToLdt = Optional.ofNullable(validTo)
+        LocalDateTime validToLdt = Optional.ofNullable(envelopeGetFilterObject.getValidTo())
                 .map(i -> LocalDateTime.ofInstant(i, ZoneId.systemDefault()))
                 .orElse(null);
 
         // Parse the arguments
-        final ContainerTypeEnum reqContainerType = Optional.ofNullable(containerType)
+        final ContainerTypeEnum reqContainerType = Optional.ofNullable(envelopeGetFilterObject.getContainerType())
                 .orElse(ContainerTypeEnum.S100_DataSet);
-        final SECOM_DataProductType reqDataProductType = Optional.ofNullable(dataProductType)
+        final SECOM_DataProductType reqDataProductType = Optional.ofNullable(envelopeGetFilterObject.getDataProductType())
                 .orElse(SECOM_DataProductType.S201);
-        if(Objects.nonNull(geometry)) {
+        if(Objects.nonNull(envelopeGetFilterObject.getGeometry())) {
             try {
-                jtsGeometry = GeometryUtils.joinGeometries(jtsGeometry, WKTUtils.convertWKTtoGeometry(geometry));
+                jtsGeometry = GeometryUtils.joinGeometries(jtsGeometry, WKTUtils.convertWKTtoGeometry(envelopeGetFilterObject.getGeometry()));
             } catch (ParseException ex) {
                 throw new ValidationException(ex.getMessage());
             }
         }
-        if(Objects.nonNull(unlocode)) {
-            jtsGeometry = GeometryUtils.joinGeometries(jtsGeometry, Optional.ofNullable(unlocode)
+        if(Objects.nonNull(envelopeGetFilterObject.getUnlocode())) {
+            jtsGeometry = GeometryUtils.joinGeometries(jtsGeometry, Optional.ofNullable(envelopeGetFilterObject.getUnlocode())
                     .map(this.unLoCodeService::getUnLoCodeMapEntry)
                     .map(UnLoCodeMapEntry::getGeometry)
                     .orElseGet(() -> this.geometryFactory.createEmpty(0)));
@@ -168,7 +144,7 @@ public class GetSecomController implements GetSecomInterface {
             // Retrieve all matching datasets
             Page<S201Dataset> result;
             try {
-                result = this.datasetService.findAll(dataReference, jtsGeometry, validFromLdt, validToLdt, Boolean.FALSE, pageable);
+                result = this.datasetService.findAll(envelopeGetFilterObject.getDataReference(), jtsGeometry, validFromLdt, validToLdt, Boolean.FALSE, pageable);
             } catch (Exception ex) {
                 log.error("Error while retrieving the dataset query results: {} ", ex.getMessage());
                 throw new ValidationException(ex.getMessage());
@@ -204,7 +180,7 @@ public class GetSecomController implements GetSecomInterface {
                 }
 
                 // Flag that this is compressed in the exchange metadata
-                dataResponseObject.setExchangeMetadata(new SECOM_ExchangeMetadataObject());
+                dataResponseObject.setExchangeMetadata(new ExchangeMetadata());
                 dataResponseObject.getExchangeMetadata().setCompressionFlag(Boolean.TRUE);
 
                 // And add it to the data response list
@@ -217,11 +193,9 @@ public class GetSecomController implements GetSecomInterface {
         getResponseObject.setDataResponseObject(dataResponseObjectList);
         getResponseObject.setPagination(new PaginationObject(
                 dataResponseObjectList.size(),
-                Optional.ofNullable(pageSize).orElse(Integer.MAX_VALUE)));
+                Optional.ofNullable(envelopeGetFilterObject.getPageSize()).orElse(Integer.MAX_VALUE)));
 
         // And final return the Get Response Object
-        return getResponseObject;
-
+        return ResponseEntity.ok(getResponseObject);
     }
-
 }

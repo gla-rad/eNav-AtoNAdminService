@@ -17,10 +17,6 @@
 package org.grad.eNav.atonAdminService.models.dtos.s201;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201DatasetIdentification;
 
 import java.math.BigInteger;
@@ -56,8 +52,6 @@ public class S201DataSetIdentificationDto {
     private String datasetTitle;
 
     @JsonFormat(pattern="yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate datasetReferenceDate;
 
     private String datasetLanguage;

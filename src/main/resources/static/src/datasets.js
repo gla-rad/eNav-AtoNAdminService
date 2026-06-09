@@ -473,7 +473,7 @@ function loadDatasetContent(event, table, button, config) {
 
     // And get the dataset content using the SECOM dataset endpoint
     $.ajax({
-        url: `api/secom/v1/object?dataReference=${datasetId}`,
+        url: `api/secom/v2/object?dataReference=${datasetId}`,
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
         success: (response) => {

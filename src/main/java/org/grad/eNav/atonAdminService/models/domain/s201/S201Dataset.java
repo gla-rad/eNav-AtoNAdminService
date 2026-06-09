@@ -49,7 +49,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Entity
+@Entity(name = "s201dataset")
 @EntityListeners(AuditingEntityListener.class)
 @Cacheable
 @Indexed

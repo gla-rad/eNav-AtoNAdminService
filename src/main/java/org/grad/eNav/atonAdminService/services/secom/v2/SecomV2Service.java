@@ -22,8 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.*;
-import org.grad.secomv2.springboot3.components.SecomClient;
-import org.grad.secomv2.springboot3.components.SecomConfigProperties;
+import org.grad.secomv2.springboot4.components.SecomClient;
+import org.grad.secomv2.springboot4.components.SecomConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -126,16 +126,17 @@ public class SecomV2Service {
 
         // Create the discovery service search filter object for the provided MRN
         final SearchFilterObject searchFilterObject = new SearchFilterObject();
+        final EnvelopeSearchFilterObject envelopeSearchFilterObject = new EnvelopeSearchFilterObject();
         final SearchParameters searchParameters = new SearchParameters();
         searchParameters.setInstanceId(mrn);
-        final EnvelopeSearchFilterObject envelopeSearchFilterObject = new EnvelopeSearchFilterObject();
         envelopeSearchFilterObject.setQuery(searchParameters);
         searchFilterObject.setEnvelope(envelopeSearchFilterObject);
 
         // Lookup the endpoints of the clients from the SECOM discovery service
         final List<ServiceInstanceObject> instances = Optional.ofNullable(this.discoveryService)
-                .flatMap(ds -> ds.searchService(searchFilterObject, 0, Integer.MAX_VALUE))
-                .map(ResponseSearchObject::getSearchServiceResult)
+                .flatMap(ds -> ds.searchService(searchFilterObject))
+                .map(SearchResult::getEnvelope)
+                .map(EnvelopeSearchResultObject::getServiceInstance)
                 .orElse(Collections.emptyList());
 
         // Extract the latest matching instance

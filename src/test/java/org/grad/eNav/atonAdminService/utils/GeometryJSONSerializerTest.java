@@ -16,19 +16,19 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GeometryJSONSerializerTest {
 
@@ -62,7 +62,8 @@ class GeometryJSONSerializerTest {
     void testSerialize() throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         JsonGenerator jsonGenerator = this.objectMapper.createGenerator(os);
-        this.serializer.serialize(this.geometry, jsonGenerator, this.objectMapper.getSerializerProvider());
+        this.serializer.serialize(this.geometry, jsonGenerator, this.objectMapper._serializationContext());
+        jsonGenerator.flush();
         assertEquals(this.json, os.toString("UTF-8"));
     }
 

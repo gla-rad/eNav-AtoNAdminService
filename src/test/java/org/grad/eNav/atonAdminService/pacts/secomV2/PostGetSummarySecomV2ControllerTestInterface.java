@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.eNav.atonAdminService.pacts.secomV1;
+package org.grad.eNav.atonAdminService.pacts.secomV2;
 
 import au.com.dius.pact.provider.junitsupport.State;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
@@ -34,12 +34,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 /**
- * The interface for testing the SECOM GetSummary controller using the Pacts
- * consumer driver contracts.
+ * The interface for testing the SECOM POST GetSummary controller using the
+ * Pacts consumer driver contracts.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetSummarySecomControllerTestInterface {
+public interface PostGetSummarySecomV2ControllerTestInterface {
 
     /**
      * Provides a geometry factory to setup test geometries.
@@ -68,8 +68,8 @@ public interface GetSummarySecomControllerTestInterface {
      *
      * @param data the request data
      */
-    @State("Test SECOM Get Summary Interface") // Method will be run before testing interactions that require "with-data" state
-    default void testSecomGetSummarySuccess(Map<?,?> data) {
+    @State("Test SECOM Get Summary POST Interface") // Method will be run before testing interactions that require "with-data" state
+    default void testSecomPostGetSummarySuccess(Map<?,?> data) {
         // Create a new dataset for testing
         S201Dataset s201Dataset = new S201Dataset("TestDataset");
         s201Dataset.setUuid(UUID.randomUUID());
@@ -83,7 +83,7 @@ public interface GetSummarySecomControllerTestInterface {
                 .findAll(any(), any(), any(), any(), any(), any());
 
         // And proceed with the testing
-        System.out.println("Service now checking the get summary interface with " + data);
+        System.out.println("Service now checking the POST get summary interface with " + data);
     }
 
 }

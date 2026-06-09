@@ -17,7 +17,6 @@
 package org.grad.eNav.atonAdminService.controllers.secom.v2;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.ws.rs.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.models.domain.s100.ServiceInformationConfig;
 import org.grad.secomv2.core.interfaces.CapabilityServiceInterface;
@@ -28,6 +27,7 @@ import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,7 +43,6 @@ import java.util.Optional;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Component
-@Path("/")
 @Validated
 @Slf4j
 public class CapabilityController implements CapabilityServiceInterface {
@@ -66,7 +65,7 @@ public class CapabilityController implements CapabilityServiceInterface {
      * @return the SECOM-compliant service capabilities
      */
     @Tag(name = "SECOM")
-    public CapabilityResponseObject capability() {
+    public ResponseEntity<CapabilityResponseObject> capability() {
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         final URL productSchemaUrl = Optional.of(this.dataProductSchemaLocation)
                 .map(l -> l.startsWith("http") ? l :(baseUrl + l) )
@@ -92,7 +91,7 @@ public class CapabilityController implements CapabilityServiceInterface {
         capabilityObject.setServiceVersion(this.serviceInformationConfig.version());
 
         // And return the Capability Response Object
-        return capabilityResponseObject;
+        return ResponseEntity.ok(capabilityResponseObject);
     }
 
 }

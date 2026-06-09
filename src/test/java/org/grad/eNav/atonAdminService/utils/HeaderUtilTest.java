@@ -31,9 +31,9 @@ class HeaderUtilTest {
     void testCreateAlert() {
         HttpHeaders headers = HeaderUtil.createAlert("message", "param");
         assertNotNull(headers);
-        assertTrue(headers.containsKey("X-atonService-alert"));
+        assertTrue(headers.containsHeader("X-atonService-alert"));
         assertEquals("[message]", headers.get("X-atonService-alert").toString());
-        assertTrue(headers.containsKey("X-atonService-params"));
+        assertTrue(headers.containsHeader("X-atonService-params"));
         assertEquals("[param]", headers.get("X-atonService-params").toString());
     }
 
@@ -44,8 +44,8 @@ class HeaderUtilTest {
     void testCreateEntityCreationAlert() {
         HttpHeaders headers = HeaderUtil.createEntityCreationAlert("entity", "param");
         assertNotNull(headers);
-        assertTrue(headers.containsKey("X-atonService-alert"));
-        assertTrue(headers.containsKey("X-atonService-params"));
+        assertTrue(headers.containsHeader("X-atonService-alert"));
+        assertTrue(headers.containsHeader("X-atonService-params"));
         assertEquals("[param]", headers.get("X-atonService-params").toString());
     }
 
@@ -56,8 +56,8 @@ class HeaderUtilTest {
     void testCreateEntityUpdateAlert() {
         HttpHeaders headers = HeaderUtil.createEntityUpdateAlert("entity", "param");
         assertNotNull(headers);
-        assertTrue(headers.containsKey("X-atonService-alert"));
-        assertTrue(headers.containsKey("X-atonService-params"));
+        assertTrue(headers.containsHeader("X-atonService-alert"));
+        assertTrue(headers.containsHeader("X-atonService-params"));
         assertEquals("[param]", headers.get("X-atonService-params").toString());
     }
 
@@ -68,8 +68,8 @@ class HeaderUtilTest {
     void testCreateEntityDeletionAlert() {
         HttpHeaders headers = HeaderUtil.createEntityDeletionAlert("entity", "param");
         assertNotNull(headers);
-        assertTrue(headers.containsKey("X-atonService-alert"));
-        assertTrue(headers.containsKey("X-atonService-params"));
+        assertTrue(headers.containsHeader("X-atonService-alert"));
+        assertTrue(headers.containsHeader("X-atonService-params"));
         assertEquals("[param]", headers.get("X-atonService-params").toString());
     }
 
@@ -80,9 +80,9 @@ class HeaderUtilTest {
     void testCreateFailureAlert() {
         HttpHeaders headers = HeaderUtil.createFailureAlert("entity", "key", "message");
         assertNotNull(headers);
-        assertTrue(headers.containsKey("X-atonService-error"));
+        assertTrue(headers.containsHeader("X-atonService-error"));
         assertEquals("[key]", headers.get("X-atonService-error").toString());
-        assertTrue(headers.containsKey("X-atonService-params"));
+        assertTrue(headers.containsHeader("X-atonService-params"));
         assertEquals("[entity]", headers.get("X-atonService-params").toString());
     }
 

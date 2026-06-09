@@ -17,8 +17,6 @@
 package org.grad.eNav.atonAdminService.controllers.secom.v2;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.components.DomainDtoMapper;
 import org.grad.eNav.atonAdminService.models.domain.secom.RemoveSubscription;
@@ -28,9 +26,11 @@ import org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface;
 import org.grad.secomv2.core.models.RemoveSubscriptionObject;
 import org.grad.secomv2.core.models.RemoveSubscriptionResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +41,6 @@ import java.util.UUID;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Component
-@Path("/")
 @Validated
 @Slf4j
 public class RemoveSubscriptionController implements RemoveSubscriptionServiceInterface {
@@ -69,7 +68,7 @@ public class RemoveSubscriptionController implements RemoveSubscriptionServiceIn
      */
     @Tag(name = "SECOM")
     @Transactional
-    public RemoveSubscriptionResponseObject removeSubscription(@QueryParam(value="subscriptionIdentifier") UUID subscriptionIdentifier) {
+    public ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestParam(value="subscriptionIdentifier") UUID subscriptionIdentifier) {
         final UUID deletedSubscriptionIdentifier = Optional.ofNullable(subscriptionIdentifier)
                 .map(this.secomV2SubscriptionService::delete)
                 .orElseThrow(() -> new SecomNotFoundException(String.format("%s", subscriptionIdentifier)));
@@ -79,7 +78,7 @@ public class RemoveSubscriptionController implements RemoveSubscriptionServiceIn
         removeSubscriptionResponse.setMessage(String.format("Subscription %s removed", deletedSubscriptionIdentifier));
 
         // Return the response
-        return removeSubscriptionResponse;
+        return ResponseEntity.ok(removeSubscriptionResponse);
     }
 
 }
