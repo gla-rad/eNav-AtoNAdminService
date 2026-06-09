@@ -16,10 +16,8 @@
 
 package org.grad.eNav.atonAdminService.controllers;
 
-import org.grad.eNav.atonAdminService.TestingConfiguration;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 import org.grad.eNav.atonAdminService.TestFeignSecurityConfig;
+import org.grad.eNav.atonAdminService.TestingConfiguration;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContentLog;
 import org.grad.eNav.atonAdminService.models.dtos.DatasetContentLogDto;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.*;
@@ -33,7 +31,6 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
-import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
@@ -44,6 +41,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;

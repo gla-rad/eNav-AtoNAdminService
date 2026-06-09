@@ -16,7 +16,7 @@
 
 package org.grad.eNav.atonAdminService.components;
 
-import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManager;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -25,13 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import jakarta.persistence.EntityManager;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 
-import java.util.concurrent.Callable;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
