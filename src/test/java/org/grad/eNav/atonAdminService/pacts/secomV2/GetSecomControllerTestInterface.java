@@ -18,7 +18,6 @@ package org.grad.eNav.atonAdminService.pacts.secomV2;
 
 import au.com.dius.pact.provider.junitsupport.State;
 import feign.Response;
-import jakarta.xml.bind.JAXBException;
 import org.grad.eNav.atonAdminService.feign.CKeeperClient;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContent;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
@@ -36,7 +35,6 @@ import org.springframework.data.domain.Pageable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.cert.CertificateException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
@@ -96,7 +94,7 @@ public interface GetSecomControllerTestInterface {
      * @param data the request data
      */
     @State("Test SECOM Get Interface") // Method will be run before testing interactions that require "with-data" state
-    default void testSecomGetSuccess(Map<?,?> data) throws IOException, JAXBException {
+    default void testSecomGetSuccess(Map<?,?> data) throws IOException {
         // Read some test data - Certificates should be minified without headers
         final String s201Data = new String(new ClassPathResource("s201-msg.xml").getInputStream().readAllBytes());
         final String pemData = new String(new ClassPathResource("test.pem").getInputStream().readAllBytes());
