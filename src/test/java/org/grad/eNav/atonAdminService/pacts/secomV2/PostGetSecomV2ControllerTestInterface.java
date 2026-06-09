@@ -47,7 +47,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 /**
- * The interface for testing the SECOM Get controller using the Pacts
+ * The interface for testing the SECOM POST Get controller using the Pacts
  * consumer driver contracts.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
@@ -96,7 +96,7 @@ public interface PostGetSecomV2ControllerTestInterface {
      * @param data the request data
      */
     @State("Test SECOM Get POST Interface") // Method will be run before testing interactions that require "with-data" state
-    default void testSecomPostGetSuccess(Map<?,?> data) throws IOException, CertificateException, JAXBException {
+    default void testSecomPostGetSuccess(Map<?,?> data) throws IOException, JAXBException {
         // Read some test data - Certificates should be minified without headers
         final String s201Data = new String(new ClassPathResource("s201-msg.xml").getInputStream().readAllBytes());
         final String pemData = new String(new ClassPathResource("test.pem").getInputStream().readAllBytes());
@@ -144,7 +144,7 @@ public interface PostGetSecomV2ControllerTestInterface {
                 .generateCertificateSignature(any(), any(), any());
 
         // And proceed with the testing
-        System.out.println("Service now checking the get POST interface with " + data);
+        System.out.println("Service now checking the POST get interface with " + data);
     }
 
 }

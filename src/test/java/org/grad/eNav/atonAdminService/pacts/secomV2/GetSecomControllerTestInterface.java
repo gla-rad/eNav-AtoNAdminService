@@ -18,11 +18,13 @@ package org.grad.eNav.atonAdminService.pacts.secomV2;
 
 import au.com.dius.pact.provider.junitsupport.State;
 import feign.Response;
+import jakarta.xml.bind.JAXBException;
 import org.grad.eNav.atonAdminService.feign.CKeeperClient;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContent;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.dtos.SignatureCertificateDto;
 import org.grad.eNav.atonAdminService.services.DatasetService;
+import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
 import org.grad.secomv2.core.utils.SecomPemUtils;
 import org.locationtech.jts.geom.Coordinate;
@@ -74,6 +76,13 @@ public interface GetSecomControllerTestInterface {
     DatasetService getDatasetService();
 
     /**
+     * Provides the mocked S100 exchange set service to the tests.
+     *
+     * @return the mocked S100ExchangeSetService
+     */
+    S100ExchangeSetService getS100ExchangeSetService();
+
+    /**
      * Provides the mocked UnLoCode service to the tests.
      *
      * @return the mocked UnLoCode service
@@ -87,7 +96,7 @@ public interface GetSecomControllerTestInterface {
      * @param data the request data
      */
     @State("Test SECOM Get Interface") // Method will be run before testing interactions that require "with-data" state
-    default void testSecomGetSuccess(Map<?,?> data) throws IOException, CertificateException {
+    default void testSecomGetSuccess(Map<?,?> data) throws IOException, JAXBException {
         // Read some test data - Certificates should be minified without headers
         final String s201Data = new String(new ClassPathResource("s201-msg.xml").getInputStream().readAllBytes());
         final String pemData = new String(new ClassPathResource("test.pem").getInputStream().readAllBytes());

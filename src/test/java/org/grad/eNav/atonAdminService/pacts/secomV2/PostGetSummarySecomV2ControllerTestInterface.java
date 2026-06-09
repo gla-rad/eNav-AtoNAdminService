@@ -25,7 +25,6 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
@@ -35,8 +34,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 /**
- * The interface for testing the SECOM GetSummary controller using the Pacts
- * consumer driver contracts.
+ * The interface for testing the SECOM POST GetSummary controller using the
+ * Pacts consumer driver contracts.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
@@ -70,7 +69,7 @@ public interface PostGetSummarySecomV2ControllerTestInterface {
      * @param data the request data
      */
     @State("Test SECOM Get Summary POST Interface") // Method will be run before testing interactions that require "with-data" state
-    default void testSecomPostGetSummarySuccess(Map<?,?> data) throws IOException {
+    default void testSecomPostGetSummarySuccess(Map<?,?> data) {
         // Create a new dataset for testing
         S201Dataset s201Dataset = new S201Dataset("TestDataset");
         s201Dataset.setUuid(UUID.randomUUID());
@@ -84,7 +83,7 @@ public interface PostGetSummarySecomV2ControllerTestInterface {
                 .findAll(any(), any(), any(), any(), any(), any());
 
         // And proceed with the testing
-        System.out.println("Service now checking the get summary POST interface with " + data);
+        System.out.println("Service now checking the POST get summary interface with " + data);
     }
 
 }
