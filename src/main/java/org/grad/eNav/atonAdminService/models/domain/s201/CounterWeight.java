@@ -30,7 +30,7 @@ public class CounterWeight extends AidsToNavigation {
     private String counterWeightType;
 
     @JsonBackReference
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     private GenericBuoy counterWeightHolds;
 
     /**

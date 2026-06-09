@@ -24,7 +24,7 @@ public class Bridle extends AidsToNavigation {
     private String bridleLinkType;
 
     @JsonBackReference
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     private GenericBuoy bridleHolds;
 
     @JsonManagedReference

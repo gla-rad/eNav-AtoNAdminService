@@ -33,7 +33,7 @@ public class MooringShackle extends AidsToNavigation {
     private BigDecimal weight;
 
     @JsonBackReference
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     private GenericBuoy shackleToBuoyConnectedTo;
 
     @JsonManagedReference
