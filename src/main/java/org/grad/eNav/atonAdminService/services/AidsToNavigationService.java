@@ -219,6 +219,156 @@ public class AidsToNavigationService {
                             .stream()
                             .filter(inf -> informationCounter.get() < informationIds.size())
                             .forEach(inf -> inf.setId(informationIds.get(informationCounter.getAndIncrement())));
+
+                    // For structures, we also need to delete all removed child equipment entries
+                    if(aton instanceof StructureObject structure) {
+                        // Re-use the existing fixing method IDs
+                        final AtomicInteger fixingMethodCounter = new AtomicInteger();
+                        final List<BigInteger> fixingMethodIds = structure.getFixingMethods()
+                                .stream().map(Information::getId)
+                                .toList();
+                        ((StructureObject)aidsToNavigation).getFixingMethods()
+                                .stream()
+                                .filter(fm -> fixingMethodCounter.get() < fixingMethodIds.size())
+                                .forEach(fm -> fm.setId(fixingMethodIds.get(fixingMethodCounter.getAndIncrement())));
+
+                        // Re-use the existing positioning method IDs
+                        final AtomicInteger positioningMethodCounter = new AtomicInteger();
+                        final List<BigInteger> positioningMethodIds = structure.getPositioningMethods()
+                                .stream().map(Information::getId)
+                                .toList();
+                        ((StructureObject)aidsToNavigation).getPositioningMethods()
+                                .stream()
+                                .filter(pm -> positioningMethodCounter.get() < positioningMethodIds.size())
+                                .forEach(pm -> pm.setId(positioningMethodIds.get(positioningMethodCounter.getAndIncrement())));
+
+                        // Get all the equipment of the updated entry
+                        final Set<String> equipmentIdsCodes = ((StructureObject)aidsToNavigation).getChildren()
+                                .stream()
+                                .map(Equipment::getIdCode)
+                                .collect(Collectors.toSet());
+                        // Now find all equipment from the old entry that are not included and delete them
+                        structure.getChildren()
+                                .stream()
+                                .filter(equipment -> !equipmentIdsCodes.contains(equipment.getIdCode()))
+                                .map(Equipment::getId)
+                                .forEach(this::delete);
+                    }
+
+                    // For generic buoys, we also need to delete all removed connected entries
+                    if(aton instanceof GenericBuoy buoy) {
+                        // Get all the topmark parts of the updated entry
+                        final Set<String> topmarkIdsCodes = ((GenericBuoy)aidsToNavigation).getTopmarkParts()
+                                .stream()
+                                .map(Topmark::getIdCode)
+                                .collect(Collectors.toSet());
+                        // Now find all topmark parts from the old entry that are not included and delete them
+                        buoy.getTopmarkParts()
+                                .stream()
+                                .filter(topmark -> !topmarkIdsCodes.contains(topmark.getIdCode()))
+                                .map(Topmark::getId)
+                                .forEach(this::delete);
+
+                        // Delete the previously connected shackle if it is no longer connected
+                        final String shackleIdCode = Optional.ofNullable(((GenericBuoy)aidsToNavigation).getShackleToBuoyConnected())
+                                .map(MooringShackle::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(buoy.getShackleToBuoyConnected())
+                                .filter(shackle -> !Objects.equals(shackle.getIdCode(), shackleIdCode))
+                                .map(MooringShackle::getId)
+                                .ifPresent(this::delete);
+
+                        // Delete the previously hanging bridle if it is no longer connected
+                        final String bridleIdCode = Optional.ofNullable(((GenericBuoy)aidsToNavigation).getBuoyHangs())
+                                .map(Bridle::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(buoy.getBuoyHangs())
+                                .filter(bridle -> !Objects.equals(bridle.getIdCode(), bridleIdCode))
+                                .map(Bridle::getId)
+                                .ifPresent(this::delete);
+
+                        // Delete the previously attached counter weight if it is no longer connected
+                        final String counterWeightIdCode = Optional.ofNullable(((GenericBuoy)aidsToNavigation).getBuoyAttached())
+                                .map(CounterWeight::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(buoy.getBuoyAttached())
+                                .filter(counterWeight -> !Objects.equals(counterWeight.getIdCode(), counterWeightIdCode))
+                                .map(CounterWeight::getId)
+                                .ifPresent(this::delete);
+                    }
+
+                    // Re-sure the object ID for sectored light characteristics
+                    if(aton instanceof LightSectored light) {
+                        // Re-use the existing sector characteristic IDs
+                        final AtomicInteger sectorCharacteristicCounter = new AtomicInteger();
+                        final List<BigInteger> sectorCharacteristicIds = light.getSectorCharacteristics()
+                                .stream().map(SectorCharacteristics::getId)
+                                .toList();
+                        ((LightSectored)aidsToNavigation).getSectorCharacteristics()
+                                .stream()
+                                .filter(sc -> sectorCharacteristicCounter.get() < sectorCharacteristicIds.size())
+                                .forEach(sc -> sc.setId(sectorCharacteristicIds.get(sectorCharacteristicCounter.getAndIncrement())));
+                    }
+
+                    // For mooring shackles, we also need to delete all removed connected entries
+                    if(aton instanceof MooringShackle shackle) {
+                        // Delete the previously connected anchor if it is no longer connected
+                        final String anchorIdCode = Optional.ofNullable(((MooringShackle)aidsToNavigation).getShackleToAnchorConnectedTo())
+                                .map(SinkerAnchor::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(shackle.getShackleToAnchorConnectedTo())
+                                .filter(anchor -> !Objects.equals(anchor.getIdCode(), anchorIdCode))
+                                .map(SinkerAnchor::getId)
+                                .ifPresent(this::delete);
+
+                        // Get all the connected swivels of the updated entry
+                        final Set<String> swivelIdsCodes = ((MooringShackle)aidsToNavigation).getShackleToSwivelConnectedTo()
+                                .stream()
+                                .map(Swivel::getIdCode)
+                                .collect(Collectors.toSet());
+                        // Now find all connected swivels from the old entry that are not included and delete them
+                        shackle.getShackleToSwivelConnectedTo()
+                                .stream()
+                                .filter(swivel -> !swivelIdsCodes.contains(swivel.getIdCode()))
+                                .map(Swivel::getId)
+                                .forEach(this::delete);
+
+                        // Get all the connected cables of the updated entry
+                        final Set<String> cableIdsCodes = ((MooringShackle)aidsToNavigation).getShackleToCableConnectedTo()
+                                .stream()
+                                .map(CableSubmarine::getIdCode)
+                                .collect(Collectors.toSet());
+                        // Now find all connected cables from the old entry that are not included and delete them
+                        shackle.getShackleToCableConnectedTo()
+                                .stream()
+                                .filter(cable -> !cableIdsCodes.contains(cable.getIdCode()))
+                                .map(CableSubmarine::getId)
+                                .forEach(this::delete);
+                    }
+
+                    // For bridles, we also need to delete all removed connected entries
+                    if(aton instanceof Bridle bridle) {
+                        // Delete the previously hanging swivel if it is no longer connected
+                        final String swivelIdCode = Optional.ofNullable(((Bridle)aidsToNavigation).getBridleHangs())
+                                .map(Swivel::getIdCode)
+                                .orElse(null);
+                        Optional.ofNullable(bridle.getBridleHangs())
+                                .filter(swivel -> !Objects.equals(swivel.getIdCode(), swivelIdCode))
+                                .map(Swivel::getId)
+                                .ifPresent(this::delete);
+
+                        // Get all the attached cables of the updated entry
+                        final Set<String> cableIdsCodes = ((Bridle)aidsToNavigation).getBridleAttacheds()
+                                .stream()
+                                .map(CableSubmarine::getIdCode)
+                                .collect(Collectors.toSet());
+                        // Now find all attached cables from the old entry that are not included and delete them
+                        bridle.getBridleAttacheds()
+                                .stream()
+                                .filter(cable -> !cableIdsCodes.contains(cable.getIdCode()))
+                                .map(CableSubmarine::getId)
+                                .forEach(this::delete);
+                    }
                 });
 
         // Now save for each type

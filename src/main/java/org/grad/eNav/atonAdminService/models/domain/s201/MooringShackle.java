@@ -33,19 +33,19 @@ public class MooringShackle extends AidsToNavigation {
     private BigDecimal weight;
 
     @JsonBackReference
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     private GenericBuoy shackleToBuoyConnectedTo;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "shackleToAnchorConnected", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "shackleToAnchorConnected", cascade = CascadeType.REMOVE)
     private SinkerAnchor shackleToAnchorConnectedTo;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "shackleToSwivelConnected", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shackleToSwivelConnected", cascade = CascadeType.REMOVE)
     final private Set<Swivel> shackleToSwivelConnectedTo = new HashSet<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "shackleToCableConnected", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shackleToCableConnected", cascade = CascadeType.REMOVE)
     final private Set<CableSubmarine> shackleToCableConnectedTo = new HashSet<>();
 
     /**
@@ -175,7 +175,7 @@ public class MooringShackle extends AidsToNavigation {
      * @param shackleToCableConnectedTo the shackle to cable connected to
      */
     public void setShackleToCableConnectedTo(Set<CableSubmarine> shackleToCableConnectedTo) {
-        this.shackleToSwivelConnectedTo.clear();
+        this.shackleToCableConnectedTo.clear();
         if(shackleToCableConnectedTo != null) {
             shackleToCableConnectedTo.forEach(connection -> connection.setShackleToCableConnected(this));
             this.shackleToCableConnectedTo.addAll(shackleToCableConnectedTo);

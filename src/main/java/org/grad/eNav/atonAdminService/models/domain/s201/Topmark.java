@@ -56,7 +56,7 @@ public class Topmark extends Equipment {
     private BigDecimal verticalLength;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     private GenericBuoy buoyPart;
 
     /**

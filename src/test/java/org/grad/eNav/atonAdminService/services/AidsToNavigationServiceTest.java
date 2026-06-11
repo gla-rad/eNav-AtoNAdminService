@@ -17,6 +17,7 @@
 package org.grad.eNav.atonAdminService.services;
 
 import _int.iho.s_201.gml.cs0._2.ChangeTypesType;
+import _int.iho.s_201.gml.cs0._2.LightCharacteristicType;
 import jakarta.persistence.EntityManager;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.s201.*;
@@ -326,6 +327,118 @@ class AidsToNavigationServiceTest {
         verify(this.aidsToNavigationRepo, times(1)).save(this.newAidsToNavigation);
         verify(this.aggregationService, times(1)).updateAidsToNavigationAggregations(eq(this.newAidsToNavigation.getIdCode()), eq(Collections.emptySet()));
         verify(this.associationService, times(1)).updateAidsToNavigationAssociations(eq(this.newAidsToNavigation.getIdCode()), eq(Collections.emptySet()));
+    }
+
+    /**
+     * Test that we can update correctly a new or existing Aids to Navigation
+     * entry if all the validation checks are successful. In this case we also
+     * need to remove old equipment entries that are not present in the updated
+     * structure version.
+     */
+    @Test
+    void testUpdateRemoveOldEquipment() {
+        // In this scenario create an updated version of the existing aton without an ID
+        AidsToNavigation updatedAton = this.newAidsToNavigation;
+        updatedAton.setId(null);
+        updatedAton.setIdCode(this.existingAidsToNavigation.getIdCode());
+        updatedAton.setInformations(this.existingAidsToNavigation.getInformations());
+        updatedAton.setFeatureNames(this.existingAidsToNavigation.getFeatureNames());
+
+        // Now create the existing equipment (light to also have light characteristics)
+        final LightSectored existingLightSectored = new LightSectored();
+        existingLightSectored.setIdCode("ID1000");
+        existingLightSectored.setId(BigInteger.valueOf(1000));
+        // Now add it to the existing structure (cardinal beacon) - this will need to be removed
+        ((BeaconCardinal)this.existingAidsToNavigation).setChildren(Collections.singleton(existingLightSectored));
+
+        // Make sure we can retrieve and save the correct AtoN
+        doReturn(Optional.of(this.existingAidsToNavigation)).when(this.aidsToNavigationRepo).findByIdCode(any());
+        doAnswer(inv -> {
+            AidsToNavigation aton = inv.getArgument(0);
+            aton.setId(this.existingAidsToNavigation.getId());
+            return aton;
+        }).when(this.aidsToNavigationRepo).save(any());
+        doReturn(existingLightSectored).when(this.aidsToNavigationService).delete(eq(existingLightSectored.getId()));
+
+        // Perform the service call
+        AidsToNavigation result = this.aidsToNavigationService.save(updatedAton);
+
+        // Test the result
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertEquals(this.existingAidsToNavigation.getId(), result.getId());
+        assertEquals(this.existingAidsToNavigation.getIdCode(), result.getIdCode());
+        assertEquals(this.existingAidsToNavigation.getInformations().size(), result.getInformations().size());
+        assertEquals(this.existingAidsToNavigation.getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null),
+                result.getInformations().stream().findFirst().map(Information::getFileLocator).orElse(null));
+        assertEquals(existingAidsToNavigation.getInformations().stream().findFirst().map(Information::getFileReference).orElse(null),
+                result.getInformations().stream().findFirst().map(Information::getFileReference).orElse(null));
+        assertEquals(existingAidsToNavigation.getInformations().stream().findFirst().map(Information::getHeadline).orElse(null),
+                result.getInformations().stream().findFirst().map(Information::getHeadline).orElse(null));
+        assertEquals(existingAidsToNavigation.getInformations().stream().findFirst().map(Information::getLanguage).orElse(null),
+                result.getInformations().stream().findFirst().map(Information::getLanguage).orElse(null));
+        assertEquals(existingAidsToNavigation.getInformations().stream().findFirst().map(Information::getText).orElse(null),
+                result.getInformations().stream().findFirst().map(Information::getText).orElse(null));
+        assertEquals(existingAidsToNavigation.getFeatureNames().size(), result.getFeatureNames().size());
+        assertEquals(existingAidsToNavigation.getFeatureNames().stream().findFirst().map(FeatureName::getName).orElse(null),
+                result.getFeatureNames().stream().findFirst().map(FeatureName::getName).orElse(null));
+        assertEquals(existingAidsToNavigation.getFeatureNames().stream().findFirst().map(FeatureName::getDisplayName).orElse(null),
+                result.getFeatureNames().stream().findFirst().map(FeatureName::getDisplayName).orElse(null));
+        assertEquals(existingAidsToNavigation.getFeatureNames().stream().findFirst().map(FeatureName::getLanguage).orElse(null),
+                result.getFeatureNames().stream().findFirst().map(FeatureName::getLanguage).orElse(null));
+
+        // Also, that a saving call took place in the repository
+        verify(this.aidsToNavigationRepo, times(1)).save(updatedAton);
+        verify(this.aggregationService, times(1)).updateAidsToNavigationAggregations(eq(this.existingAidsToNavigation.getIdCode()), eq(Collections.emptySet()));
+        verify(this.associationService, times(1)).updateAidsToNavigationAssociations(eq(this.existingAidsToNavigation.getIdCode()), eq(Collections.emptySet()));
+
+        // Test that the equipment IDs was removed
+        verify(aidsToNavigationService, times(1)).delete(existingLightSectored.getId());
+    }
+
+    /**
+     * Test that we can update correctly a new or existing Aids to Navigation
+     * entry if all the validation checks are successful. In this case we also
+     * need to update the sector characteristics for sectored lights.
+     */
+    @Test
+    void testUpdateSectorInformation() {
+        // Create an equipment (light to also have light characteristics)
+        final LightSectored newLightSectored = new LightSectored();
+        newLightSectored.setIdCode("ID1000");
+        final SectorCharacteristics newSectorCharacteristics = new SectorCharacteristics();
+        newSectorCharacteristics.setLightCharacteristic(LightCharacteristicType.VERY_QUICK_FLASHING);
+        newLightSectored.setSectorCharacteristics(Collections.singleton(newSectorCharacteristics));
+        // Now create the existing equipment (light to also have light characteristics)
+        final LightSectored existingLightSectored = new LightSectored();
+        existingLightSectored.setId(BigInteger.valueOf(1000));
+        existingLightSectored.setIdCode("ID1000");
+        final SectorCharacteristics existingSectorCharacteristics = new SectorCharacteristics();
+        existingSectorCharacteristics.setId(BigInteger.valueOf(1001));
+        existingSectorCharacteristics.setLightCharacteristic(LightCharacteristicType.LONG_FLASHING);
+        existingLightSectored.setSectorCharacteristics(Collections.singleton(existingSectorCharacteristics));
+
+        // Make sure we can retrieve and save the correct AtoN
+        doReturn(Optional.of(existingLightSectored)).when(this.aidsToNavigationRepo).findByIdCode(any());
+        doReturn(newLightSectored).when(this.aidsToNavigationRepo).save(any());
+
+        // Perform the service call
+        AidsToNavigation result = this.aidsToNavigationService.save(newLightSectored);
+
+        // Test the result
+        assertNotNull(result);
+        assertNotNull(newLightSectored.getId());
+        assertEquals(newLightSectored.getId(), result.getId());
+        assertEquals(newLightSectored.getIdCode(), result.getIdCode());
+        assertNotNull(((LightSectored)result).getSectorCharacteristics());
+        assertEquals(1, ((LightSectored)result).getSectorCharacteristics().size());
+        assertNotNull(((LightSectored)result).getSectorCharacteristics().stream()
+                .findFirst().orElse(null));
+        assertEquals(existingSectorCharacteristics.getId(), ((LightSectored)result).getSectorCharacteristics().stream()
+                .findFirst().map(SectorCharacteristics::getId).orElse(null));
+
+        // Also, that a saving call took place in the repository
+        verify(this.aidsToNavigationRepo, times(1)).save(newLightSectored);
     }
 
     /**
