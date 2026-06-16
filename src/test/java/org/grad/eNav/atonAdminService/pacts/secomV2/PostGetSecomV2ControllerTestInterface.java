@@ -95,7 +95,7 @@ public interface PostGetSecomV2ControllerTestInterface {
      *
      * @param data the request data
      */
-    @State("Test SECOM Get POST Interface") // Method will be run before testing interactions that require "with-data" state
+    @State("Test SECOM POST Get Interface") // Method will be run before testing interactions that require "with-data" state
     default void testSecomPostGetSuccess(Map<?,?> data) throws IOException, JAXBException {
         // Read some test data - Certificates should be minified without headers
         final String s201Data = new String(new ClassPathResource("s201-msg.xml").getInputStream().readAllBytes());

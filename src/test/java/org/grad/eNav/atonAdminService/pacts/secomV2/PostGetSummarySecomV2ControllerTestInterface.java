@@ -68,7 +68,7 @@ public interface PostGetSummarySecomV2ControllerTestInterface {
      *
      * @param data the request data
      */
-    @State("Test SECOM Get Summary POST Interface") // Method will be run before testing interactions that require "with-data" state
+    @State("Test SECOM POST Get Summary Interface") // Method will be run before testing interactions that require "with-data" state
     default void testSecomPostGetSummarySuccess(Map<?,?> data) {
         // Create a new dataset for testing
         S201Dataset s201Dataset = new S201Dataset("TestDataset");
