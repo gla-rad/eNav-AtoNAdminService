@@ -90,10 +90,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(geoJsonStringToGeometryConverter);
-        registry.addConverter(String.class, ContainerTypeEnum.class,
-                s -> (s == null || s.isEmpty()) ? null : ContainerTypeEnum.fromValue(Integer.parseInt(s)));
-        registry.addConverter(String.class, SECOM_DataProductType.class,
-                s -> (s == null || s.isEmpty()) ? null : SECOM_DataProductType.fromString(s));
     }
 
 }
