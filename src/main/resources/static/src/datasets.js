@@ -232,7 +232,7 @@ $(() => {
                     createdAt: null,
                     lastUpdatedAt: null,
                     datasetContentGeneratedAt: null,
-                    cancelled: null
+                    cancelled: false
                 }),
                 success: success,
                 error: (response, status, more) => {
