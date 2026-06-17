@@ -67,7 +67,7 @@ public class AcknowledgementController implements AcknowledgementServiceInterfac
 
         // Process the incoming request - for now just log
         // TODO: We need to actually check for active transactions and log acks
-        Optional.ofNullable(acknowledgementObject)
+        Optional.of(acknowledgementObject)
                 .map(AcknowledgementObject::getEnvelope)
                 .ifPresent(e -> log.debug("Acknowledgement of type {} for transaction {} received at {}",
                         e.getAckType(), e.getTransactionIdentifier(), e.getCreatedAt()));

@@ -38,7 +38,7 @@ public interface AcknowledgementSecomControllerTestInterface {
      * @param data the request data
      */
     @State("Test SECOM Acknowledgement Interface") // Method will be run before testing interactions that require "with-data" state
-    default void testSecomAcknowledgementSuccess(Map<?,?> data) throws IOException, KeyStoreException, CertificateException {
+    default void testSecomAcknowledgementSuccess(Map<?,?> data) {
         System.out.println("Service now checking the acknowledgement interface with " + data);
     }
 

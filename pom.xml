@@ -46,9 +46,9 @@
 		<java.version>25</java.version>
 		<spring-cloud.version>2025.1.1</spring-cloud.version>
 		<springdoc.version>3.0.3</springdoc.version>
-		<bootstrap.version>5.3.3</bootstrap.version>
+		<bootstrap.version>5.3.8</bootstrap.version>
 		<jquery.version>3.7.1</jquery.version>
-		<fa.version>6.5.2</fa.version>
+		<fa.version>7.2.0</fa.version>
 		<geomesa.version>5.4.0</geomesa.version>
 		<scala.abi.version>2.13</scala.abi.version>
 		<kafka.version>3.9.2</kafka.version>
