@@ -66,7 +66,7 @@ public class S201Dataset {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dataset_identification_id", referencedColumnName = "id")
-    @IndexedEmbedded(includeEmbeddedObjectId = true)
+    @IndexedEmbedded
     private S201DatasetIdentification datasetIdentificationInformation;
 
     @NonStandardField(name="geometry", valueBinder = @ValueBinderRef(type = GeometryBinder.class))
@@ -86,7 +86,7 @@ public class S201Dataset {
                     { @JoinColumn(name = "dataset_uuid", referencedColumnName = "uuid", unique = true) },
             inverseJoinColumns =
                     { @JoinColumn(name = "dataset_content_id", referencedColumnName = "id", unique = true) })
-    @IndexedEmbedded(includeEmbeddedObjectId = true)
+    @IndexedEmbedded
     private DatasetContent datasetContent;
 
     @GenericField(sortable = Sortable.YES)

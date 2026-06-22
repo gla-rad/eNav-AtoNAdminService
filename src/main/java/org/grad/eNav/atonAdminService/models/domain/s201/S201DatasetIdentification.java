@@ -48,7 +48,7 @@ public class S201DatasetIdentification {
 
     // Class Variables
     @Id
-    @ScaledNumberField(name = "id_sort", decimalScale=0, sortable = Sortable.YES)
+    @ScaledNumberField(decimalScale=0, sortable = Sortable.YES)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dataset_identification_generator")
     @SequenceGenerator(name="dataset_identification_generator", sequenceName = "dataset_identification_generator_seq", allocationSize=1)
     private BigInteger id;

@@ -49,7 +49,7 @@ public class DatasetContent implements Serializable {
 
     // Class Variables
     @Id
-    @ScaledNumberField(name = "id_sort", decimalScale=0, sortable = Sortable.YES)
+    @ScaledNumberField(decimalScale=0, sortable = Sortable.YES)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dataset_content_generator")
     @SequenceGenerator(name="dataset_content_generator", sequenceName = "dataset_content_seq", allocationSize=1)
     @Column(name = "id", nullable = false, precision = 24, scale = 0)

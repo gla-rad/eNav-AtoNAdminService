@@ -23,21 +23,16 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortedSetSortField;
-import org.apache.lucene.spatial.prefix.RecursivePrefixTreeStrategy;
-import org.apache.lucene.spatial.prefix.tree.GeohashPrefixTree;
-import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
-import org.apache.lucene.spatial.query.SpatialArgs;
-import org.apache.lucene.spatial.query.SpatialOperation;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.domain.secom.SubscriptionRequest;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
+import org.grad.eNav.atonAdminService.models.dtos.datatables.DtSortField;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.repos.SecomSubscriptionRepo;
 import org.grad.eNav.atonAdminService.services.S100ExchangeSetService;
 import org.grad.eNav.atonAdminService.services.UnLoCodeService;
+import org.grad.eNav.atonAdminService.utils.GeometryUtils;
+import org.grad.eNav.atonAdminService.utils.SearchSortUtils;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
@@ -48,8 +43,7 @@ import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
 import org.grad.secomv2.springboot4.components.SecomClient;
-import org.hibernate.search.backend.lucene.LuceneExtension;
-import org.hibernate.search.backend.lucene.search.sort.dsl.LuceneSearchSortFactory;
+import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
 import org.hibernate.search.engine.search.query.SearchQuery;
@@ -57,8 +51,6 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.spatial4j.context.jts.JtsSpatialContext;
-import org.locationtech.spatial4j.shape.jts.JtsGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -281,7 +273,7 @@ public class SecomV2SubscriptionService implements MessageHandler {
                 dataReference,
                 geometry,
                 timestamp,
-                new Sort(new SortedSetSortField("uuid", false))
+                Collections.singletonList(new DtSortField("uuid", false))
         );
 
         // Map the results to a paged response
@@ -304,7 +296,7 @@ public class SecomV2SubscriptionService implements MessageHandler {
         // Create the search query
         final SearchQuery<SubscriptionRequest> searchQuery = this.getDatasetSearchQueryByText(
                 dtPagingRequest.getSearch().getValue(),
-                dtPagingRequest.getLucenceSort(List.of())
+                dtPagingRequest.getSearchSortFields()
         );
 
         // Map the results to a paged response
@@ -485,14 +477,13 @@ public class SecomV2SubscriptionService implements MessageHandler {
      * search test. This query will be based on the SECOM subscriptions fields.
      *
      * @param searchText the text to be searched
-     * @param sort the sorting selection for the search query
+     * @param sortFields the sorting selection for the search query
      * @return the full text query
      */
-    protected SearchQuery<SubscriptionRequest> getDatasetSearchQueryByText(String searchText, Sort sort) {
+    protected SearchQuery<SubscriptionRequest> getDatasetSearchQueryByText(String searchText, List<DtSortField> sortFields) {
         SearchSession searchSession = Search.session( this.entityManager );
         SearchScope<SubscriptionRequest> scope = searchSession.scope( SubscriptionRequest.class );
         return searchSession.search( scope )
-                .extension(LuceneExtension.get())
                 .where(f -> f.wildcard()
                         .fields(
                                 "uuid",
@@ -504,7 +495,7 @@ public class SecomV2SubscriptionService implements MessageHandler {
                         )
                         .matching(Optional.ofNullable(searchText).map(st -> "*" + st).orElse("") + "*")
                 )
-                .sort(f -> f.fromLuceneSort(sort))
+                .sort(f -> SearchSortUtils.buildSort(f, sortFields))
                 .toQuery();
     }
 
@@ -521,7 +512,7 @@ public class SecomV2SubscriptionService implements MessageHandler {
      * @param dataReference         the UUID data reference matched by the requested subscriptions
      * @param geometry              the geometry intersecting with the requested subscriptions
      * @param timestamp             the timestamp for which the requested subscriptions are valid
-     * @param sort the sorting selection for the search query
+     * @param sortFields the sorting selection for the search query
      * @return the full text query
      */
     protected SearchQuery<SubscriptionRequest> getSubscriptionRequestSearchQuery(ContainerTypeEnum containerType,
@@ -530,7 +521,7 @@ public class SecomV2SubscriptionService implements MessageHandler {
                                                                                  UUID dataReference,
                                                                                  Geometry geometry,
                                                                                  LocalDateTime timestamp,
-                                                                                 Sort sort) {
+                                                                                 Collection<DtSortField> sortFields) {
         // Then build and return the hibernate-search query
         SearchSession searchSession = Search.session( this.entityManager );
         SearchScope<SubscriptionRequest> scope = searchSession.scope( SubscriptionRequest.class );
@@ -594,8 +585,8 @@ public class SecomV2SubscriptionService implements MessageHandler {
                                 .should(emptyValuePred));
                     });
                     Optional.ofNullable(geometry).ifPresent(g -> {
-                        step.must(f.extension(LuceneExtension.get())
-                                .fromLuceneQuery(createGeoSpatialQuery(g)));
+                        step.must(f.extension(ElasticsearchExtension.get())
+                                .fromJson(GeometryUtils.geoShapeIntersectsQuery("subscriptionGeometry", g)));
                     });
                     Optional.ofNullable(timestamp).ifPresent(v -> {
                         step.must(f.range()
@@ -609,30 +600,8 @@ public class SecomV2SubscriptionService implements MessageHandler {
                     });
                     return step;
                 })
-                .sort(f -> ((LuceneSearchSortFactory)f).fromLuceneSort(sort))
+                .sort(f -> SearchSortUtils.buildSort(f, sortFields))
                 .toQuery();
-    }
-
-    /**
-     * Creates a Lucene geo-spatial query based on the provided geometry. The
-     * query isa recursive one based on the maxLevels defined (in this case 12,
-     * which result in a sub-meter precision).
-     *
-     * @param geometry      The geometry to generate the spatial query for
-     * @return The Lucene geo-spatial query constructed
-     */
-    protected Query createGeoSpatialQuery(Geometry geometry) {
-        // Initialise the spatial strategy
-        JtsSpatialContext ctx = JtsSpatialContext.GEO;
-        int maxLevels = 12; //results in sub-meter precision for geo-hash
-        SpatialPrefixTree grid = new GeohashPrefixTree(ctx, maxLevels);
-        RecursivePrefixTreeStrategy strategy = new RecursivePrefixTreeStrategy(grid,"subscriptionGeometry");
-
-        // Create the Lucene GeoSpatial Query
-        return Optional.ofNullable(geometry)
-                .map(g -> new SpatialArgs(SpatialOperation.Intersects, new JtsGeometry(g, ctx, false , true)))
-                .map(strategy::makeQuery)
-                .orElse(null);
     }
 
     /**

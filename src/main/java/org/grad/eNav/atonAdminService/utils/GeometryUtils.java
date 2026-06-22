@@ -16,7 +16,9 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
+import com.google.gson.JsonObject;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.WKTWriter;
 
 import java.util.Optional;
 
@@ -29,6 +31,48 @@ import java.util.Optional;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public class GeometryUtils {
+
+    /**
+     * Translates the provided JTS geometry into its Well-Known-Text (WKT)
+     * representation, which is directly understood by the Elasticsearch
+     * geo_shape fields and queries.
+     *
+     * @param geometry the geometry to be translated
+     * @return the WKT representation of the geometry, or null if not provided
+     */
+    public static String toWkt(Geometry geometry) {
+        return Optional.ofNullable(geometry)
+                .map(g -> new WKTWriter().write(g))
+                .orElse(null);
+    }
+
+    /**
+     * Creates the JSON for an Elasticsearch
+     * <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-shape-query.html">geo_shape</a>
+     * query that matches all the documents whose geometry, indexed under the
+     * provided field, intersects with the provided geometry. The result can be
+     * fed directly to the Hibernate Search Elasticsearch extension through the
+     * {@code fromJson} predicate.
+     *
+     * @param fieldName the name of the indexed geo_shape field
+     * @param geometry  the geometry that the results should intersect with
+     * @return the geo_shape query as a JSON object, or null if no geometry is provided
+     */
+    public static JsonObject geoShapeIntersectsQuery(String fieldName, Geometry geometry) {
+        return Optional.ofNullable(geometry)
+                .map(GeometryUtils::toWkt)
+                .map(wkt -> {
+                    final JsonObject shape = new JsonObject();
+                    shape.addProperty("shape", wkt);
+                    shape.addProperty("relation", "intersects");
+                    final JsonObject field = new JsonObject();
+                    field.add(fieldName, shape);
+                    final JsonObject query = new JsonObject();
+                    query.add("geo_shape", field);
+                    return query;
+                })
+                .orElse(null);
+    }
 
     /**
      * A helper function to simplify the joining of geometries without troubling
