@@ -209,7 +209,8 @@ public class DatasetContentLogService {
         // Create the search query
         final SearchQuery<DatasetContentLog> searchQuery = this.getDatasetContentLogSearchQueryByText(
                 dtPagingRequest.getSearch().getValue(),
-                dtPagingRequest.getSearchSortFields());
+                dtPagingRequest.getSearchSortFields()
+        );
 
         // Map the results to a paged response
         return Optional.of(searchQuery)

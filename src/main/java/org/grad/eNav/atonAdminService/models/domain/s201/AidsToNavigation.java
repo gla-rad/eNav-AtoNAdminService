@@ -58,7 +58,7 @@ public abstract class AidsToNavigation implements Serializable {
 
     // Class Variables
     @Id
-    @ScaledNumberField(decimalScale=0, sortable = Sortable.YES)
+    @ScaledNumberField(name = "id", decimalScale=0, sortable = Sortable.YES)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aids_to_navigation_generator")
     @SequenceGenerator(name="aids_to_navigation_generator", sequenceName = "aids_to_navigation_seq", allocationSize=1)
     private BigInteger id;

@@ -475,7 +475,7 @@ public class AidsToNavigationService {
                 .where( f -> f.bool(b -> {
                             b.must(f.matchAll());
                             Optional.ofNullable(idCode).ifPresent(v -> b.must(f.match()
-                                    .field("id_code")
+                                    .field("idCode")
                                     .matching(v)));
                             Optional.ofNullable(geometry).ifPresent(g-> b.must(f.extension(ElasticsearchExtension.get())
                                     .fromJson(GeometryUtils.geoShapeIntersectsQuery("geometry", g))));
