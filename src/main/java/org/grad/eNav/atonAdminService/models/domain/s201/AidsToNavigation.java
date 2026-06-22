@@ -58,32 +58,32 @@ public abstract class AidsToNavigation implements Serializable {
 
     // Class Variables
     @Id
-    @ScaledNumberField(name = "id_sort", decimalScale=0, sortable = Sortable.YES)
+    @ScaledNumberField(decimalScale=0, sortable = Sortable.YES)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aids_to_navigation_generator")
     @SequenceGenerator(name="aids_to_navigation_generator", sequenceName = "aids_to_navigation_seq", allocationSize=1)
     private BigInteger id;
 
     @NotNull
-    @KeywordField(name="id_code", sortable = Sortable.YES)
+    @KeywordField(sortable = Sortable.YES)
     @Column(unique=true)
     private String idCode;
 
     @ElementCollection
     private Set<FeatureName> featureNames;
 
-    @GenericField(indexNullAs = "9999-01-01")
+    @GenericField(indexNullAs = "9999-01-01", sortable = Sortable.YES)
     private LocalDate dateEnd;
 
-    @GenericField(indexNullAs = "1970-01-01")
+    @GenericField(indexNullAs = "1970-01-01", sortable = Sortable.YES)
     private LocalDate dateStart;
 
-    @GenericField(indexNullAs = "9999-01-01")
+    @GenericField(indexNullAs = "9999-01-01", sortable = Sortable.YES)
     private LocalDate periodEnd;
 
-    @GenericField(indexNullAs = "1970-01-01")
+    @GenericField(indexNullAs = "1970-01-01", sortable = Sortable.YES)
     private LocalDate periodStart;
 
-    @GenericField(indexNullAs = "1970-01-01")
+    @GenericField(indexNullAs = "1970-01-01", sortable = Sortable.YES)
     private LocalDate sourceDate;
 
     @KeywordField(name="source", sortable = Sortable.YES)

@@ -16,9 +16,6 @@
 
 package org.grad.eNav.atonAdminService.models.dtos.datatables;
 
-import org.apache.lucene.search.SortField;
-import org.apache.lucene.search.SortedNumericSortField;
-import org.apache.lucene.search.SortedSetSortField;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
@@ -177,31 +174,19 @@ public class DtPagingRequest {
     }
 
     /**
-     * Constructs a Lucence Data Sort object based on the information of the
-     * datatables page request.
+     * Constructs a backend-agnostic list of search sort fields based on the
+     * information of the datatables page request. This is used to build the
+     * Hibernate Search portable sort definition, supported by the Elasticsearch
+     * backend.
      *
-     * @return the Springboot sort definition
+     * @return the list of search sort fields
      */
-    public org.apache.lucene.search.Sort getLucenceSort(List<String> diffSortFields) {
-        // Create the Lucene sorting and direction
-        List<org.apache.lucene.search.SortField> sortFields = this.getOrder().stream()
-                .map(dtOrder -> {
-                    String field = this.getColumns().get(dtOrder.getColumn()).getData();
-                    field = Optional.ofNullable(diffSortFields)
-                            .orElse(Collections.emptyList())
-                            .contains(field) ? field + "_sort" : field;
-                    if(field.compareTo("id") == 0 || field.compareTo("id_sort") == 0) {
-                        return new SortedNumericSortField(field, SortField.Type.LONG,  dtOrder.getDir() == DtDirection.desc);
-                    } else if(field.endsWith("At") || field.endsWith("At_sort")) {
-                        return new SortedNumericSortField(field, SortField.Type.LONG,  dtOrder.getDir() == DtDirection.desc);
-                    } else if(field.endsWith("No") || field.endsWith("No_sort")) {
-                        return new SortedNumericSortField(field, SortField.Type.INT,  dtOrder.getDir() == DtDirection.desc);
-                    } else {
-                        return new SortedSetSortField(field, dtOrder.getDir() == DtDirection.desc);
-                    }
-                })
+    public List<DtSortField> getSearchSortFields() {
+        return this.getOrder().stream()
+                .map(dtOrder -> new DtSortField(
+                        this.getColumns().get(dtOrder.getColumn()).getData(),
+                        dtOrder.getDir() == DtDirection.desc))
                 .collect(Collectors.toList());
-        return new org.apache.lucene.search.Sort(sortFields.toArray(new org.apache.lucene.search.SortField[]{}));
     }
 
     /**

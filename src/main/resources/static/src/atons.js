@@ -26,6 +26,7 @@ var nodesColumnDefs = [
      title: "Type",
      hoverMsg: "The AtoN Type",
      placeholder: "The AtoN Type",
+     sortable: false
  }, {
     data: ( row, type, val, meta ) => {
         if(row.featureNames && row.featureNames.length > 0) {
@@ -40,6 +41,7 @@ var nodesColumnDefs = [
     title: "Name",
     hoverMsg: "The AtoN Name",
     placeholder: "The AtoN Name",
+    sortable: false
  }, {
     data: "dateStart",
     title: "Start Date",

@@ -21,14 +21,6 @@ import _int.iho.s_201.s_100.gml.base._5_2.MDTopicCategoryCode;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortedSetSortField;
-import org.apache.lucene.spatial.prefix.RecursivePrefixTreeStrategy;
-import org.apache.lucene.spatial.prefix.tree.GeohashPrefixTree;
-import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
-import org.apache.lucene.spatial.query.SpatialArgs;
-import org.apache.lucene.spatial.query.SpatialOperation;
 import org.grad.eNav.atonAdminService.aspects.LogDataset;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.exceptions.DeletedAtoNsInDatasetContentGenerationException;
@@ -38,19 +30,19 @@ import org.grad.eNav.atonAdminService.models.domain.DatasetContent;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201DatasetIdentification;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
+import org.grad.eNav.atonAdminService.models.dtos.datatables.DtSortField;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.repos.DatasetRepo;
+import org.grad.eNav.atonAdminService.utils.GeometryUtils;
+import org.grad.eNav.atonAdminService.utils.SearchSortUtils;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
-import org.hibernate.search.backend.lucene.LuceneExtension;
-import org.hibernate.search.backend.lucene.search.sort.dsl.LuceneSearchSortFactory;
+import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
 import org.hibernate.search.engine.search.query.SearchQuery;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.spatial4j.context.jts.JtsSpatialContext;
-import org.locationtech.spatial4j.shape.jts.JtsGeometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -136,9 +128,6 @@ public class DatasetService {
             "datasetIdentificationInformation.datasetFileIdentifier",
             "datasetIdentificationInformation.datasetAbstract"
     };
-    private final String[] searchFieldsWithSort = new String[] {
-
-    };
 
     /**
      * Find one dataset by UUID.
@@ -180,7 +169,7 @@ public class DatasetService {
                 fromTime,
                 toTime,
                 includeCancelled,
-                new Sort(new SortedSetSortField("uuid", false))
+                Collections.singletonList(new DtSortField("uuid", false))
         );
 
         // Map the results to a paged response
@@ -207,7 +196,7 @@ public class DatasetService {
         final SearchQuery<S201Dataset> searchQuery = this.getDatasetSearchQueryByText(
                 dtPagingRequest.getSearch().getValue(),
                 dtPagingRequest.getSearch().getIncludeCancelled(),
-                dtPagingRequest.getLucenceSort(Arrays.asList(searchFieldsWithSort))
+                dtPagingRequest.getSearchSortFields()
         );
 
         // Map the results to a paged response
@@ -442,14 +431,13 @@ public class DatasetService {
      *
      * @param searchText the text to be searched
      * @param includeCancelled whether cancelled datasets should be included in the response
-     * @param sort the sorting selection for the search query
+     * @param sortFields the sorting selection for the search query
      * @return the full text query
      */
-    protected SearchQuery<S201Dataset> getDatasetSearchQueryByText(String searchText, Boolean includeCancelled, Sort sort) {
+    protected SearchQuery<S201Dataset> getDatasetSearchQueryByText(String searchText, Boolean includeCancelled, Collection<DtSortField> sortFields) {
         SearchSession searchSession = Search.session( this.entityManager );
         SearchScope<S201Dataset> scope = searchSession.scope( S201Dataset.class );
         return searchSession.search( scope )
-                .extension(LuceneExtension.get())
                 .where(f -> {
                     BooleanPredicateClausesStep<?,?> step = f.bool()
                             .must(Optional.ofNullable(includeCancelled)
@@ -468,7 +456,7 @@ public class DatasetService {
                     return step;
                 }
                 )
-                .sort(f -> f.fromLuceneSort(sort))
+                .sort(f -> SearchSortUtils.buildSort(f, sortFields))
                 .toQuery();
     }
 
@@ -485,7 +473,7 @@ public class DatasetService {
      * @param fromTime the date-time the results should match from
      * @param toTime the date-time the results should match to
      * @param includeCancelled  whether cancelled datasets should be included in the response
-     * @param sort the sorting selection for the search query
+     * @param sortFields the sorting selection for the search query
      * @return the full text query
      */
     protected SearchQuery<S201Dataset> getDatasetSearchQuery(UUID uuid,
@@ -493,7 +481,7 @@ public class DatasetService {
                                                              LocalDateTime fromTime,
                                                              LocalDateTime toTime,
                                                              Boolean includeCancelled,
-                                                             Sort sort) {
+                                                             Collection<DtSortField> sortFields) {
         // Then build and return the hibernate-search query
         SearchSession searchSession = Search.session( this.entityManager );
         SearchScope<S201Dataset> scope = searchSession.scope( S201Dataset.class );
@@ -514,36 +502,13 @@ public class DatasetService {
                                 .matching(uuid));
                     }
                     if(Objects.nonNull(geometry)) {
-                        step = step.must(f.bool()
-                                .must(f.extension(LuceneExtension.get())
-                                .fromLuceneQuery(createGeoSpatialQuery(geometry))));
+                        step = step.must(f.extension(ElasticsearchExtension.get())
+                                .fromJson(GeometryUtils.geoShapeIntersectsQuery("geometry", geometry)));
                     }
                     return step;
                 })
-                .sort(f -> ((LuceneSearchSortFactory)f).fromLuceneSort(sort))
+                .sort(f -> SearchSortUtils.buildSort(f, sortFields))
                 .toQuery();
-    }
-
-    /**
-     * Creates a Lucene geo-spatial query based on the provided geometry. The
-     * query isa recursive one based on the maxLevels defined (in this case 12,
-     * which result in a sub-meter precision).
-     *
-     * @param geometry      The geometry to generate the spatial query for
-     * @return The Lucene geo-spatial query constructed
-     */
-    protected Query createGeoSpatialQuery(Geometry geometry) {
-        // Initialise the spatial strategy
-        JtsSpatialContext ctx = JtsSpatialContext.GEO;
-        int maxLevels = 12; //results in sub-meter precision for geo-hash
-        SpatialPrefixTree grid = new GeohashPrefixTree(ctx, maxLevels);
-        RecursivePrefixTreeStrategy strategy = new RecursivePrefixTreeStrategy(grid,"geometry");
-
-        // Create the Lucene GeoSpatial Query
-        return Optional.ofNullable(geometry)
-                .map(g -> new SpatialArgs(SpatialOperation.Intersects, new JtsGeometry(g, ctx, false , true)))
-                .map(strategy::makeQuery)
-                .orElse(null);
     }
 
     /**

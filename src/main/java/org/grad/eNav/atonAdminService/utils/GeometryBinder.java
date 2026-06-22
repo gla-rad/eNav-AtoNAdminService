@@ -16,22 +16,19 @@
 
 package org.grad.eNav.atonAdminService.utils;
 
-import org.apache.lucene.spatial.SpatialStrategy;
-import org.apache.lucene.spatial.prefix.RecursivePrefixTreeStrategy;
-import org.apache.lucene.spatial.prefix.tree.GeohashPrefixTree;
-import org.apache.lucene.spatial.prefix.tree.SpatialPrefixTree;
-import org.hibernate.search.backend.lucene.LuceneExtension;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeFromIndexedValueContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.spatial4j.context.jts.JtsSpatialContext;
-import org.locationtech.spatial4j.shape.jts.JtsGeometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.io.WKTWriter;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -39,30 +36,23 @@ import java.util.Optional;
  *
  * This value binder class is used in order for Hibernate Search to generate
  * indexable fields from the geometry variables of each instance and then
- * be able to perform search queries on them using their Lucene indexes.
+ * be able to perform search queries on them using the Elasticsearch backend.
+ * <p>
+ * The geometries are indexed into a native Elasticsearch
+ * <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-shape.html">geo_shape</a>
+ * field, using their Well-Known-Text (WKT) representation. Elasticsearch accepts
+ * WKT for both the indexing and the querying of geo_shape fields, which makes it
+ * an easy and lossless way to map the JTS geometries. The geo-spatial queries can
+ * then be constructed through the {@link GeometryUtils} utility.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public class GeometryBinder implements ValueBinder {
 
     /**
-     * <p>
      * The main binding operation where the geometry value bridge is used and
-     * the geometry objects are indexed based on a recursive strategy depending
-     * on the search level.
-     * </p><p>
-     * This is based on a previous implementation for the same problem on an
-     * older hibernate search release, but had to be developed for hibernate
-     * search 6. See the following links for more information
-     * </p>
-     * <ul>
-     *     <li>
-     *         <a>https://stackoverflow.com/questions/39440184/hibernate-search-query-all-the-entities-intersecting-point</a>
-     *     </li>
-     *     <li>
-     *         <a>https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single</a>
-     *     </li>
-     * </ul>
+     * the geometry objects are indexed as a native Elasticsearch geo_shape
+     * field, using their WKT representation.
      *
      * @param context    The value binding context.
      */
@@ -72,42 +62,45 @@ public class GeometryBinder implements ValueBinder {
                 Geometry.class,
                 new GeometryValueBridge(),
                 context.typeFactory()
-                        .extension(LuceneExtension.get())
-                        .asNative(
-                                Geometry.class,
-                                (absoluteFieldPath, value, collector) -> {
-                                    JtsSpatialContext spatialContext = JtsSpatialContext.GEO;
-                                    SpatialPrefixTree grid = new GeohashPrefixTree(spatialContext, 22);
-                                    // Preparing the tree strategy field
-                                    SpatialStrategy treeStrategy = new RecursivePrefixTreeStrategy(grid, context.paramOptional("fieldName")
-                                            .filter(String.class::isInstance)
-                                            .map(String.class::cast)
-                                            .orElse("geometry"));
-                                    Optional.of(value)
-                                            .map(v -> new JtsGeometry(v, spatialContext, false, true))
-                                            .map(treeStrategy::createIndexableFields)
-                                            .map(Arrays::asList)
-                                            .orElse(Collections.emptyList())
-                                            .stream()
-                                            .forEach(collector::accept);
-                                }
-                        )
+                        .extension(ElasticsearchExtension.get())
+                        .asNative()
+                        .mapping("{\"type\": \"geo_shape\"}")
         );
     }
 
     /**
-     * The private Geometry Value Bride that does pretty much nothing, just
-     * returns the geometry value fields as they are.
+     * The private Geometry Value Bridge that translates the JTS geometries into
+     * their WKT representation, wrapped into a JSON primitive so that it can be
+     * indexed into a native Elasticsearch geo_shape field.
      */
-    private static class GeometryValueBridge implements ValueBridge<Geometry, Geometry> {
+    private static class GeometryValueBridge implements ValueBridge<Geometry, JsonElement> {
         @Override
-        public Geometry toIndexedValue(Geometry value, ValueBridgeToIndexedValueContext context) {
-            return value;
+        public JsonElement toIndexedValue(Geometry value, ValueBridgeToIndexedValueContext context) {
+            return Optional.ofNullable(value)
+                    .map(g -> new WKTWriter().write(g))
+                    .<JsonElement>map(JsonPrimitive::new)
+                    .orElse(null);
         }
 
         @Override
-        public Geometry fromIndexedValue(Geometry value, ValueBridgeFromIndexedValueContext context) {
-            return value;
+        public Geometry fromIndexedValue(JsonElement value, ValueBridgeFromIndexedValueContext context) {
+            // The geo_shape field is not projectable, so this is mostly a
+            // best-effort reconstruction kept for type consistency.
+            try {
+                return Optional.ofNullable(value)
+                        .filter(JsonElement::isJsonPrimitive)
+                        .map(JsonElement::getAsString)
+                        .map(wkt -> {
+                            try {
+                                return new WKTReader().read(wkt);
+                            } catch (ParseException ex) {
+                                throw new IllegalArgumentException(ex);
+                            }
+                        })
+                        .orElse(null);
+            } catch (IllegalArgumentException ex) {
+                return null;
+            }
         }
     }
 

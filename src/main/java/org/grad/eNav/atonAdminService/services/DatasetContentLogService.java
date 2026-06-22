@@ -19,16 +19,16 @@ package org.grad.eNav.atonAdminService.services;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.search.Sort;
 import org.grad.eNav.atonAdminService.exceptions.DataNotFoundException;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContent;
 import org.grad.eNav.atonAdminService.models.domain.DatasetContentLog;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
+import org.grad.eNav.atonAdminService.models.dtos.datatables.DtSortField;
 import org.grad.eNav.atonAdminService.models.enums.DatasetOperation;
 import org.grad.eNav.atonAdminService.models.enums.DatasetType;
 import org.grad.eNav.atonAdminService.repos.DatasetContentLogRepo;
-import org.hibernate.search.backend.lucene.LuceneExtension;
+import org.grad.eNav.atonAdminService.utils.SearchSortUtils;
 import org.hibernate.search.engine.search.query.SearchQuery;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.scope.SearchScope;
@@ -86,7 +86,6 @@ public class DatasetContentLogService {
             "datasetType",
             "operation"
     };
-    private final String[] searchFieldsWithSort = new String[] { };
 
     /**
      * Get all the dataset content logs in a pageable search.
@@ -210,8 +209,7 @@ public class DatasetContentLogService {
         // Create the search query
         final SearchQuery<DatasetContentLog> searchQuery = this.getDatasetContentLogSearchQueryByText(
                 dtPagingRequest.getSearch().getValue(),
-                dtPagingRequest.getLucenceSort(Arrays.asList(this.searchFieldsWithSort))
-        );
+                dtPagingRequest.getSearchSortFields());
 
         // Map the results to a paged response
         return Optional.of(searchQuery)
@@ -330,19 +328,18 @@ public class DatasetContentLogService {
      * </ul>
      *
      * @param searchText the UUID as text to be searched
-     * @param sort the sorting selection for the search query
+     * @param sortFields the sorting selection for the search query
      * @return the full text query
      */
-    protected SearchQuery<DatasetContentLog> getDatasetContentLogSearchQueryByText(String searchText, Sort sort) {
+    protected SearchQuery<DatasetContentLog> getDatasetContentLogSearchQueryByText(String searchText, Collection<DtSortField> sortFields) {
         SearchSession searchSession = Search.session( this.entityManager );
         SearchScope<DatasetContentLog> scope = searchSession.scope( DatasetContentLog.class );
         return searchSession.search( scope )
-                .extension(LuceneExtension.get())
                 .where(f -> f.wildcard()
                         .fields(this.searchFields)
                         .matching(Optional.ofNullable(searchText).map(st -> "*" + st).orElse("") + "*")
                 )
-                .sort(f -> f.fromLuceneSort(sort))
+                .sort(f -> SearchSortUtils.buildSort(f, sortFields))
                 .toQuery();
     }
 
