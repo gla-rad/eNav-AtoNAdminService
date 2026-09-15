@@ -54,7 +54,8 @@ public class FogSignal extends Equipment {
 
     private BigDecimal signalPeriod;
 
-    private SignalSequence signalSequence;
+    @ElementCollection
+    private Set<SignalSequence> signalSequences;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -155,21 +156,21 @@ public class FogSignal extends Equipment {
     }
 
     /**
-     * Gets signal sequence.
+     * Gets signal sequences.
      *
-     * @return the signal sequence
+     * @return the signal sequences
      */
-    public SignalSequence getSignalSequence() {
-        return signalSequence;
+    public Set<SignalSequence> getSignalSequences() {
+        return signalSequences;
     }
 
     /**
-     * Sets signal sequence.
+     * Sets signal sequences.
      *
-     * @param signalSequence the signal sequence
+     * @param signalSequences the signal sequences
      */
-    public void setSignalSequence(SignalSequence signalSequence) {
-        this.signalSequence = signalSequence;
+    public void setSignalSequences(Set<SignalSequence> signalSequences) {
+        this.signalSequences = signalSequences;
     }
 
     /**
