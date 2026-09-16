@@ -58,11 +58,24 @@ public class HTMLViewerController {
                 .collect(Collectors.toList()));
 
         // Add the properties to the UI model
-        model.addAttribute("appName", this.serviceInformationConfig.name());
-        model.addAttribute("appOperatorUrl", this.serviceInformationConfig.url());
-        model.addAttribute("appCopyright", this.serviceInformationConfig.copyright());
+        this.addCommonAttributes(model, "index");
+
         // Return the rendered index
         return "index";
+    }
+
+    /**
+     * The AtoN chart page of the AtoN Service Application. This provides an
+     * overview of all the Aids to Navigation of the service, optionally
+     * narrowed down to the coverage of a single S-201 dataset.
+     *
+     * @param model The application UI model
+     * @return The map page
+     */
+    @GetMapping("/map")
+    public String map(Model model) {
+        this.addCommonAttributes(model, "map");
+        return "map";
     }
 
     /**
@@ -73,9 +86,7 @@ public class HTMLViewerController {
      */
     @GetMapping("/datasets")
     public String datasets(Model model) {
-        model.addAttribute("appName", this.serviceInformationConfig.name());
-        model.addAttribute("appOperatorUrl", this.serviceInformationConfig.url());
-        model.addAttribute("appCopyright", this.serviceInformationConfig.copyright());
+        this.addCommonAttributes(model, "datasets");
         return "datasets";
     }
 
@@ -87,9 +98,7 @@ public class HTMLViewerController {
      */
     @GetMapping("/atons")
     public String atons(Model model) {
-        model.addAttribute("appName", this.serviceInformationConfig.name());
-        model.addAttribute("appOperatorUrl", this.serviceInformationConfig.url());
-        model.addAttribute("appCopyright", this.serviceInformationConfig.copyright());
+        this.addCommonAttributes(model, "atons");
         return "atons";
     }
 
@@ -101,9 +110,7 @@ public class HTMLViewerController {
      */
     @GetMapping("/subscriptions")
     public String subscriptions(Model model) {
-        model.addAttribute("appName", this.serviceInformationConfig.name());
-        model.addAttribute("appOperatorUrl", this.serviceInformationConfig.url());
-        model.addAttribute("appCopyright", this.serviceInformationConfig.copyright());
+        this.addCommonAttributes(model, "subscriptions");
         return "subscriptions";
     }
 
@@ -115,9 +122,7 @@ public class HTMLViewerController {
      */
     @GetMapping("/logs")
     public String logs(Model model) {
-        model.addAttribute("appName", this.serviceInformationConfig.name());
-        model.addAttribute("appOperatorUrl", this.serviceInformationConfig.url());
-        model.addAttribute("appCopyright", this.serviceInformationConfig.copyright());
+        this.addCommonAttributes(model, "logs");
         return "datasetContentLogs";
     }
 
@@ -129,13 +134,26 @@ public class HTMLViewerController {
      */
     @GetMapping("/about")
     public String about(Model model) {
-        model.addAttribute("appName", this.serviceInformationConfig.name());
+        this.addCommonAttributes(model, "about");
         model.addAttribute("appVersion", this.serviceInformationConfig.version());
         model.addAttribute("appOperatorName", this.serviceInformationConfig.organization());
         model.addAttribute("appOperatorContact", Arrays.toString(this.serviceInformationConfig.electronicMailAddresses().toArray()));
+        return "about";
+    }
+
+    /**
+     * Populates the UI model with the attributes shared by every page of the
+     * application - the service branding and the name of the currently
+     * rendered page, which drives the active entry of the navigation bar.
+     *
+     * @param model The application UI model
+     * @param page The name of the page being rendered
+     */
+    protected void addCommonAttributes(Model model, String page) {
+        model.addAttribute("page", page);
+        model.addAttribute("appName", this.serviceInformationConfig.name());
         model.addAttribute("appOperatorUrl", this.serviceInformationConfig.url());
         model.addAttribute("appCopyright", this.serviceInformationConfig.copyright());
-        return "about";
     }
 
     /**

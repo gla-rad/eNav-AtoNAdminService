@@ -12,13 +12,29 @@ var maxNoOfMessages = 100;
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#incoming").show();
-    }
-    else {
-        $("#incoming").hide();
-    }
+    $("#connectionStatus")
+        .toggleClass("tag-success", connected)
+        .toggleClass("tag-danger", !connected)
+        .html(`<i class="fa-solid fa-circle"></i>${connected ? 'Connected' : 'Disconnected'}`);
+    clearMessages();
+}
+
+/**
+ * Empties the message table and resets the counter.
+ */
+function clearMessages() {
     $("#incoming").html("");
+    noOfMessages = 0;
+    updateMessageCount();
+}
+
+/**
+ * Keeps the message counter and the empty state in sync with the table.
+ */
+function updateMessageCount() {
+    $("#messageCount").text(noOfMessages);
+    $("#messages").toggle(noOfMessages > 0);
+    $("#messagesEmpty").toggle(noOfMessages === 0);
 }
 
 /**
@@ -32,6 +48,7 @@ function connect() {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, (frame) => {
             setConnected(true);
+            showToast(`Listening on the ${endpoint} topic`, 'success');
             stompClient.subscribe('/topic/' + endpoint, (msg) => {
                 showMessage(JSON.parse(msg.body));
             });
@@ -69,20 +86,20 @@ function disconnect() {
 function showMessage(msg) {
     // For too many messages clear out the incoming table
     if(noOfMessages >= maxNoOfMessages) {
-        $("#incoming").html("");
-        noOfMessages = 0;
+        clearMessages();
     }
 
     // And add the entry to the table
-    $("#incoming").append("<tr class=\"d-flex\">"
-        + "<td class=\"col-4\">" + msg.idCode + "</td>"
-        + "<td class=\"col-4\">" + msg.textualDescription + "</td>"
-        + "<td class=\"col-2\">" + msg.dateStart + "</td>"
-        + "<td class=\"col-2\">" + msg.dateEnd + "</td>"
+    $("#incoming").prepend("<tr>"
+        + "<td>" + renderIdentifier(msg.idCode) + "</td>"
+        + "<td>" + escapeHtml(msg.textualDescription) + "</td>"
+        + "<td>" + renderDateTime(msg.dateStart) + "</td>"
+        + "<td>" + renderDateTime(msg.dateEnd) + "</td>"
         + "</tr>");
 
     // Increase the number of shown messages
     noOfMessages++;
+    updateMessageCount();
 }
 
 /**
@@ -92,7 +109,11 @@ function showMessage(msg) {
 $(() => {
     $( "#connect" ).click(() => { connect(); });
     $( "#disconnect" ).click(() => { disconnect(); });
+    $( "#clear" ).click(() => { clearMessages(); });
     $("form").on('submit', (e) => {
         e.preventDefault();
     });
+
+    // Start from a clean, disconnected state
+    setConnected(false);
 });
