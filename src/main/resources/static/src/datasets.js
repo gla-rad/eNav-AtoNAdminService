@@ -17,8 +17,8 @@ var datasetColumnDefs = [
     hoverMsg: "The Dataset UUID",
     placeholder: "The Dataset UUID",
     type: "hidden",
-    visible: false,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderIdentifier(data) : data
 }, {
      data: "datasetIdentificationInformation.id",
      title: "Information ID",
@@ -26,14 +26,16 @@ var datasetColumnDefs = [
      placeholder: "The Dataset Identification Information ID",
      type: "hidden",
      visible: false,
-     searchable: false
+     searchable: false,
+     className: "noVis"
 }, {
     data: "datasetIdentificationInformation.datasetTitle",
     title: "Title",
     hoverMsg: "The Dataset Title",
     placeholder: "The Dataset Title",
     required: true,
-    width: "20%"
+    width: "20%",
+    render: (data, type) => type === 'display' ? `<span class="fw-semibold">${escapeHtml(data)}</span>` : data
  }, {
     data: "datasetIdentificationInformation.encodingSpecification",
     title: "Encoding",
@@ -43,7 +45,8 @@ var datasetColumnDefs = [
     options: {
         "S100 Part 10b":"S100 Part 10b"
     },
-    required: true
+    required: true,
+    visible: false
  }, {
     data: "datasetIdentificationInformation.encodingSpecificationEdition",
     title: "Encoding Edition",
@@ -53,7 +56,8 @@ var datasetColumnDefs = [
     options: {
         "1.0.0":"1.0.0"
     },
-    required: true
+    required: true,
+    visible: false
  }, {
     data: "datasetIdentificationInformation.productIdentifier",
     title: "Product Identifier",
@@ -63,7 +67,8 @@ var datasetColumnDefs = [
     options: {
         "S-201":"S-201"
     },
-    required: true
+    required: true,
+    render: (data, type) => type === 'display' ? renderTag(data, 'accent') : data
 }, {
     data: "datasetIdentificationInformation.productEdition",
     title: "Product Edition",
@@ -73,28 +78,41 @@ var datasetColumnDefs = [
     options: {
         "2.0.0":"2.0.0"
     },
-    required: true
+    required: true,
+    visible: false
  }, {
     data: "datasetIdentificationInformation.applicationProfile",
     title: "Application Profile",
     hoverMsg: "The Dataset Application Profile",
     placeholder: "The Dataset Application Profile",
-    required: true
+    required: true,
+    visible: false
 }, {
     data: "datasetIdentificationInformation.datasetFileIdentifier",
     title: "File Identifier",
     hoverMsg: "The Dataset File Identifier",
     placeholder: "The Dataset File Identifier",
-    required: true
+    required: true,
+    render: (data, type) => type === 'display' ? renderIdentifier(data) : data
  }, {
     data: "geometry",
-    title: "Geometry",
+    title: "Coverage",
     hoverMsg: "The Dataset Geometry",
     placeholder: "The Dataset Geometry",
     type: "hidden",
-    visible: false,
-    searchable: false
- },{
+    sortable: false,
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderCoverage(data) : data
+ }, {
+    data: "cancelled",
+    title: "Status",
+    hoverMsg: "Cancelled",
+    placeholder: "Cancelled",
+    type: "hidden",
+    sortable: false,
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderDatasetStatus(data) : data
+}, {
     data: "datasetIdentificationInformation.datasetAbstract",
     title: "Abstract",
     type: "textarea",
@@ -109,37 +127,55 @@ var datasetColumnDefs = [
     hoverMsg: "Dataset Created At",
     placeholder: "Dataset Created At",
     visible: false,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderDateTime(data) : data
 }, {
     data: "lastUpdatedAt",
     title: "Updated At",
     type: "hidden",
     hoverMsg: "Dataset Updated At",
     placeholder: "Dataset Updated At",
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderDateTime(data) : data
 }, {
      data: "datasetContent.generatedAt",
      title: "Content Updated At",
      type: "hidden",
      hoverMsg: "Dataset Content Updated At",
      placeholder: "Dataset Content Updated At",
-     searchable: false
- }, {
-    data: "cancelled",
-    title: "Cancelled",
-    type: "hidden",
-    hoverMsg: "Cancelled",
-    placeholder: "Cancelled",
-    visible: false,
-    searchable: false
-}];
+     searchable: false,
+     render: (data, type) => type === 'display' ? renderDateTime(data) : data
+ }];
+
+/**
+ * Renders whether a dataset has an area of coverage attached to it.
+ *
+ * @param {Object}  geometry    The dataset geometry
+ * @return {String} The coverage markup
+ */
+function renderCoverage(geometry) {
+    const positions = MapUtils.positionsOf(geometry);
+    return positions.length > 0
+        ? renderTag('Defined', 'success')
+        : renderTag('Not set', 'warning');
+}
+
+/**
+ * Renders the life cycle status of a dataset.
+ *
+ * @param {Boolean} cancelled   Whether the dataset has been cancelled
+ * @return {String} The status markup
+ */
+function renderDatasetStatus(cancelled) {
+    return cancelled === true
+        ? renderTag('Cancelled', 'danger')
+        : renderTag('Active', 'success');
+}
 
 // Run when the document is ready
 $(() => {
     // And re-initialise it
-    datasetTable = $('#dataset_table').DataTable({
-        processing: true,
-        serverSide: true,
+    datasetTable = $('#dataset_table').DataTable($.extend(commonDatatableOptions(), {
         ajax: {
             type: "POST",
             url: `./api/dataset/dt`,
@@ -151,49 +187,24 @@ $(() => {
                 return JSON.stringify(d);
             },
             error: (response, status, more) => {
-                error({"responseText" : response.getResponseHeader("X-atonService-error")}, status, more);
+                showErrorDialog(extractErrorMessage(response));
             }
         },
         columns: datasetColumnDefs,
-        dom: '<"d-flex"<"flex-start"B><"flex-middle p-1"l><"flex-end flex-fill"f>><"d-flex mt-1 mb-1"t><"d-flex w-100"<"flex-fill"i><"flex-end"p>>',
-        select: 'single',
-        lengthMenu: [10, 25, 50, 75, 100],
-        responsive: true,
         altEditor: true, // Enable altEditor
         buttons: [{
-            text: '<i class="fa-solid fa-circle-plus"></i>',
-            titleAttr: 'Add Dataset',
+            text: '<i class="fa-solid fa-circle-plus"></i><span class="dt-button-text">New</span>',
+            titleAttr: 'Add a new dataset',
             name: 'add' // do not change name
         }, {
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-pen-to-square"></i>',
-            titleAttr: 'Edit Dataset',
+            text: '<i class="fa-solid fa-pen-to-square"></i><span class="dt-button-text">Edit</span>',
+            titleAttr: 'Edit the selected dataset',
             name: 'edit' // do not change name
         }, {
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-ban"></i>',
-            titleAttr: 'Cancel Dataset',
-            name: 'cancel',
-            action: (e, dt, node, config) => {
-                cancelDataset(e, dt, node, config);
-            }
-        }, {
-            extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-copy"></i>',
-            titleAttr: 'Replace Dataset',
-            name: 'replace',
-            action: (e, dt, node, config) => {
-                replaceDataset(e, dt, node, config);
-            }
-        }, {
-            extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-trash-can"></i>',
-            titleAttr: 'Delete Dataset',
-            name: 'delete' // do not change name
-        }, {
-            extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-map-location-dot"></i>',
-            titleAttr: 'View Dataset Area',
+            text: '<i class="fa-solid fa-draw-polygon"></i><span class="dt-button-text">Area</span>',
+            titleAttr: 'View and edit the dataset area',
             name: 'datasetGeometry', // do not change name
             className: 'dataset-geometry-toggle',
             action: (e, dt, node, config) => {
@@ -201,14 +212,37 @@ $(() => {
             }
         }, {
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-code"></i>',
-            titleAttr: 'View S-201 Dataset Content',
+            text: '<i class="fa-solid fa-code"></i><span class="dt-button-text">Content</span>',
+            titleAttr: 'View the S-201 dataset content',
             name: 'datasetContent', // do not change name
             className: 'dataset-content-toggle',
             action: (e, dt, node, config) => {
                 loadDatasetContent(e, dt, node, config);
             }
-        }],
+        }, {
+            extend: 'selected', // Bind to Selected row
+            text: '<i class="fa-solid fa-copy"></i><span class="dt-button-text">Replace</span>',
+            titleAttr: 'Replace the selected dataset',
+            name: 'replace',
+            action: (e, dt, node, config) => {
+                replaceDataset(e, dt, node, config);
+            }
+        }, {
+            extend: 'selected', // Bind to Selected row
+            text: '<i class="fa-solid fa-ban"></i><span class="dt-button-text">Cancel</span>',
+            titleAttr: 'Cancel the selected dataset',
+            name: 'cancel',
+            className: 'btn-danger-soft',
+            action: (e, dt, node, config) => {
+                cancelDataset(e, dt, node, config);
+            }
+        }, {
+            extend: 'selected', // Bind to Selected row
+            text: '<i class="fa-solid fa-trash-can"></i><span class="dt-button-text">Delete</span>',
+            titleAttr: 'Delete the selected dataset',
+            className: 'btn-danger-soft',
+            name: 'delete' // do not change name
+        }].concat(commonDatatableButtons('S-201 Datasets')),
         onAddRow: (datatable, rowdata, success, error) => {
             $.ajax({
                 url: './api/dataset',
@@ -234,9 +268,12 @@ $(() => {
                     datasetContentGeneratedAt: null,
                     cancelled: false
                 }),
-                success: success,
+                success: (response) => {
+                    showToast('The dataset has been created', 'success');
+                    success(response);
+                },
                 error: (response, status, more) => {
-                    error({"responseText" : response.getResponseHeader("X-atonService-error")}, status, more);
+                    error({"responseText" : extractErrorMessage(response)}, status, more);
                 }
             });
         },
@@ -270,9 +307,12 @@ $(() => {
                     datasetContentGeneratedAt: rowdata["datasetContentGeneratedAt"],
                     cancelled: rowdata["cancelled"]
                 }),
-                success: success,
+                success: (response) => {
+                    showToast('The dataset has been updated', 'success');
+                    success(response);
+                },
                 error: (response, status, more) => {
-                     error({"responseText" : response.getResponseHeader("X-atonService-error")}, status, more);
+                     error({"responseText" : extractErrorMessage(response)}, status, more);
                 }
             });
         },
@@ -284,7 +324,7 @@ $(() => {
                     crossDomain: true,
                     success: success,
                     error: (response, status, more) => {
-                        error({"responseText" : response.getResponseHeader("X-atonService-error")}, status, more);
+                        error({"responseText" : extractErrorMessage(response)}, status, more);
                     }
                 });
             });
@@ -295,7 +335,7 @@ $(() => {
                 $(row).addClass('cancelled');
             }
         }
-    });
+    }));
 
     // On changes in the cancelled dataset inclusion option, we need to
     // reload the whole table
@@ -316,10 +356,7 @@ $(() => {
         .attr({ "data-bs-toggle": "modal", "data-bs-target": "#datasetContentPanel" });
 
     // Now also initialise the aton geometry map before we need it
-    datasetMap = L.map('datasetGeometryMap').setView([54.910, -3.432], 5);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(datasetMap);
+    datasetMap = MapUtils.createMap('datasetGeometryMap');
 
     // FeatureGroup is to store editable layers
     drawnItems = new L.FeatureGroup();
@@ -350,11 +387,7 @@ $(() => {
     });
 
     // Invalidate the map size on show to fix the presentation
-    $('#datasetGeometryPanel').on('shown.bs.modal', () => {
-        setTimeout(() => {
-            datasetMap.invalidateSize();
-        }, 10);
-    });
+    MapUtils.refreshOnModalShow('#datasetGeometryPanel', datasetMap);
 });
 
 /**
@@ -383,9 +416,12 @@ function cancelDataset(event, table, button, config) {
                 url: `./api/dataset/${datasetId}/cancel`,
                 type: 'PUT',
                 contentType: 'application/json; charset=utf-8',
-                success: (response) => datasetTable.ajax.reload(),
+                success: (response) => {
+                    showToast('The dataset has been cancelled', 'success');
+                    datasetTable.ajax.reload();
+                },
                 error: (response, status, more) => {
-                    showErrorDialog(response.getResponseHeader("X-atonService-error"));
+                    showErrorDialog(extractErrorMessage(response));
                 }
           });
        }
@@ -410,7 +446,7 @@ function replaceDataset(event, table, button, config) {
     showConfirmationDialog(`
            <p>The selected dataset with UUID:<p>
            <p class="fw-bold">${datasetId}</p>
-           <p>will be replaces. This action involves cancelling the existing dataset and cannot be undone.<p>
+           <p>will be replaced. This action involves cancelling the existing dataset and cannot be undone.<p>
            <p class="text-danger">Are  you sure you want to proceed?</p>
        `,
        () => {
@@ -418,9 +454,12 @@ function replaceDataset(event, table, button, config) {
                 url: `./api/dataset/${datasetId}/replace`,
                 type: 'PUT',
                 contentType: 'application/json; charset=utf-8',
-                success: (response) => datasetTable.ajax.reload(),
+                success: (response) => {
+                    showToast('The dataset has been replaced', 'success');
+                    datasetTable.ajax.reload();
+                },
                 error: (response, status, more) => {
-                    showErrorDialog(response.getResponseHeader("X-atonService-error"));
+                    showErrorDialog(extractErrorMessage(response));
                 }
           });
        }
@@ -448,9 +487,9 @@ function loadDatasetGeometry(event, table, button, config) {
     // Recreate the drawn items feature group
     drawnItems.clearLayers();
     if(geometry) {
-        var geomLayer = L.geoJson(geometry, {coordsToLatLng: (coords)=>coords});
-        addNonGroupLayers(geomLayer, drawnItems);
-        datasetMap.setView(geomLayer.getBounds().getCenter(), 5);
+        var geomLayer = MapUtils.geoJsonLayer(geometry);
+        MapUtils.addNonGroupLayers(geomLayer, drawnItems);
+        MapUtils.fitTo(datasetMap, drawnItems, 10);
     }
 }
 
@@ -485,12 +524,12 @@ function loadDatasetContent(event, table, button, config) {
                 processed = processed.split('').map(x => x.charCodeAt(0));
                 // Decompress if required
                 if(response.dataResponseObject[0].exchangeMetadata.compressionFlag) {
-                    processed = pako.ungzip(new Uint8Array(decoded), { to: 'string' });
+                    processed = pako.ungzip(new Uint8Array(processed), { to: 'string' });
                     processed = processed.split('').map(x => x.charCodeAt(0));
                 }
                 // Decrypt if required
                 if(response.dataResponseObject[0].exchangeMetadata.dataProtection) {
-                    log.warn("Decryption not supported yet!!!");
+                    console.warn("Decryption not supported yet!!!");
                     processed = processed; // Not supported yet
                 }
                 // To XML string - For large files, split the process into chunks
@@ -505,20 +544,10 @@ function loadDatasetContent(event, table, button, config) {
             }
         },
         error: (response, status, more) => {
-            showErrorDialog(response.getResponseHeader("X-atonService-error"));
+            $('#datasetContentTextArea').val("");
+            showErrorDialog(extractErrorMessage(response));
         }
     });
-}
-
-// Would benefit from https://github.com/Leaflet/Leaflet/issues/4461
-function addNonGroupLayers(sourceLayer, targetGroup) {
-    if (sourceLayer instanceof L.LayerGroup) {
-        sourceLayer.eachLayer((layer) => {
-            addNonGroupLayers(layer, targetGroup);
-        });
-    } else {
-        targetGroup.addLayer(sourceLayer);
-    }
 }
 
 /**
@@ -551,11 +580,13 @@ function saveGeometry() {
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             data: JSON.stringify(dataset),
-            success: () => {console.log("success"); datasetTable.ajax.reload();},
+            success: () => {
+                showToast('The dataset area has been saved', 'success');
+                datasetTable.ajax.reload();
+            },
             error: (response, status, more) => {
-               showErrorDialog(response.getResponseHeader("X-atonService-error"));
+               showErrorDialog(extractErrorMessage(response));
             }
         });
     }
 }
-

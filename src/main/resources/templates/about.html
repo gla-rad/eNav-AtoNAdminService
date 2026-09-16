@@ -16,42 +16,54 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
-    </head>
-    <body>
-        <div class="d-flex flex-column vh-100">
-            <div th:replace="~{fragments/general.html :: navbar}"></div>
-            <div class="flex-fill flex-grow-1 flex-shrink-0 sky-bg">
-                <div id="main-content" class="container mt-3">
-                    <div class="card shadow" sec:authorize="isAuthenticated()">
-                        <div class="card-header">
-                            <h2>[[${appName}]] Information</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="row p-1">
-                                <div class="col-sm-2"><h5>Name:</h5></div>
-                                <div class="col-sm-10"><span>&nbsp;[[${appName}]]</span></div>
-                            </div>
-                            <div class="row p-1">
-                                <div class="col-sm-2"><h5>Version:</h5></div>
-                                <div class="col-sm-10"><span>&nbsp;[[${appVersion}]]</span></div>
-                            </div>
-                            <div class="row p-1">
-                                <div class="col-sm-2"><h5>Operator Name:</h5></div>
-                                <div class="col-sm-10"><span>&nbsp;[[${appOperatorName}]]</span></div>
-                            </div>
-                            <div class="row p-1">
-                                <div class="col-sm-2"><h5>Contact:</h5></div>
-                                <div class="col-sm-10"><span>&nbsp;[[${appOperatorContact}]]</span></div>
-                            </div>
+<head>
+    <th:block th:replace="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+<body class="app-shell sky-bg">
+    <th:block th:replace="~{fragments/general.html :: navbar}"></th:block>
+    <main class="app-main">
+        <div class="container-fluid app-container">
+            <th:block th:replace="~{fragments/general.html :: login-card}"></th:block>
+            <th:block th:replace="~{fragments/general.html :: page-header(
+                'fa-circle-info',
+                'About this service',
+                'The identity and the operator of this e-Navigation microservice')}"></th:block>
+
+            <div class="card app-card" sec:authorize="isAuthenticated()">
+                <div class="card-header">
+                    <i class="fa-solid fa-id-card"></i>
+                    <h2>Service information</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <div class="info-label">Name</div>
+                        <div class="info-value">[[${appName}]]</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Version</div>
+                        <div class="info-value"><span class="tag tag-accent">[[${appVersion}]]</span></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Operator name</div>
+                        <div class="info-value">[[${appOperatorName}]]</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Contact</div>
+                        <div class="info-value cell-mono">[[${appOperatorContact}]]</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Operator website</div>
+                        <div class="info-value">
+                            <a th:href="@{${appOperatorUrl}}" target="_blank" rel="noopener">[[${appOperatorUrl}]]</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div th:replace="~{fragments/general.html :: footer}"></div>
+
         </div>
-        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    </body>
+    </main>
+    <th:block th:replace="~{fragments/general.html :: footer}"></th:block>
+
+    <th:block th:replace="~{fragments/general.html :: core-scripts}"></th:block>
+</body>
 </html>

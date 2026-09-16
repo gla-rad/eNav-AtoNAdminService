@@ -17,95 +17,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.bootstrap5.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/3.0.3/css/responsive.bootstrap5.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/2.1.0/css/select.bootstrap5.min.css" />
-    <link rel="stylesheet" th:href="@{/webjars/leaflet/dist/leaflet.css}" />
-    <link rel="stylesheet" th:href="@{/webjars/leaflet-draw/dist/leaflet.draw.css}" />
+    <th:block th:replace="~{fragments/general.html :: headerfiles}"></th:block>
+    <th:block th:replace="~{fragments/general.html :: datatable-styles}"></th:block>
+    <th:block th:replace="~{fragments/general.html :: map-styles}"></th:block>
 </head>
-<body>
-    <div class="d-flex flex-column vh-100">
-        <div th:replace="~{fragments/general.html :: navbar}"></div>
-        <div class="flex-fill flex-grow-1 flex-shrink-0 sky-bg" >
-            <div id="main-content" class="container-fluid mt-3">
-                <div class="card shadow" sec:authorize="isAuthenticated()">
-                    <div class="card-header">
-                        <h2>S-201 Dataset Content Logs</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="col-12 m-1">
-                            <table id="dataset_content_logs_table" class="table table-sm table-striped row-border hover w-100">
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="datasetContentLogGeometryPanel" tabindex="-1" role="dialog" aria-labelledby="datasetContentLogGeometryPanelHeader"
-             aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="datasetContentLogGeometryPanelHeader">Dataset Content Log Area</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- map container -->
-                        <div id="datasetContentLogGeometryMap" class="map border shadow"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="float-right">
-                            <button type="button" class="btn btn-default" data-bs-dismiss="modal" title="Close">
-                                <i class="fa-solid fa-xmark"></i>&nbsp;
-                                <span class="btn-label"> Close</span>
-                            </button>
-                        </div>
+<body class="app-shell sky-bg">
+    <th:block th:replace="~{fragments/general.html :: navbar}"></th:block>
+    <main class="app-main">
+        <div class="container-fluid app-container">
+            <th:block th:replace="~{fragments/general.html :: login-card}"></th:block>
+            <th:block th:replace="~{fragments/general.html :: page-header(
+                'fa-clock-rotate-left',
+                'Dataset Content Logs',
+                'The audit trail of every S-201 dataset generation, update and delta')}"></th:block>
+            <div class="card app-card" sec:authorize="isAuthenticated()">
+                <div class="card-body">
+                    <div class="table-shell">
+                        <table id="dataset_content_logs_table" class="table table-sm table-striped row-border hover w-100"></table>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="datasetContentLogPanel" tabindex="-1" role="dialog" aria-labelledby="datasetContentLogPanelHeader"
-             aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="datasetContentLogPanelHeader">Dataset Content Log</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <textarea class="form-control form-control-sm" id="datasetContentLogTextArea" rows="30" readonly></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="float-right">
-                            <button type="button" class="btn btn-default" data-bs-dismiss="modal" title="Cancel Changes">
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="btn-label"> Close</span>
-                            </button>
-                        </div>
-                    </div>
+    </main>
+    <th:block th:replace="~{fragments/general.html :: footer}"></th:block>
+
+    <div class="modal fade" id="datasetContentLogGeometryPanel" tabindex="-1" role="dialog" aria-labelledby="datasetContentLogGeometryPanelHeader"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="datasetContentLogGeometryPanelHeader">
+                        <i class="fa-solid fa-draw-polygon"></i>Dataset Content Log Area
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- map container -->
+                    <div id="datasetContentLogGeometryMap" class="map border"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal" title="Close">
+                        <i class="fa-solid fa-xmark"></i><span class="btn-label">Close</span>
+                    </button>
                 </div>
             </div>
         </div>
-        <div th:replace="~{fragments/general.html :: footer}"></div>
     </div>
-    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/leaflet/dist/leaflet.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/leaflet-draw/dist/leaflet.draw.js}"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.bootstrap5.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.3/js/dataTables.responsive.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/responsive/3.0.3/js/responsive.bootstrap5.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/select/2.1.0/js/dataTables.select.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <script type="text/javascript" th:src="@{/lib/dataTables.altEditor.free.js}"></script>
-    <script type="text/javascript" th:src="@{/src/common.js}"></script>
+
+    <div class="modal fade" id="datasetContentLogPanel" tabindex="-1" role="dialog" aria-labelledby="datasetContentLogPanelHeader"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="datasetContentLogPanelHeader">
+                        <i class="fa-solid fa-code"></i>Dataset Content Log
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control form-control-sm code-view" id="datasetContentLogTextArea" rows="26" readonly></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal" title="Close">
+                        <i class="fa-solid fa-xmark"></i><span class="btn-label">Close</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" title="Copy the log content to the clipboard"
+                            onclick="copyToClipboard('#datasetContentLogTextArea')">
+                        <i class="fa-solid fa-copy"></i><span class="btn-label">Copy</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/general.html :: error-dialog}"></th:block>
+
+    <th:block th:replace="~{fragments/general.html :: core-scripts}"></th:block>
+    <th:block th:replace="~{fragments/general.html :: map-scripts}"></th:block>
+    <th:block th:replace="~{fragments/general.html :: datatable-scripts}"></th:block>
     <script type="text/javascript" th:src="@{/src/datasetContentLogs.js}"></script>
 </body>
 </html>

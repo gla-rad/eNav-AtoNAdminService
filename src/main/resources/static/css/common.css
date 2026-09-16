@@ -1,46 +1,1302 @@
-/** Footer Panel **/
+/*
+ * Copyright (c) 2024 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-.footer {
-    padding: 10px 30px;
-    border-radius: 0;
+/*****************************
+ *       Design Tokens       *
+ *****************************/
+
+:root {
+    /* Brand palette - a maritime navy/teal scale */
+    --grad-navy-900: #061426;
+    --grad-navy-800: #0a2138;
+    --grad-navy-700: #0f2e4c;
+    --grad-navy-600: #143c64;
+    --grad-navy-500: #1a5182;
+    --grad-teal-600: #0b7285;
+    --grad-teal-500: #0f8fa5;
+    --grad-teal-400: #21b0c4;
+    --grad-amber-500: #e8a317;
+
+    /* Semantic surfaces - light theme */
+    --app-canvas: #eef2f7;
+    --app-surface: #ffffff;
+    --app-surface-alt: #f6f8fb;
+    --app-surface-sunken: #eceff4;
+    --app-border: #dde3ec;
+    --app-border-strong: #c6cfdd;
+    --app-text: #10203a;
+    --app-text-muted: #5c6b83;
+    --app-accent: var(--grad-teal-600);
+    --app-accent-soft: rgba(15, 143, 165, 0.12);
+    --app-navbar: rgba(10, 33, 56, 0.94);
+    --app-navbar-border: rgba(255, 255, 255, 0.10);
+    --app-footer: #0a2138;
+
+    /* Elevation + geometry */
+    --app-radius-sm: 8px;
+    --app-radius: 14px;
+    --app-radius-lg: 20px;
+    --app-shadow-sm: 0 1px 2px rgba(11, 26, 48, 0.06), 0 1px 3px rgba(11, 26, 48, 0.08);
+    --app-shadow: 0 4px 12px rgba(11, 26, 48, 0.08), 0 12px 28px rgba(11, 26, 48, 0.10);
+    --app-shadow-lg: 0 10px 20px rgba(11, 26, 48, 0.10), 0 24px 60px rgba(11, 26, 48, 0.18);
+
+    /* Typography */
+    --app-font: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Roboto, Arial, sans-serif;
+    --app-font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+
+    /* Bootstrap overrides so every component follows the palette */
+    --bs-primary: var(--grad-teal-600);
+    --bs-primary-rgb: 11, 114, 133;
+    --bs-link-color: var(--grad-teal-600);
+    --bs-link-color-rgb: 11, 114, 133;
+    --bs-link-hover-color: var(--grad-teal-500);
+    --bs-body-font-family: var(--app-font);
+    --bs-body-color: var(--app-text);
+    --bs-border-radius: var(--app-radius-sm);
+    --bs-border-radius-lg: var(--app-radius);
 }
 
-.footer a {
-    color: #888;
-    font-size: 12px;
-    text-decoration: none;
+[data-bs-theme="dark"] {
+    --app-canvas: #070f1c;
+    --app-surface: #101c2e;
+    --app-surface-alt: #16243a;
+    --app-surface-sunken: #0c1728;
+    --app-border: #223349;
+    --app-border-strong: #31465f;
+    --app-text: #e3ecf8;
+    --app-text-muted: #91a3bd;
+    --app-accent: var(--grad-teal-400);
+    --app-accent-soft: rgba(33, 176, 196, 0.16);
+    --app-navbar: rgba(6, 20, 38, 0.92);
+    --app-navbar-border: rgba(255, 255, 255, 0.07);
+    --app-footer: #061426;
+
+    --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --app-shadow: 0 4px 12px rgba(0, 0, 0, 0.45), 0 12px 28px rgba(0, 0, 0, 0.35);
+    --app-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.55);
+
+    --bs-primary: var(--grad-teal-500);
+    --bs-primary-rgb: 15, 143, 165;
+    --bs-link-color: var(--grad-teal-400);
+    --bs-link-color-rgb: 33, 176, 196;
+    --bs-link-hover-color: #57cfe0;
 }
 
-.footer-left {
-    padding-top: 7px;
-    text-align: center;
+/*****************************
+ *        Base Layout        *
+ *****************************/
+
+html {
+    scroll-behavior: smooth;
 }
 
-.footer-center {
-    text-align: center;
+body {
+    font-family: var(--app-font);
+    color: var(--app-text);
+    background-color: var(--app-canvas);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.005em;
 }
 
-.footer-right {
-    padding-top: 7px;
-    text-align: center;
+/* The application shell - navbar / scrolling content / footer */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-@media (min-width: 800px) {
-    .footer-left {
-        text-align: left;
+.app-main {
+    flex: 1 1 auto;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.app-container {
+    padding-top: 1.75rem;
+    padding-inline: clamp(1rem, 2vw, 2.5rem);
+}
+
+/* The soft horizon backdrop that sits behind the whole application */
+.sky-bg::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(6, 20, 38, 0.72) 0%, rgba(6, 20, 38, 0.30) 38%, var(--app-canvas) 82%),
+        url("../images/sky-bg.jpg") no-repeat center top;
+    background-size: auto, cover;
+    will-change: transform;
+    z-index: -1;
+}
+
+[data-bs-theme="dark"] .sky-bg::before {
+    background:
+        linear-gradient(180deg, rgba(3, 10, 20, 0.86) 0%, rgba(4, 12, 24, 0.92) 38%, var(--app-canvas) 82%),
+        url("../images/sky-bg.jpg") no-repeat center top;
+    background-size: auto, cover;
+}
+
+.sky-bg .additional-bg {
+    display: none;
+}
+
+::selection {
+    background: var(--app-accent-soft);
+}
+
+/* A slimmer, theme aware scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--app-border-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--app-border-strong);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 99px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--app-text-muted);
+}
+
+/*****************************
+ *          Navbar           *
+ *****************************/
+
+.app-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background-color: var(--app-navbar);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
+    border-bottom: 1px solid var(--app-navbar-border);
+    box-shadow: 0 1px 24px rgba(4, 14, 28, 0.28);
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+}
+
+.app-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #ffffff;
+    padding-block: 0.2rem;
+}
+
+.app-navbar .navbar-brand:hover {
+    color: #ffffff;
+}
+
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 11px;
+    background: linear-gradient(140deg, var(--grad-teal-500), var(--grad-navy-600));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-size: 1.05rem;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.brand-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.brand-subtitle {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.app-navbar .navbar-nav {
+    gap: 0.15rem;
+}
+
+.app-navbar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.42rem 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.72);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.app-navbar .nav-link .fa-solid,
+.app-navbar .nav-link .fa-regular {
+    font-size: 0.85em;
+    opacity: 0.85;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus-visible {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.app-navbar .nav-link.active {
+    color: #ffffff;
+    background-color: rgba(33, 176, 196, 0.24);
+    box-shadow: inset 0 0 0 1px rgba(33, 176, 196, 0.45);
+}
+
+.app-navbar .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 0.55rem;
+}
+
+.app-navbar .navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(33, 176, 196, 0.35);
+}
+
+/* The circular icon buttons living on the right hand side of the navbar */
+.navbar-action {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.navbar-action:hover,
+.navbar-action:focus-visible {
+    background-color: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Only one of the two theme glyphs is ever visible */
+[data-bs-theme="light"] .theme-toggle .theme-icon-dark,
+[data-bs-theme="dark"] .theme-toggle .theme-icon-light {
+    display: none;
+}
+
+/*****************************
+ *        Page Header        *
+ *****************************/
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+}
+
+.page-header-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    border-radius: var(--app-radius);
+    font-size: 1.35rem;
+    color: #ffffff;
+    background: linear-gradient(140deg, rgba(33, 176, 196, 0.85), rgba(20, 60, 100, 0.85));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), var(--app-shadow-sm);
+}
+
+.page-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-shadow: 0 1px 12px rgba(4, 14, 28, 0.55);
+}
+
+.page-subtitle {
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 10px rgba(4, 14, 28, 0.5);
+}
+
+.page-header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .page-header-icon {
+        display: none;
     }
-    .footer-right {
-        text-align: right;
+    .page-title {
+        font-size: 1.3rem;
+    }
+}
+
+/*****************************
+ *           Cards           *
+ *****************************/
+
+.app-card {
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius);
+    background-color: var(--app-surface);
+    box-shadow: var(--app-shadow);
+    overflow: hidden;
+}
+
+.app-card > .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.15rem;
+    background-color: var(--app-surface-alt);
+    border-bottom: 1px solid var(--app-border);
+    font-weight: 600;
+    color: var(--app-text);
+}
+
+.app-card > .card-header h2,
+.app-card > .card-header h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.app-card > .card-body {
+    padding: 1.15rem;
+    background-color: var(--app-surface);
+    color: var(--app-text);
+}
+
+.app-card > .card-footer {
+    background-color: var(--app-surface-alt);
+    border-top: 1px solid var(--app-border);
+    color: var(--app-text-muted);
+}
+
+/* The sign-in card shown to anonymous visitors */
+.login-card {
+    max-width: 480px;
+    margin: 3rem auto;
+    text-align: center;
+}
+
+.login-card .login-mark {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    border-radius: 18px;
+    font-size: 1.6rem;
+    color: #ffffff;
+    background: linear-gradient(140deg, var(--grad-teal-500), var(--grad-navy-600));
+}
+
+/* Compact key/value rows, used by the about page */
+.info-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    padding: 0.7rem 0.25rem;
+    border-bottom: 1px solid var(--app-border);
+}
+
+.info-row:last-child {
+    border-bottom: 0;
+}
+
+.info-label {
+    flex: 0 0 200px;
+    font-weight: 600;
+    color: var(--app-text-muted);
+}
+
+.info-value {
+    flex: 1 1 260px;
+    word-break: break-word;
+}
+
+/* Small statistic tiles */
+.stat-tile {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius);
+    background-color: var(--app-surface);
+}
+
+.stat-tile .stat-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 12px;
+    background-color: var(--app-accent-soft);
+    color: var(--app-accent);
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--app-text-muted);
+}
+
+/*****************************
+ *     Buttons and Forms     *
+ *****************************/
+
+.btn {
+    --bs-btn-border-radius: var(--app-radius-sm);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--grad-teal-600);
+    --bs-btn-border-color: var(--grad-teal-600);
+    --bs-btn-hover-bg: var(--grad-teal-500);
+    --bs-btn-hover-border-color: var(--grad-teal-500);
+    --bs-btn-active-bg: var(--grad-teal-600);
+    --bs-btn-active-border-color: var(--grad-teal-600);
+    --bs-btn-disabled-bg: var(--grad-teal-600);
+    --bs-btn-disabled-border-color: var(--grad-teal-600);
+}
+
+/* altEditor and several templates still ask for the Bootstrap 3 era class */
+.btn-default {
+    --bs-btn-color: var(--app-text);
+    --bs-btn-bg: var(--app-surface);
+    --bs-btn-border-color: var(--app-border-strong);
+    --bs-btn-hover-color: var(--app-text);
+    --bs-btn-hover-bg: var(--app-surface-alt);
+    --bs-btn-hover-border-color: var(--app-border-strong);
+    --bs-btn-active-color: var(--app-text);
+    --bs-btn-active-bg: var(--app-surface-sunken);
+    --bs-btn-active-border-color: var(--app-border-strong);
+    color: var(--app-text);
+    background-color: var(--app-surface);
+    border: 1px solid var(--app-border-strong);
+}
+
+.form-control,
+.form-select {
+    border-radius: var(--app-radius-sm);
+    border-color: var(--app-border-strong);
+    background-color: var(--app-surface);
+    color: var(--app-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 0.2rem var(--app-accent-soft);
+}
+
+.form-control::placeholder {
+    color: var(--app-text-muted);
+    opacity: 0.75;
+}
+
+.form-check-input:checked {
+    background-color: var(--app-accent);
+    border-color: var(--app-accent);
+}
+
+.form-check-input:focus {
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 0.2rem var(--app-accent-soft);
+}
+
+/* A framed switch that reads as a proper toolbar control. The left padding
+   keeps Bootstrap's own switch gutter and simply adds our own on top of it. */
+.toolbar-switch {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    margin: 0;
+    padding-block: 0.35rem;
+    padding-right: 0.9rem;
+    padding-left: calc(2.5em + 0.9rem);
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background-color: var(--app-surface-alt);
+    font-size: 0.875rem;
+    color: var(--app-text-muted);
+}
+
+.toolbar-switch .form-check-input,
+.toolbar-switch .form-check-label {
+    cursor: pointer;
+}
+
+.toolbar-switch .form-check-label {
+    white-space: nowrap;
+}
+
+/* Monospace read-only content panes (S-201 XML, deltas, ...) */
+.code-view {
+    font-family: var(--app-font-mono);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    tab-size: 2;
+    background-color: var(--app-surface-sunken);
+    border-color: var(--app-border);
+    color: var(--app-text);
+    resize: vertical;
+}
+
+/*****************************
+ *        Datatables         *
+ *****************************/
+
+/* The toolbar strip that holds the buttons, the length menu and the search */
+div.dt-container div.dt-layout-row:first-child {
+    gap: 0.6rem;
+    align-items: center;
+    padding-bottom: 0.9rem;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid var(--app-border);
+}
+
+div.dt-container div.dt-layout-row:last-child {
+    gap: 0.6rem;
+    align-items: center;
+    padding-top: 0.75rem;
+    margin-top: 0.4rem;
+    border-top: 1px solid var(--app-border);
+}
+
+div.dt-container div.dt-layout-cell {
+    padding: 0;
+}
+
+div.dt-container .dt-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+div.dt-container .dt-search label {
+    display: none;
+}
+
+div.dt-container .dt-search input {
+    min-width: 230px;
+    height: 38px;
+    padding-left: 2.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--app-border-strong);
+    background-color: var(--app-surface-alt);
+    color: var(--app-text);
+}
+
+div.dt-container .dt-search input:focus {
+    outline: none;
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 0.2rem var(--app-accent-soft);
+    background-color: var(--app-surface);
+}
+
+/* The magnifier glyph is drawn by us so the label can stay hidden */
+div.dt-container .dt-search::before {
+    content: "\f002";
+    font-family: "Font Awesome 7 Free", "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0.85rem;
+    font-size: 0.8rem;
+    color: var(--app-text-muted);
+    pointer-events: none;
+}
+
+div.dt-container .dt-length {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--app-text-muted);
+}
+
+div.dt-container .dt-length select {
+    height: 34px;
+    padding: 0 1.8rem 0 0.6rem;
+    border-radius: var(--app-radius-sm);
+    border: 1px solid var(--app-border-strong);
+    background-color: var(--app-surface-alt);
+    color: var(--app-text);
+}
+
+div.dt-container .dt-info {
+    font-size: 0.85rem;
+    color: var(--app-text-muted);
+    padding-top: 0;
+}
+
+/* Buttons toolbar */
+div.dt-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+div.dt-buttons .dt-button,
+div.dt-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    height: 38px;
+    margin: 0;
+    padding: 0 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: var(--app-radius-sm);
+    border: 1px solid var(--app-border-strong);
+    background: var(--app-surface-alt);
+    color: var(--app-text);
+    box-shadow: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+div.dt-buttons .dt-button:hover:not(.disabled),
+div.dt-buttons .btn:hover:not(.disabled) {
+    background: var(--app-accent-soft);
+    border-color: var(--app-accent);
+    color: var(--app-text);
+    transform: translateY(-1px);
+}
+
+div.dt-buttons .dt-button.disabled,
+div.dt-buttons .btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Destructive actions get a red tint so they cannot be hit by accident */
+div.dt-buttons .dt-button.btn-danger-soft:hover:not(.disabled) {
+    background: rgba(220, 53, 69, 0.12);
+    border-color: rgba(220, 53, 69, 0.55);
+    color: #b02a37;
+}
+
+[data-bs-theme="dark"] div.dt-buttons .dt-button.btn-danger-soft:hover:not(.disabled) {
+    color: #ff8a95;
+}
+
+/* On narrow screens the button labels fold away and leave just the glyphs */
+@media (max-width: 991.98px) {
+    div.dt-buttons .dt-button .dt-button-text {
+        display: none;
+    }
+    div.dt-container .dt-search input {
+        min-width: 150px;
+    }
+}
+
+/* The column visibility / export drop downs */
+div.dt-button-collection {
+    border-radius: var(--app-radius);
+    border: 1px solid var(--app-border);
+    background-color: var(--app-surface);
+    box-shadow: var(--app-shadow);
+    padding: 0.4rem;
+}
+
+div.dt-button-collection .dt-button {
+    width: 100%;
+    justify-content: flex-start;
+    border: 0;
+    background: transparent;
+}
+
+div.dt-button-collection .dt-button.dt-button-active,
+div.dt-button-collection .dt-button.active {
+    background: var(--app-accent-soft);
+}
+
+/* The table itself */
+table.dataTable {
+    --bs-table-bg: transparent;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    color: var(--app-text);
+}
+
+table.dataTable > thead > tr > th {
+    background-color: var(--app-surface-alt);
+    border-bottom: 1px solid var(--app-border-strong) !important;
+    color: var(--app-text-muted);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0.65rem 0.7rem;
+}
+
+table.dataTable > thead > tr > th:first-child {
+    border-top-left-radius: var(--app-radius-sm);
+}
+
+table.dataTable > thead > tr > th:last-child {
+    border-top-right-radius: var(--app-radius-sm);
+}
+
+table.dataTable > tbody > tr > td {
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--app-border);
+    vertical-align: middle;
+    font-size: 0.875rem;
+}
+
+table.dataTable.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: transparent;
+    box-shadow: none;
+    background-color: var(--app-surface-alt);
+}
+
+table.dataTable > tbody > tr:hover > td {
+    background-color: var(--app-accent-soft);
+}
+
+table.dataTable > tbody > tr.selected > td,
+table.dataTable > tbody > tr.selected > th {
+    background-color: var(--app-accent-soft) !important;
+    box-shadow: inset 3px 0 0 var(--app-accent);
+    color: var(--app-text) !important;
+}
+
+/* Cancelled datasets stay visually struck out in both themes */
+table.dataTable.table-striped > tbody > tr.cancelled > td,
+table.dataTable > tbody > tr.cancelled > td {
+    background-color: rgba(220, 53, 69, 0.12) !important;
+    color: var(--app-text-muted);
+    text-decoration: line-through;
+    text-decoration-color: rgba(220, 53, 69, 0.55);
+}
+
+table.dataTable > tbody > tr.cancelled.selected > td {
+    background-color: rgba(220, 53, 69, 0.2) !important;
+}
+
+/* Pagination */
+div.dt-container .dt-paging .pagination {
+    margin: 0;
+    gap: 0.2rem;
+}
+
+div.dt-container .dt-paging .page-link {
+    border: 1px solid transparent;
+    border-radius: var(--app-radius-sm);
+    min-width: 34px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--app-text-muted);
+    background-color: transparent;
+}
+
+div.dt-container .dt-paging .page-link:hover {
+    background-color: var(--app-accent-soft);
+    color: var(--app-text);
+}
+
+div.dt-container .dt-paging .page-item.active .page-link {
+    background-color: var(--app-accent);
+    border-color: var(--app-accent);
+    color: #ffffff;
+}
+
+div.dt-container .dt-paging .page-item.disabled .page-link {
+    opacity: 0.45;
+    background-color: transparent;
+}
+
+/* Processing overlay */
+div.dt-container div.dt-processing,
+div.dataTables_processing {
+    z-index: 99999;
+    border-radius: var(--app-radius-sm);
+    border: 1px solid var(--app-border);
+    background: var(--app-surface);
+    color: var(--app-text);
+    box-shadow: var(--app-shadow);
+    padding: 0.6rem 1rem;
+}
+
+div.dt-container div.dt-processing > div > div {
+    background: var(--app-accent);
+}
+
+/* Responsive "show more" control */
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
+    background-color: var(--app-accent);
+    border: 0;
+    box-shadow: none;
+}
+
+/* The wrapper keeps wide tables scrollable instead of breaking the layout */
+.table-shell {
+    overflow-x: auto;
+}
+
+/* For datatables only the table row scrolls, so the scrollbar sits under the
+   table itself and never overlaps or clips the paging controls below it */
+.table-shell:has(> .dt-container) {
+    overflow: visible;
+}
+
+.table-shell div.dt-container div.dt-layout-table {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+/* A pill used to render enumerated values inside table cells */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.16rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    background-color: var(--app-surface-sunken);
+    border: 1px solid var(--app-border);
+    color: var(--app-text-muted);
+    white-space: nowrap;
+}
+
+.tag-accent {
+    background-color: var(--app-accent-soft);
+    border-color: transparent;
+    color: var(--app-accent);
+}
+
+.tag-success {
+    background-color: rgba(25, 135, 84, 0.14);
+    border-color: transparent;
+    color: #198754;
+}
+
+.tag-danger {
+    background-color: rgba(220, 53, 69, 0.14);
+    border-color: transparent;
+    color: #dc3545;
+}
+
+.tag-warning {
+    background-color: rgba(232, 163, 23, 0.16);
+    border-color: transparent;
+    color: #b47a06;
+}
+
+[data-bs-theme="dark"] .tag-success { color: #4ade80; }
+[data-bs-theme="dark"] .tag-danger { color: #ff8a95; }
+[data-bs-theme="dark"] .tag-warning { color: #f0be5c; }
+
+.cell-mono {
+    font-family: var(--app-font-mono);
+    font-size: 0.78rem;
+    color: var(--app-text-muted);
+}
+
+.cell-muted {
+    color: var(--app-text-muted);
+}
+
+/*****************************
+ *           Maps            *
+ *****************************/
+
+.map {
+    height: 500px;
+    border-radius: var(--app-radius-sm);
+    background-color: var(--app-surface-sunken);
+    z-index: 0;
+}
+
+.map-tall {
+    height: calc(100vh - 310px);
+    min-height: 460px;
+}
+
+.leaflet-container {
+    font-family: var(--app-font);
+    background-color: var(--app-surface-sunken);
+}
+
+.leaflet-control-container .leaflet-control {
+    border-radius: var(--app-radius-sm);
+    box-shadow: var(--app-shadow-sm);
+}
+
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    border-color: var(--app-border);
+}
+
+.leaflet-bar a:hover {
+    background-color: var(--app-surface-alt);
+    color: var(--app-text);
+}
+
+.leaflet-control-layers,
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+    background-color: var(--app-surface) !important;
+    color: var(--app-text-muted) !important;
+    border-color: var(--app-border) !important;
+}
+
+.leaflet-control-attribution a {
+    color: var(--app-accent) !important;
+}
+
+.leaflet-control-scale-line {
+    border: 1px solid var(--app-border-strong) !important;
+    border-top: none !important;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    box-shadow: var(--app-shadow);
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: var(--app-radius);
+}
+
+.leaflet-popup-content {
+    margin: 0.85rem 1rem;
+    font-size: 0.85rem;
+}
+
+/* The AtoN markers - a coloured pin drawn purely with CSS */
+.aton-marker {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50% 50% 50% 10%;
+    transform: rotate(45deg);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 6px rgba(4, 14, 28, 0.45);
+    color: #ffffff;
+    font-size: 0.7rem;
+}
+
+.aton-marker > i {
+    transform: rotate(-45deg);
+}
+
+/* Beacons are fixed structures, so they get a squared off pin */
+.aton-marker.aton-marker-fixed {
+    border-radius: 6px 6px 6px 2px;
+}
+
+/* Virtual AtoNs are not physically there - show them as a dashed outline */
+.aton-marker.aton-marker-virtual {
+    border-style: dashed;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 75%, transparent 75%);
+    background-size: 8px 8px;
+}
+
+.marker-cluster-aton {
+    background-color: rgba(11, 114, 133, 0.35);
+    border-radius: 50%;
+}
+
+.marker-cluster-aton div {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    margin: 3px;
+    border-radius: 50%;
+    background-color: var(--grad-teal-600);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(4, 14, 28, 0.4);
+}
+
+/* Popup body for an AtoN */
+.aton-popup-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.1rem;
+}
+
+.aton-popup-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--app-text-muted);
+    margin-bottom: 0.6rem;
+}
+
+.aton-popup-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.aton-popup-grid dt {
+    color: var(--app-text-muted);
+    font-weight: 500;
+}
+
+.aton-popup-grid dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+/* The legend rendered as a Leaflet control */
+.map-legend {
+    padding: 0.7rem 0.85rem;
+    background-color: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-sm);
+    font-size: 0.78rem;
+    color: var(--app-text);
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.map-legend h6 {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--app-text-muted);
+    margin-bottom: 0.45rem;
+}
+
+.map-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.12rem 0;
+}
+
+.map-legend-swatch {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 1px var(--app-border);
+}
+
+/* The filter rail of the AtoN explorer */
+.map-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: calc(100vh - 310px);
+    min-height: 460px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.filter-group-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--app-text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.aton-result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 120px;
+}
+
+.aton-result {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: var(--app-radius-sm);
+    background-color: transparent;
+    text-align: left;
+    color: var(--app-text);
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.aton-result:hover,
+.aton-result:focus-visible {
+    background-color: var(--app-accent-soft);
+    border-color: var(--app-accent);
+}
+
+.aton-result-swatch {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--app-border);
+}
+
+.aton-result-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.aton-result-meta {
+    font-size: 0.72rem;
+    color: var(--app-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--app-text-muted);
+    font-size: 0.85rem;
+}
+
+.empty-state .fa-solid {
+    font-size: 1.6rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 991.98px) {
+    .map-sidebar,
+    .map-tall {
+        max-height: none;
+        min-height: 0;
+    }
+    .map-tall {
+        height: 60vh;
+    }
+    .map-sidebar {
+        max-height: 50vh;
     }
 }
 
 /*****************************
  *       Modal Panels        *
  *****************************/
+
+.modal-content {
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius);
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    box-shadow: var(--app-shadow-lg);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--app-border);
+    padding: 0.9rem 1.15rem;
+}
+
+.modal-header .modal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--app-border);
+    background-color: var(--app-surface-alt);
+    padding: 0.75rem 1.15rem;
+}
+
+/* altEditor builds its own modal, so it needs the same treatment */
+.altEditor-modal .modal-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.altEditor-modal .modal-body label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--app-text-muted);
+}
+
+.altEditor-modal .modal-body input.form-control,
+.altEditor-modal .modal-body select.form-control,
+.altEditor-modal .modal-body textarea.form-control {
+    border-radius: var(--app-radius-sm);
+}
+
 .modal-dialog-slideout {
     min-height: 100%;
     margin: 0 auto 0 0;
-    background: #fff;
+    background: var(--app-surface);
 }
 
 .modal.fade .modal-dialog.modal-dialog-slideout {
@@ -77,19 +1333,84 @@
 }
 
 /*****************************
- *           Maps            *
+ *          Toasts           *
  *****************************/
-.map {
-    height: 500px;
+
+.toast-stack {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: min(420px, calc(100vw - 2rem));
+}
+
+.toast-stack .toast {
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-sm);
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    box-shadow: var(--app-shadow);
 }
 
 /*****************************
- *        Datatables         *
+ *       Footer Panel        *
  *****************************/
-table.dataTable.table-striped > tbody > tr.cancelled > td {
-    background-color: lightpink !important;
+
+.app-footer {
+    background-color: var(--app-footer);
+    border-top: 1px solid var(--app-navbar-border);
+    padding: 0.9rem 1.5rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.78rem;
 }
 
-div.dataTables_processing {
-    z-index: 99999;
+.app-footer a {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.app-footer a:hover {
+    color: #ffffff;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.2rem 0;
+}
+
+@media (min-width: 800px) {
+    .footer-left {
+        justify-content: flex-start;
+    }
+    .footer-right {
+        justify-content: flex-end;
+    }
+}
+
+/*****************************
+ *        Accessibility      *
+ *****************************/
+
+:focus-visible {
+    outline: 2px solid var(--app-accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
 }

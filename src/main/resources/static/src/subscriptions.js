@@ -17,57 +17,76 @@ var subscriptionColumnDefs = [
     hoverMsg: "The Subscription UUID",
     placeholder: "The Subscription UUID",
     visible: true,
-    searchable: true
+    searchable: true,
+    render: (data, type) => type === 'display' ? renderIdentifier(data) : data
 }, {
      data: "containerType",
      title: "Container",
      hoverMsg: "The Subscription Container Type",
      visible: true,
-     searchable: true
+     searchable: true,
+     render: (data, type) => type === 'display' ? renderTag(data) : data
 }, {
     data: "dataProductType",
     title: "Data Product",
     hoverMsg: "The Subscription Data Product Type",
     visible: true,
-    searchable: true
+    searchable: true,
+    render: (data, type) => type === 'display' ? renderTag(data, 'accent') : data
  }, {
     data: "dataReference",
     title: "Data Ref",
     hoverMsg: "The Subscription Data Reference",
     visible: true,
-    searchable: true
+    searchable: true,
+    render: (data, type) => type === 'display' ? renderIdentifier(data) : data
  }, {
     data: "subscriptionGeometry",
-    title: "Geometry",
+    title: "Area",
     hoverMsg: "The Subscription Geometry",
-    visible: false,
-    searchable: false
+    visible: true,
+    sortable: false,
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderSubscriptionArea(data) : data
  }, {
     data: "createdAt",
     title: "Created At",
     hoverMsg: "Created At",
     visible: true,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderDateTime(data) : data
 }, {
     data: "updatedAt",
     title: "Updated At",
     hoverMsg: "Updated At",
     visible: true,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderDateTime(data) : data
 }, {
      data: "clientMrn",
      title: "Client MRN",
      hoverMsg: "The Subscription Client MRN",
      visible: true,
-     searchable: true
+     searchable: true,
+     render: (data, type) => type === 'display' ? renderIdentifier(data) : data
  }];
+
+/**
+ * Renders whether a subscription is restricted to a geographical area.
+ *
+ * @param {Object}  geometry    The subscription geometry
+ * @return {String} The area markup
+ */
+function renderSubscriptionArea(geometry) {
+    return MapUtils.positionsOf(geometry).length > 0
+        ? renderTag('Restricted', 'accent')
+        : renderTag('Unrestricted');
+}
 
 // Run when the document is ready
 $(() => {
     // And re-initialise it
-    subscriptionTable = $('#subscriptions_table').DataTable({
-        processing: true,
-        serverSide: true,
+    subscriptionTable = $('#subscriptions_table').DataTable($.extend(commonDatatableOptions(), {
         ajax: {
             type: "POST",
             url: "./api/subscriptions/dt",
@@ -76,26 +95,22 @@ $(() => {
                 return JSON.stringify(d);
             },
             error: (response, status, more) => {
-               error({"responseText" : response.getResponseHeader("X-atonService-error")}, status, more);
-           }
+                showErrorDialog(extractErrorMessage(response));
+            }
         },
         columns: subscriptionColumnDefs,
         order: [[6, 'desc']],
-        dom: '<"d-flex"<"flex-start"B><"flex-middle p-1"l><"flex-end flex-fill"f>><"d-flex mt-1 mb-1"t><"d-flex w-100"<"flex-fill"i><"flex-end"p>>',
-        select: 'single',
-        lengthMenu: [10, 25, 50, 75, 100],
-        responsive: true,
         buttons: [{
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-map-location-dot"></i>',
-            titleAttr: 'View Subscription Area',
+            text: '<i class="fa-solid fa-map-location-dot"></i><span class="dt-button-text">Area</span>',
+            titleAttr: 'View the subscription area',
             name: 'subscriptionGeometry', // do not change name
             className: 'subscription-geometry-toggle',
             action: (e, dt, node, config) => {
                 loadSubscriptionGeometry(e, dt, node, config);
             }
-        }]
-    });
+        }].concat(commonDatatableButtons('SECOM Subscriptions'))
+    }));
 
     // We also need to link the aton geometry toggle button with the the modal
     // panel so that by clicking the button the panel pops up. It's easier done
@@ -105,21 +120,14 @@ $(() => {
         .attr({ "data-bs-toggle": "modal", "data-bs-target": "#subscriptionGeometryPanel" });
 
     // Now also initialise the subscription geometry map before we need it
-    subscriptionMap = L.map('subscriptionGeometryMap').setView([54.910, -3.432], 5);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(subscriptionMap);
+    subscriptionMap = MapUtils.createMap('subscriptionGeometryMap');
 
     // FeatureGroup is to store editable layers
     drawnItems = new L.FeatureGroup();
     subscriptionMap.addLayer(drawnItems);
 
     // Invalidate the map size on show to fix the presentation
-    $('#subscriptionGeometryPanel').on('shown.bs.modal', () => {
-        setTimeout(() => {
-            subscriptionMap.invalidateSize();
-        }, 10);
-    });
+    MapUtils.refreshOnModalShow('#subscriptionGeometryPanel', subscriptionMap);
 });
 
 /**
@@ -139,21 +147,8 @@ function loadSubscriptionGeometry(event, table, button, config) {
     // Recreate the drawn items feature group
     drawnItems.clearLayers();
     if(geometry) {
-        var geomLayer = L.geoJson(geometry, {coordsToLatLng: (coords)=>coords});
-        addNonGroupLayers(geomLayer, drawnItems);
-        subscriptionMap.setView(geomLayer.getBounds().getCenter(), 5);
+        var geomLayer = MapUtils.geoJsonLayer(geometry);
+        MapUtils.addNonGroupLayers(geomLayer, drawnItems);
+        MapUtils.fitTo(subscriptionMap, drawnItems, 10);
     }
 }
-
-// Would benefit from https://github.com/Leaflet/Leaflet/issues/4461
-function addNonGroupLayers(sourceLayer, targetGroup) {
-    if (sourceLayer instanceof L.LayerGroup) {
-        sourceLayer.eachLayer((layer) => {
-            addNonGroupLayers(layer, targetGroup);
-        });
-    } else {
-        targetGroup.addLayer(sourceLayer);
-    }
-}
-
-

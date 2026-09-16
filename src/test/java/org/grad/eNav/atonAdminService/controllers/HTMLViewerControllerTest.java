@@ -66,6 +66,28 @@ class HTMLViewerControllerTest {
     }
 
     /**
+     * Test that we can access the AtoN chart HTML page.
+     */
+    @Test
+    void testGetMap() throws Exception {
+        // Perform the MVC request
+        this.mockMvc.perform(get("/map")
+                .contentType(MediaType.TEXT_HTML))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test that we can access the Datasets HTML page.
+     */
+    @Test
+    void testGetDatasets() throws Exception {
+        // Perform the MVC request
+        this.mockMvc.perform(get("/datasets")
+                .contentType(MediaType.TEXT_HTML))
+                .andExpect(status().isOk());
+    }
+
+    /**
      * Test that we can access the AtoNs HTML page.
      */
     @Test

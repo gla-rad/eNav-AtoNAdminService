@@ -1,7 +1,7 @@
 /**
  * Global variables
  */
-var datasetTable = undefined;
+var datasetContentLogTable = undefined;
 var datasetContentLogMap = undefined;
 var drawControl = undefined;
 var drawnItems = undefined;
@@ -17,51 +17,88 @@ var datasetContentLogColumnDefs = [
     hoverMsg: "The Dataset Content Log ID",
     placeholder: "The Dataset Content Log ID",
     visible: false,
-    searchable: false
+    searchable: false,
+    className: "noVis"
 }, {
     data: "uuid",
     title: "UUID",
     hoverMsg: "The Dataset UUID",
     placeholder: "The Dataset UUID",
     visible: true,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderIdentifier(data) : data
 }, {
      data: "datasetType",
-     title: "DatasetTypeID",
+     title: "Dataset Type",
      hoverMsg: "The Dataset Type",
      visible: true,
-     searchable: false
+     searchable: false,
+     render: (data, type) => type === 'display' ? renderTag(data, 'accent') : data
 }, {
     data: "operation",
     title: "Operation",
     hoverMsg: "Operation",
-    required: true
+    required: true,
+    render: (data, type) => type === 'display' ? renderOperation(data) : data
  }, {
     data: "sequenceNo",
     title: "Sequence No",
     hoverMsg: "Sequence No",
     visible: true,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderIdentifier(data) : data
  }, {
     data: "geometry",
-    title: "Geometry",
+    title: "Area",
     hoverMsg: "The Dataset Geometry",
-    visible: false,
-    searchable: false
+    visible: true,
+    sortable: false,
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderLogArea(data) : data
  }, {
     data: "generatedAt",
     title: "Generated At",
     hoverMsg: "Generated At",
     visible: true,
-    searchable: false
+    searchable: false,
+    render: (data, type) => type === 'display' ? renderDateTime(data) : data
 }];
+
+/**
+ * Renders the dataset operation as a tag whose colour reflects how disruptive
+ * the operation is for the subscribers of the dataset.
+ *
+ * @param {String}  operation   The dataset operation
+ * @return {String} The operation markup
+ */
+function renderOperation(operation) {
+    const variants = {
+        CREATED: 'success',
+        UPDATED: 'accent',
+        CANCELLED: 'danger',
+        DELETED: 'danger',
+        AUTO: 'warning',
+        OTHER: undefined
+    };
+    return renderTag(operation, variants[String(operation).toUpperCase()]);
+}
+
+/**
+ * Renders whether a dataset content log entry carries an area of coverage.
+ *
+ * @param {Object}  geometry    The dataset content log geometry
+ * @return {String} The area markup
+ */
+function renderLogArea(geometry) {
+    return MapUtils.positionsOf(geometry).length > 0
+        ? renderTag('Defined', 'success')
+        : renderTag('Not set');
+}
 
 // Run when the document is ready
 $(() => {
     // And re-initialise it
-    datasetContentLogTable = $('#dataset_content_logs_table').DataTable({
-        processing: true,
-        serverSide: true,
+    datasetContentLogTable = $('#dataset_content_logs_table').DataTable($.extend(commonDatatableOptions(), {
         ajax: {
             type: "POST",
             url: "./api/datasetcontentlog/dt",
@@ -70,19 +107,15 @@ $(() => {
                 return JSON.stringify(d);
             },
             error: (response, status, more) => {
-               error({"responseText" : response.getResponseHeader("X-atonService-error")}, status, more);
-           }
+                showErrorDialog(extractErrorMessage(response));
+            }
         },
         columns: datasetContentLogColumnDefs,
         order: [[6, 'desc']],
-        dom: '<"d-flex"<"flex-start"B><"flex-middle p-1"l><"flex-end flex-fill"f>><"d-flex mt-1 mb-1"t><"d-flex w-100"<"flex-fill"i><"flex-end"p>>',
-        select: 'single',
-        lengthMenu: [10, 25, 50, 75, 100],
-        responsive: true,
         buttons: [{
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-map-location-dot"></i>',
-            titleAttr: 'View Dataset Content Log Area',
+            text: '<i class="fa-solid fa-map-location-dot"></i><span class="dt-button-text">Area</span>',
+            titleAttr: 'View the dataset content log area',
             name: 'datasetContentLogGeometry', // do not change name
             className: 'dataset-geometry-toggle',
             action: (e, dt, node, config) => {
@@ -90,8 +123,8 @@ $(() => {
             }
         }, {
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-code"></i>',
-            titleAttr: 'View Dataset Content Log Data',
+            text: '<i class="fa-solid fa-code"></i><span class="dt-button-text">Data</span>',
+            titleAttr: 'View the dataset content log data',
             name: 'datasetContentLog', // do not change name
             className: 'dataset-content-log-toggle',
             action: (e, dt, node, config) => {
@@ -99,15 +132,15 @@ $(() => {
             }
         }, {
             extend: 'selected', // Bind to Selected row
-            text: '<i class="fa-solid fa-code-compare"></i>',
-            titleAttr: 'View Dataset Content Log Delta',
-            name: 'datasetContentLog', // do not change name
+            text: '<i class="fa-solid fa-code-compare"></i><span class="dt-button-text">Delta</span>',
+            titleAttr: 'View the dataset content log delta',
+            name: 'datasetContentLogDelta', // do not change name
             className: 'dataset-content-log-toggle',
             action: (e, dt, node, config) => {
                 loadDatasetContentLog(e, dt, node, config, 'Delta');
             }
-        }]
-    });
+        }].concat(commonDatatableButtons('S-201 Dataset Content Logs'))
+    }));
 
     // We also need to link the aton geometry toggle button with the the modal
     // panel so that by clicking the button the panel pops up. It's easier done
@@ -124,21 +157,14 @@ $(() => {
         .attr({ "data-bs-toggle": "modal", "data-bs-target": "#datasetContentLogPanel" });
 
     // Now also initialise the aton geometry map before we need it
-    datasetContentLogMap = L.map('datasetContentLogGeometryMap').setView([54.910, -3.432], 5);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(datasetContentLogMap);
+    datasetContentLogMap = MapUtils.createMap('datasetContentLogGeometryMap');
 
     // FeatureGroup is to store editable layers
     drawnItems = new L.FeatureGroup();
     datasetContentLogMap.addLayer(drawnItems);
 
     // Invalidate the map size on show to fix the presentation
-    $('#datasetContentLogGeometryPanel').on('shown.bs.modal', () => {
-        setTimeout(() => {
-            datasetContentLogMap.invalidateSize();
-        }, 10);
-    });
+    MapUtils.refreshOnModalShow('#datasetContentLogGeometryPanel', datasetContentLogMap);
 });
 
 /**
@@ -158,9 +184,9 @@ function loadDatasetContentLogGeometry(event, table, button, config) {
     // Recreate the drawn items feature group
     drawnItems.clearLayers();
     if(geometry) {
-        var geomLayer = L.geoJson(geometry, {coordsToLatLng: (coords)=>coords});
-        addNonGroupLayers(geomLayer, drawnItems);
-        datasetContentLogMap.setView(geomLayer.getBounds().getCenter(), 5);
+        var geomLayer = MapUtils.geoJsonLayer(geometry);
+        MapUtils.addNonGroupLayers(geomLayer, drawnItems);
+        MapUtils.fitTo(datasetContentLogMap, drawnItems, 10);
     }
 }
 
@@ -180,7 +206,7 @@ function loadDatasetContentLog(event, table, button, config, endpoint) {
     var datasetId = data[0].id;
 
     // Initialise the popup and clear any previous output
-    $('#datasetContentLogPanelHeader').html(`Dataset Content Log - ${endpoint}`)
+    $('#datasetContentLogPanelHeader').html(`<i class="fa-solid fa-code"></i>Dataset Content Log - ${endpoint}`);
     $('#datasetContentLogTextArea').val("Loading...");
 
     // And get the dataset content using the SECOM dataset endpoint
@@ -198,20 +224,8 @@ function loadDatasetContentLog(event, table, button, config, endpoint) {
             }
         },
         error: (response, status, more) => {
-            showErrorDialog(response.getResponseHeader("X-atonService-error"));
+            $('#datasetContentLogTextArea').val("");
+            showErrorDialog(extractErrorMessage(response));
         }
     });
 }
-
-// Would benefit from https://github.com/Leaflet/Leaflet/issues/4461
-function addNonGroupLayers(sourceLayer, targetGroup) {
-    if (sourceLayer instanceof L.LayerGroup) {
-        sourceLayer.eachLayer((layer) => {
-            addNonGroupLayers(layer, targetGroup);
-        });
-    } else {
-        targetGroup.addLayer(sourceLayer);
-    }
-}
-
-
