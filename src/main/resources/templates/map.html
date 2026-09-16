@@ -1,0 +1,113 @@
+<!--
+  ~ Copyright (c) 2024 GLA Research and Development Directorate
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/general.html :: headerfiles}"></th:block>
+    <th:block th:replace="~{fragments/general.html :: map-styles}"></th:block>
+</head>
+<body class="app-shell sky-bg">
+    <th:block th:replace="~{fragments/general.html :: navbar}"></th:block>
+    <main class="app-main">
+        <div class="container-fluid app-container">
+            <th:block th:replace="~{fragments/general.html :: login-card}"></th:block>
+            <th:block th:replace="~{fragments/general.html :: page-header(
+                'fa-earth-europe',
+                'AtoN Chart',
+                'Every Aid to Navigation of the service on one chart, optionally narrowed down to a single dataset')}"></th:block>
+
+            <div class="row g-3" sec:authorize="isAuthenticated()">
+                <div class="col-12 col-lg-4 col-xxl-3">
+                    <div class="card app-card h-100">
+                        <div class="card-header">
+                            <i class="fa-solid fa-filter"></i>
+                            <h2>Filters</h2>
+                        </div>
+                        <div class="card-body map-sidebar">
+                            <div>
+                                <div class="filter-group-title">Dataset</div>
+                                <select id="datasetSelect" class="form-select form-select-sm">
+                                    <option value="">All Aids to Navigation</option>
+                                </select>
+                                <div class="form-check form-switch mt-2">
+                                    <input id="showCoverageSwitch" class="form-check-input" type="checkbox" checked>
+                                    <label for="showCoverageSwitch" class="form-check-label small">Outline the dataset area</label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="filter-group-title">Search</div>
+                                <input id="atonSearch" type="search" class="form-control form-control-sm"
+                                       placeholder="Name or ID code&hellip;" autocomplete="off">
+                            </div>
+
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="filter-group-title mb-0">AtoN types</div>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-default btn-sm py-0 px-2" id="selectAllTypes">All</button>
+                                        <button type="button" class="btn btn-default btn-sm py-0 px-2" id="clearAllTypes">None</button>
+                                    </div>
+                                </div>
+                                <div id="atonFilters" class="mt-2">
+                                    <div class="empty-state py-3"><span>Loading the AtoN types&hellip;</span></div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column flex-fill">
+                                <div class="filter-group-title">
+                                    Results <span id="atonCount" class="tag tag-accent ms-1">0</span>
+                                </div>
+                                <div id="atonResults" class="aton-result-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-8 col-xxl-9">
+                    <div class="card app-card h-100">
+                        <div class="card-header">
+                            <i class="fa-solid fa-map"></i>
+                            <h2 id="chartTitle">All Aids to Navigation</h2>
+                            <div class="ms-auto d-flex gap-2">
+                                <button type="button" class="btn btn-default btn-sm" id="fitResults"
+                                        title="Zoom the chart onto the visible Aids to Navigation">
+                                    <i class="fa-solid fa-expand"></i><span class="d-none d-md-inline">Fit to results</span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm" id="reloadChart"
+                                        title="Reload the Aids to Navigation">
+                                    <i class="fa-solid fa-rotate"></i><span class="d-none d-md-inline">Reload</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="atonChartMap" class="map map-tall"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <th:block th:replace="~{fragments/general.html :: footer}"></th:block>
+
+    <th:block th:replace="~{fragments/general.html :: error-dialog}"></th:block>
+
+    <th:block th:replace="~{fragments/general.html :: core-scripts}"></th:block>
+    <th:block th:replace="~{fragments/general.html :: map-scripts}"></th:block>
+    <script type="text/javascript" th:src="@{/src/map.js}"></script>
+</body>
+</html>
