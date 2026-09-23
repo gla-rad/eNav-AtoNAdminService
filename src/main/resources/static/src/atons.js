@@ -235,7 +235,7 @@ function loadAtonGeometry(event, table, button, config) {
     drawnItems.clearLayers();
     if(geometry) {
         var geomLayer = MapUtils.geoJsonLayer(geometry, {
-            pointToLayer: (feature, latlng) => L.marker(latlng, { icon: MapUtils.atonIcon(aton.atonType) })
+            pointToLayer: (feature, position) => L.marker(position, { icon: MapUtils.atonIcon(aton.atonType) })
         });
         geomLayer.bindPopup(MapUtils.atonPopup(aton));
         MapUtils.addNonGroupLayers(geomLayer, drawnItems);

@@ -222,7 +222,7 @@ const MapUtils = (() => {
             return null;
         }
         const sum = positions.reduce((acc, pos) => [acc[0] + pos[0], acc[1] + pos[1]], [0, 0]);
-        return L.latLng(sum[0] / positions.length, sum[1] / positions.length);
+        return L.latLng(sum[1] / positions.length, sum[0] / positions.length);
     }
 
     /**
