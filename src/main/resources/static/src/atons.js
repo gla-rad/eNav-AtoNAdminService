@@ -114,7 +114,7 @@ function renderPosition(geometry) {
     if(!centre) {
         return '<span class="cell-muted">&mdash;</span>';
     }
-    return `<span class="cell-mono">${centre.lat.toFixed(4)}, ${centre.lng.toFixed(4)}</span>`;
+    return `<span class="cell-mono">${centre.lng.toFixed(4)}, ${centre.lat.toFixed(4)}</span>`;
 }
 
 // Run when the document is ready
@@ -227,7 +227,7 @@ function loadAtonGeometry(event, table, button, config) {
     $('#atonGeometryName').html(escapeHtml(MapUtils.atonName(aton)));
     $('#atonGeometryType').html(escapeHtml(aton.atonType || 'AtoN'));
     $('#atonGeometryPosition').html(centre
-        ? `${centre.lat.toFixed(5)}, ${centre.lng.toFixed(5)}`
+        ? `${centre.lng.toFixed(5)}, ${centre.lat.toFixed(5)}`
         : '&mdash;');
     $('#atonGeometryChartLink').attr('href', `map?aton=${encodeURIComponent(aton.idCode || '')}`);
 

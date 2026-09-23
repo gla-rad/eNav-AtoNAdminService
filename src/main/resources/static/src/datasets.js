@@ -567,7 +567,7 @@ function saveGeometry() {
             type: "GeometryCollection",
             geometries: []
         };
-        L.geoJson(drawnItems.toGeoJSON(), {coordsToLatLng: (coords)=>coords})
+        L.geoJson(drawnItems.toGeoJSON())
             .toGeoJSON()
             .features
             .forEach(feature => {

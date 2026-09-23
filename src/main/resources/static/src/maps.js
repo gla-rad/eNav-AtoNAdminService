@@ -137,7 +137,6 @@ const MapUtils = (() => {
      */
     function geoJsonLayer(geometry, options) {
         return L.geoJson(geometry, $.extend({
-            coordsToLatLng: (coords) => coords,
             style: () => ({
                 color: '#0f8fa5',
                 weight: 2,
