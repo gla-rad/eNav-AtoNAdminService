@@ -90,8 +90,8 @@ class GeometryS201ConverterTest {
         // Make sure the result looks OK
         assertNotNull(result);
         assertEquals(Point.class, result.getClass());
-        assertEquals(51.8916667, ((Point)result).getX());
-        assertEquals(1.4233333, ((Point)result).getY());
+        assertEquals(51.8916667, ((Point)result).getY());
+        assertEquals(1.4233333, ((Point)result).getX());
     }
 
     /**
@@ -102,7 +102,7 @@ class GeometryS201ConverterTest {
     @Test
     void testConvertToGeometry() {
         // Create the point
-        List<Double> coords = Stream.of(51.98, 1.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98).toList();
         Point point = this.factory.createPoint(new Coordinate(coords.get(0), coords.get(1)));
 
         // Create a typical Aids to Navigation
@@ -123,8 +123,9 @@ class GeometryS201ConverterTest {
         assertNotNull(pointProperty.getPoint().getPos());
         assertNotNull(pointProperty.getPoint().getPos().getValue());
         assertEquals(coords.size(), pointProperty.getPoint().getPos().getValue().length);
-        for(int i=0; i< coords.size(); i++) {
-            assertEquals(coords.get(i), pointProperty.getPoint().getPos().getValue()[i]);
+        for(int i=0; i< coords.size(); i=i+2) {
+            assertEquals(coords.get(i), pointProperty.getPoint().getPos().getValue()[i+1]);
+            assertEquals(coords.get(i+1), pointProperty.getPoint().getPos().getValue()[i]);
         }
     }
 
@@ -136,7 +137,7 @@ class GeometryS201ConverterTest {
     @Test
     void testGeometryToS201PointCurveSurfaceToGeometryForSurface() {
         // Create the polygon
-        List<Double> coords = Stream.of(51.98, 1.28, 51.98, 2.28, 52.98, 2.28, 52.98, 1.28, 51.98, 1.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98, 2.28, 51.98, 2.28, 52.98, 1.28, 52.98, 1.28, 51.98).toList();
         Polygon polygon = this.factory.createPolygon(new Coordinate[]{
                 new Coordinate(coords.get(0), coords.get(1)),
                 new Coordinate(coords.get(2), coords.get(3)),
@@ -177,8 +178,9 @@ class GeometryS201ConverterTest {
         assertNotNull(((LinearRingType)polygonPatchType.getExterior().getAbstractRing().getValue()).getPosList());
         assertNotNull(((LinearRingType)polygonPatchType.getExterior().getAbstractRing().getValue()).getPosList().getValue());
         assertEquals(10, ((LinearRingType)polygonPatchType.getExterior().getAbstractRing().getValue()).getPosList().getValue().length);
-        for(int i=0; i< coords.size(); i++) {
-            assertEquals(coords.get(i), ((LinearRingType)polygonPatchType.getExterior().getAbstractRing().getValue()).getPosList().getValue()[i]);
+        for(int i=0; i< coords.size(); i=i+2) {
+            assertEquals(coords.get(i), ((LinearRingType)polygonPatchType.getExterior().getAbstractRing().getValue()).getPosList().getValue()[i+1]);
+            assertEquals(coords.get(i+1), ((LinearRingType)polygonPatchType.getExterior().getAbstractRing().getValue()).getPosList().getValue()[i]);
         }
     }
 
@@ -190,7 +192,7 @@ class GeometryS201ConverterTest {
     @Test
     void testGeometryToS201PointCurveSurfaceToGeometryForCurve() {
         // Create the line
-        List<Double> coords = Stream.of(51.98, 1.28, 52.98, 2.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98, 2.28, 52.98).toList();
         LineString lineString = this.factory.createLineString(new Coordinate[]{new Coordinate(coords.get(0), coords.get(1)), new Coordinate(coords.get(2), coords.get(3))});
 
         // Translate to S-201 geometry
@@ -218,8 +220,9 @@ class GeometryS201ConverterTest {
         assertNotNull(lineStringSegmentType.getPosList());
         assertNotNull(lineStringSegmentType.getPosList().getValue());
         assertEquals(4,lineStringSegmentType.getPosList().getValue().length);
-        for(int i=0; i< coords.size(); i++) {
-            assertEquals(coords.get(i),lineStringSegmentType.getPosList().getValue()[i]);
+        for(int i=0; i< coords.size(); i=i+2) {
+            assertEquals(coords.get(i),lineStringSegmentType.getPosList().getValue()[i+1]);
+            assertEquals(coords.get(i+1),lineStringSegmentType.getPosList().getValue()[i]);
         }
     }
 
@@ -231,7 +234,7 @@ class GeometryS201ConverterTest {
     @Test
     void testGeometryToS201PointCurveSurfaceToGeometryForPoint() {
         // Create the point
-        List<Double> coords = Stream.of(51.98, 1.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98).toList();
         Point point = this.factory.createPoint(new Coordinate(coords.get(0), coords.get(1)));
 
         // Translate to S-201 geometry
@@ -252,8 +255,9 @@ class GeometryS201ConverterTest {
         assertNotNull(pointProperty.getPoint().getPos());
         assertNotNull(pointProperty.getPoint().getPos().getValue());
         assertEquals(coords.size(), pointProperty.getPoint().getPos().getValue().length);
-        for(int i=0; i< coords.size(); i++) {
-            assertEquals(coords.get(i), pointProperty.getPoint().getPos().getValue()[i]);
+        for(int i=0; i< coords.size(); i=i+2) {
+            assertEquals(coords.get(i), pointProperty.getPoint().getPos().getValue()[i+1]);
+            assertEquals(coords.get(i+1), pointProperty.getPoint().getPos().getValue()[i]);
         }
     }
 
@@ -264,7 +268,7 @@ class GeometryS201ConverterTest {
     @Test
     void testGenerateSurfacePropertyPatch() {
         // Create the coordinates
-        List<Double> coords = Stream.of(51.98, 1.28, 51.98, 2.28, 52.98, 2.28, 52.98, 1.28, 51.98, 1.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98, 2.28, 51.98, 2.28, 52.98, 1.28, 52.98, 1.28, 51.98).toList();
 
         // Generate the curve property patch
         PolygonPatchType result = this.geometryS201Converter.generateSurfacePropertyPatch(coords.toArray(Double[]::new));
@@ -290,7 +294,7 @@ class GeometryS201ConverterTest {
     @Test
     void testGenerateCurvePropertySegment() {
         // Create the coordinates
-        List<Double> coords = Stream.of(51.98, 1.28, 52.98, 2.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98, 2.28, 52.98).toList();
 
         // Generate the curve property segment
         LineStringSegmentType result = this.geometryS201Converter.generateCurvePropertySegment(coords.toArray(Double[]::new));
@@ -312,7 +316,7 @@ class GeometryS201ConverterTest {
     @Test
     void testGeneratePointPropertyPosition() {
         // Create the coordinates
-        List<Double> coords = Stream.of(51.98, 1.28).toList();
+        List<Double> coords = Stream.of(1.28, 51.98).toList();
 
         // Generate the point property position
         Pos result = this.geometryS201Converter.generatePointPropertyPosition(coords.toArray(Double[]::new));
@@ -386,10 +390,10 @@ class GeometryS201ConverterTest {
         // Make sure the translation looks OK
         assertNotNull(result);
         assertEquals(2, result.length);
-        assertEquals(posList.getValue()[0], result[0].getX());
-        assertEquals(posList.getValue()[1], result[0].getY());
-        assertEquals(posList.getValue()[2], result[1].getX());
-        assertEquals(posList.getValue()[3], result[1].getY());
+        assertEquals(posList.getValue()[0], result[0].getY());
+        assertEquals(posList.getValue()[1], result[0].getX());
+        assertEquals(posList.getValue()[2], result[1].getY());
+        assertEquals(posList.getValue()[3], result[1].getX());
     }
 
     /**
@@ -408,9 +412,9 @@ class GeometryS201ConverterTest {
         assertNotNull(result);
         assertNotNull(result.getValue());
         assertEquals(4, result.getValue().length);
-        assertEquals(coordinates[0].getX(), result.getValue()[0]);
-        assertEquals(coordinates[0].getY(), result.getValue()[1]);
-        assertEquals(coordinates[1].getX(), result.getValue()[2]);
-        assertEquals(coordinates[1].getY(), result.getValue()[3]);
+        assertEquals(coordinates[0].getY(), result.getValue()[0]);
+        assertEquals(coordinates[0].getX(), result.getValue()[1]);
+        assertEquals(coordinates[1].getY(), result.getValue()[2]);
+        assertEquals(coordinates[1].getX(), result.getValue()[3]);
     }
 }
