@@ -23,9 +23,11 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OrderColumn;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -55,7 +57,8 @@ public class FogSignal extends Equipment {
     private BigDecimal signalPeriod;
 
     @ElementCollection
-    private Set<SignalSequence> signalSequences;
+    @OrderColumn(name = "signal_sequence_index")
+    private List<SignalSequence> signalSequences;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -160,7 +163,7 @@ public class FogSignal extends Equipment {
      *
      * @return the signal sequences
      */
-    public Set<SignalSequence> getSignalSequences() {
+    public List<SignalSequence> getSignalSequences() {
         return signalSequences;
     }
 
@@ -169,7 +172,7 @@ public class FogSignal extends Equipment {
      *
      * @param signalSequences the signal sequences
      */
-    public void setSignalSequences(Set<SignalSequence> signalSequences) {
+    public void setSignalSequences(List<SignalSequence> signalSequences) {
         this.signalSequences = signalSequences;
     }
 

@@ -21,7 +21,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,7 +44,8 @@ public class RhythmOfLight implements Serializable {
     private BigDecimal signalPeriod;
 
     @ElementCollection
-    private Set<SignalSequence> signalSequences;
+    @OrderColumn(name = "signal_sequence_index")
+    private List<SignalSequence> signalSequences;
 
     /**
      * Gets light characteristic.
@@ -105,7 +106,7 @@ public class RhythmOfLight implements Serializable {
      *
      * @return the signal sequences
      */
-    public Set<SignalSequence> getSignalSequences() {
+    public List<SignalSequence> getSignalSequences() {
         return signalSequences;
     }
 
@@ -114,7 +115,7 @@ public class RhythmOfLight implements Serializable {
      *
      * @param signalSequences the signal sequences
      */
-    public void setSignalSequences(Set<SignalSequence> signalSequences) {
+    public void setSignalSequences(List<SignalSequence> signalSequences) {
         this.signalSequences = signalSequences;
     }
 }

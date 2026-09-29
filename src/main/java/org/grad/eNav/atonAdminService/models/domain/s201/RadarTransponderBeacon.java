@@ -21,6 +21,7 @@ import _int.iho.s_201.gml.cs0._2.StatusType;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -75,7 +76,8 @@ public class RadarTransponderBeacon extends Equipment {
     private SectorLimitDetails sectorLimitTwo;
 
     @ElementCollection
-    private Set<SignalSequence> signalSequences;
+    @OrderColumn(name = "signal_sequence_index")
+    private List<SignalSequence> signalSequences;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = StatusType.class)
@@ -212,7 +214,7 @@ public class RadarTransponderBeacon extends Equipment {
      *
      * @return the signal sequences
      */
-    public Set<SignalSequence> getSignalSequences() {
+    public List<SignalSequence> getSignalSequences() {
         return signalSequences;
     }
 
@@ -221,7 +223,7 @@ public class RadarTransponderBeacon extends Equipment {
      *
      * @param signalSequences the signal sequences
      */
-    public void setSignalSequences(Set<SignalSequence> signalSequences) {
+    public void setSignalSequences(List<SignalSequence> signalSequences) {
         this.signalSequences = signalSequences;
     }
 

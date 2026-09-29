@@ -55,7 +55,8 @@ public class SectorCharacteristics implements Serializable {
     private BigDecimal signalPeriod;
 
     @ElementCollection
-    private Set<SignalSequence> signalSequences;
+    @OrderColumn(name = "signal_sequence_index")
+    private List<SignalSequence> signalSequences;
 
     @JsonBackReference
     @ManyToOne
@@ -168,7 +169,7 @@ public class SectorCharacteristics implements Serializable {
      *
      * @return the signal sequences
      */
-    public Set<SignalSequence> getSignalSequences() {
+    public List<SignalSequence> getSignalSequences() {
         return signalSequences;
     }
 
@@ -177,7 +178,7 @@ public class SectorCharacteristics implements Serializable {
      *
      * @param signalSequences the signal sequences
      */
-    public void setSignalSequences(Set<SignalSequence> signalSequences) {
+    public void setSignalSequences(List<SignalSequence> signalSequences) {
         this.signalSequences = signalSequences;
     }
 
