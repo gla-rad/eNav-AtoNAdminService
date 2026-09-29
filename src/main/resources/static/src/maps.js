@@ -327,12 +327,25 @@ const MapUtils = (() => {
     }
 
     /**
-     * Builds the popup shown when an AtoN marker is clicked.
+     * The detail lookups of the AtoNs whose popup has already been opened.
+     * Every AtoN type carries a different set of attributes, which is far too
+     * much to ship along with every entry of the chart, so they are requested
+     * for the one AtoN the user clicked on and then kept for as long as the
+     * page lives. Caching the request itself rather than its outcome also
+     * keeps a double click from asking the service twice.
+     */
+    const atonDetailsCache = new Map();
+
+    /**
+     * Builds the popup shown when an AtoN is clicked. Everything an AtoN has
+     * in common is rendered straight away, while the attributes that depend on
+     * its type only arrive once the lookup behind the popup comes back.
      *
-     * @param {Object}  aton    The AtoN entry
+     * @param {Object}  aton        The AtoN entry
+     * @param {Object}  details     The looked up details, or nothing while they are on their way
      * @return {String} The popup markup
      */
-    function atonPopup(aton) {
+    function atonPopup(aton, details) {
         const centre = centreOf(aton.geometry);
         const position = centre
             ? `${centre.lat.toFixed(5)}, ${centre.lng.toFixed(5)}`
@@ -345,7 +358,84 @@ const MapUtils = (() => {
                 <dt>Position</dt><dd>${escapeHtml(position)}</dd>
                 <dt>Valid from</dt><dd>${escapeHtml(aton.dateStart)}</dd>
                 <dt>Valid to</dt><dd>${escapeHtml(aton.dateEnd)}</dd>
-            </dl>`;
+            </dl>
+            <div class="aton-popup-details">${atonDetailsMarkup(details)}</div>`;
+    }
+
+    /**
+     * Renders the type specific part of an AtoN popup - the light
+     * characteristic of a light, the colour and the shape of a buoy, the
+     * construction of a lighthouse - as the service has grouped them.
+     *
+     * @param {Object}  details     The looked up details, or nothing while they are on their way
+     * @return {String} The markup of the details
+     */
+    function atonDetailsMarkup(details) {
+        if (!details) {
+            return '<div class="aton-popup-loading"><i class="fa-solid fa-circle-notch fa-spin"></i>'
+                + '<span>Loading the details&hellip;</span></div>';
+        }
+        if (details.error) {
+            return '<div class="aton-popup-loading"><i class="fa-solid fa-triangle-exclamation"></i>'
+                + `<span>${escapeHtml(details.error)}</span></div>`;
+        }
+        return (details.groups || []).map(group => {
+            const rows = Object.entries(group.attributes || {})
+                .map(([name, value]) => `<dt>${escapeHtml(name)}</dt><dd>${escapeHtml(value)}</dd>`)
+                .join('');
+            return '<div class="aton-popup-group">'
+                + `<div class="aton-popup-group-title">${escapeHtml(group.title)}</div>`
+                + `<dl class="aton-popup-grid">${rows}</dl></div>`;
+        }).join('');
+    }
+
+    /**
+     * Binds the AtoN popup onto a layer, along with the lookup that fills in
+     * the attributes specific to the type of that AtoN.
+     *
+     * @param {Object}  layer   The Leaflet layer representing the AtoN
+     * @param {Object}  aton    The AtoN entry
+     * @return {Object} The same layer, for chaining
+     */
+    function bindAtonPopup(layer, aton) {
+        layer.bindPopup(atonPopup(aton), { minWidth: 250, maxWidth: 320 });
+        layer.on('popupopen', (event) => loadAtonDetails(aton, event.popup));
+        return layer;
+    }
+
+    /**
+     * Looks the type specific attributes of an AtoN up and hands them over to
+     * the popup that has just been opened. Note that the content is replaced
+     * as a whole rather than patched into the DOM, since Leaflet rebuilds the
+     * body of a popup out of the content it was given whenever it resizes it.
+     *
+     * @param {Object}  aton    The AtoN entry
+     * @param {Object}  popup   The Leaflet popup being opened
+     */
+    function loadAtonDetails(aton, popup) {
+        if (!atonDetailsCache.has(aton.id)) {
+            const request = $.ajax({
+                url: `./api/atons/${encodeURIComponent(aton.id)}/details`,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8'
+            });
+            atonDetailsCache.set(aton.id, request);
+            // A failed lookup should not keep the AtoN from being tried again
+            request.fail(() => atonDetailsCache.delete(aton.id));
+        }
+
+        atonDetailsCache.get(aton.id)
+            .done(response => {
+                if (popup.isOpen()) {
+                    popup.setContent(atonPopup(aton, { groups: (response || {}).attributeGroups || [] }));
+                }
+            })
+            // A failing popup should never pop an error dialog up on top of it
+            .fail(response => {
+                if (popup.isOpen()) {
+                    popup.setContent(atonPopup(aton, { error: extractErrorMessage(response) }));
+                }
+            });
     }
 
     /**
@@ -358,14 +448,38 @@ const MapUtils = (() => {
         return L.markerClusterGroup({
             showCoverageOnHover: false,
             spiderfyOnMaxZoom: true,
-            disableClusteringAtZoom: 15,
-            maxClusterRadius: 50,
+            spiderfyDistanceMultiplier: 1.6,
+            maxClusterRadius: clusterRadius,
             iconCreateFunction: (cluster) => L.divIcon({
                 html: `<div>${cluster.getChildCount()}</div>`,
                 className: 'marker-cluster-aton',
                 iconSize: L.point(40, 40)
             })
         });
+    }
+
+    /**
+     * How close two Aids to Navigation have to be before they are drawn as a
+     * single cluster, in pixels of the current zoom level.
+     * <p>
+     * Clustering is deliberately never switched off altogether. A structure
+     * and the equipment it carries - the light, the bell or the racon of a
+     * buoy - are separate features sharing the exact same position, so however
+     * far the chart is zoomed in they never come apart. Without a cluster left
+     * to expand, only whichever of them happens to be drawn on top could ever
+     * be clicked. Tightening the radius instead means that from close up only
+     * the AtoNs that genuinely sit on top of each other are still grouped, and
+     * because such a group survives all the way down to the maximum zoom level
+     * Leaflet spreads it out on a click rather than zooming in any further.
+     *
+     * @param {Number}  zoom    The zoom level being clustered
+     * @return {Number} The clustering radius in pixels
+     */
+    function clusterRadius(zoom) {
+        if (zoom >= 15) {
+            return 8;
+        }
+        return zoom >= 13 ? 20 : 50;
     }
 
     // The public surface of the module
@@ -383,6 +497,7 @@ const MapUtils = (() => {
         atonIcon: atonIcon,
         atonName: atonName,
         atonPopup: atonPopup,
+        bindAtonPopup: bindAtonPopup,
         createClusterGroup: createClusterGroup
     };
 })();

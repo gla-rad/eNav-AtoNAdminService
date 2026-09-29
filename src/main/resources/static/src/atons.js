@@ -237,7 +237,7 @@ function loadAtonGeometry(event, table, button, config) {
         var geomLayer = MapUtils.geoJsonLayer(geometry, {
             pointToLayer: (feature, position) => L.marker(position, { icon: MapUtils.atonIcon(aton.atonType) })
         });
-        geomLayer.bindPopup(MapUtils.atonPopup(aton));
+        MapUtils.bindAtonPopup(geomLayer, aton);
         MapUtils.addNonGroupLayers(geomLayer, drawnItems);
         MapUtils.fitTo(atonMessagesMap, drawnItems, 14);
     }

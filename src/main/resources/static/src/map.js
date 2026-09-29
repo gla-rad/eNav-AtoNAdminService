@@ -181,10 +181,10 @@ function refreshChart(fit) {
     // Redraw the markers
     atonClusterGroup.clearLayers();
     matches.forEach(entry => {
-        entry.marker = L.marker(entry.position, {
+        entry.marker = MapUtils.bindAtonPopup(L.marker(entry.position, {
             icon: MapUtils.atonIcon(entry.type),
             title: entry.name
-        }).bindPopup(MapUtils.atonPopup(entry.aton));
+        }), entry.aton);
         atonClusterGroup.addLayer(entry.marker);
     });
 

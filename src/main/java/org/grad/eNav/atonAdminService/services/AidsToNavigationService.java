@@ -172,6 +172,20 @@ public class AidsToNavigationService {
     }
 
     /**
+     * Returns the Aids to Navigation with the provided ID.
+     *
+     * @param id the ID of the Aids to Navigation
+     * @return the matching Aids to Navigation
+     * @throws DataNotFoundException if no Aids to Navigation carries that ID
+     */
+    @Transactional(readOnly = true)
+    public AidsToNavigation findOne(BigInteger id) {
+        log.debug("Request to get Aids to Navigation with ID : {}", id);
+        return this.aidsToNavigationRepo.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(String.format("No Aid to Navigation found for the provided ID: %d", id)));
+    }
+
+    /**
      * Returns the Aids to Navigation based on the provided ID Code is that
      * exists.
      *

@@ -1021,6 +1021,8 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
 .leaflet-popup-content {
     margin: 0.85rem 1rem;
     font-size: 0.85rem;
+    max-height: 22rem;
+    overflow-y: auto;
 }
 
 /* The AtoN markers - a coloured pin drawn purely with CSS */
@@ -1056,6 +1058,12 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
 .marker-cluster-aton {
     background-color: rgba(11, 114, 133, 0.35);
     border-radius: 50%;
+}
+
+/* The legs joining a cluster to the AtoNs it has just been spread out into */
+.leaflet-cluster-spider-leg {
+    stroke: var(--app-accent);
+    stroke-opacity: 0.8;
 }
 
 .marker-cluster-aton div {
@@ -1102,6 +1110,34 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
 .aton-popup-grid dd {
     margin: 0;
     word-break: break-word;
+}
+
+/* The attributes that depend on the type of the AtoN, looked up on demand */
+.aton-popup-details:not(:empty) {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--app-border);
+}
+
+.aton-popup-group + .aton-popup-group {
+    margin-top: 0.55rem;
+}
+
+.aton-popup-group-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--app-accent);
+    margin-bottom: 0.2rem;
+}
+
+.aton-popup-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--app-text-muted);
 }
 
 /* The legend rendered as a Leaflet control */

@@ -24,11 +24,13 @@ import org.grad.eNav.atonAdminService.models.domain.s201.S201AtonTypes;
 import org.grad.eNav.atonAdminService.models.domain.s201.S201Dataset;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPage;
 import org.grad.eNav.atonAdminService.models.dtos.datatables.DtPagingRequest;
+import org.grad.eNav.atonAdminService.models.dtos.s201.AidsToNavigationDetailsDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.AidsToNavigationDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.AidsToNavigationMapEntryDto;
 import org.grad.eNav.atonAdminService.models.dtos.s201.FeatureNameDto;
 import org.grad.eNav.atonAdminService.services.AidsToNavigationService;
 import org.grad.eNav.atonAdminService.services.DatasetService;
+import org.grad.eNav.atonAdminService.utils.AtonAttributeUtils;
 import org.grad.eNav.atonAdminService.utils.GeometryJSONConverter;
 import org.grad.eNav.atonAdminService.utils.HeaderUtil;
 import org.locationtech.jts.geom.Geometry;
@@ -200,6 +202,37 @@ public class AidsToNavigationController {
                         .stream()
                         .map(this::toMapEntry)
                         .collect(Collectors.toList()));
+    }
+
+    /**
+     * GET /api/atons/{id}/details : Returns the type specific description of
+     * one Aid to Navigation.
+     * <p/>
+     * Which attributes an Aid to Navigation carries depends entirely on its
+     * S-201 type, so rather than a fixed set of fields this operation returns
+     * the groups of attributes that actually apply to it - the colour and the
+     * shape of a buoy, the characteristic of a light, the Morse group of a
+     * racon - together with the same description of the equipment it carries.
+     * The chart view requests this only for the feature the user clicked on,
+     * which is what keeps the {@link #getAidsToNavigationForMap} response slim
+     * enough to cover a whole dataset.
+     *
+     * @param id the ID of the Aids to Navigation to be described
+     * @return the ResponseEntity with status 200 (OK) and the description in body
+     */
+    @GetMapping(value = "/{id}/details", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AidsToNavigationDetailsDto> getAidsToNavigationDetails(@PathVariable BigInteger id) {
+        log.debug("REST request to get the details of the Aids to Navigation : {}", id);
+
+        final AidsToNavigation aidsToNavigation = this.aidsToNavigationService.findOne(id);
+
+        final AidsToNavigationDetailsDto details = new AidsToNavigationDetailsDto();
+        details.setId(aidsToNavigation.getId());
+        details.setIdCode(aidsToNavigation.getIdCode());
+        details.setAtonType(S201AtonTypes.fromLocalClass(aidsToNavigation.getClass()).getDescription());
+        details.setAttributeGroups(AtonAttributeUtils.attributesOf(aidsToNavigation));
+
+        return ResponseEntity.ok().body(details);
     }
 
     /**
