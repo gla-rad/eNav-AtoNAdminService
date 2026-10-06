@@ -454,7 +454,7 @@ class SecomV2ControllerTest {
                     assertNotNull(getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue());
                     assertEquals(DatatypeConverter.printHexBinary("signature".getBytes()), getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
                     assertArrayEquals(new String[]{Base64.getEncoder().encodeToString("certificate".getBytes())}, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
-                    assertEquals("fc5b132b465442bdde70eb9d7f0e9ec8ad84ec56858e237e3e3cbe6398946a2d", getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
+                    assertEquals("4edd0286ffa1c7a7d460cdb2960d395340046bd8f83dc373bb233e43332f20437672834fa111297d9dc26dd72b6f20c3", getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
                     assertEquals(Integer.MAX_VALUE, getResponseObject.getPagination().getMaxItemsPerPage());
                     assertEquals(1, getResponseObject.getPagination().getTotalItems());
 
@@ -540,7 +540,7 @@ class SecomV2ControllerTest {
                     assertNotNull(getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue());
                     assertEquals(DatatypeConverter.printHexBinary("signature".getBytes()), getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
                     assertArrayEquals(new String[]{Base64.getEncoder().encodeToString("certificate".getBytes())}, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
-                    assertEquals("fc5b132b465442bdde70eb9d7f0e9ec8ad84ec56858e237e3e3cbe6398946a2d", getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
+                    assertEquals("4edd0286ffa1c7a7d460cdb2960d395340046bd8f83dc373bb233e43332f20437672834fa111297d9dc26dd72b6f20c3", getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
                     assertEquals(Integer.MAX_VALUE, getResponseObject.getPagination().getMaxItemsPerPage());
                     assertEquals(1, getResponseObject.getPagination().getTotalItems());
 
