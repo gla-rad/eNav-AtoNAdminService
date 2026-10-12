@@ -235,7 +235,10 @@ class SecomV2ControllerTest {
         this.savedSubscriptionRequest.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.savedSubscriptionRequest.setDataProductType(SECOM_DataProductType.S201);
         this.removeSubscriptionObject = new RemoveSubscriptionObject();
-        this.removeSubscriptionObject.setSubscriptionIdentifier(UUID.randomUUID());
+        final EnvelopeRemoveSubscriptionObject envelopeRemoveSubscriptionObject = new EnvelopeRemoveSubscriptionObject();
+        envelopeRemoveSubscriptionObject.setSubscriptionIdentifier(UUID.randomUUID());
+        this.removeSubscriptionObject.setEnvelope(envelopeRemoveSubscriptionObject);
+        this.removeSubscriptionObject.setEnvelopeSignature("Envelope Signature");
 
         // Setup an acknowledgement
         this.acknowledgementObject = new AcknowledgementObject();
@@ -449,8 +452,6 @@ class SecomV2ControllerTest {
                     assertNotNull(getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata());
                     assertEquals(Boolean.FALSE, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDataProtection());
                     assertEquals(Boolean.FALSE, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getCompressionFlag());
-                    assertEquals(SecomConstants.SECOM_PROTECTION_SCHEME, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getProtectionScheme());
-                    assertEquals(DigitalSignatureAlgorithmEnum.SHA3_384_WITH_ECDSA, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureReference());
                     assertNotNull(getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue());
                     assertEquals(DatatypeConverter.printHexBinary("signature".getBytes()), getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
                     assertArrayEquals(new String[]{Base64.getEncoder().encodeToString("certificate".getBytes())}, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
@@ -535,8 +536,6 @@ class SecomV2ControllerTest {
                     assertNotNull(getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata());
                     assertEquals(Boolean.FALSE, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDataProtection());
                     assertEquals(Boolean.TRUE, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getCompressionFlag());
-                    assertEquals(SecomConstants.SECOM_PROTECTION_SCHEME, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getProtectionScheme());
-                    assertEquals(DigitalSignatureAlgorithmEnum.SHA3_384_WITH_ECDSA, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureReference());
                     assertNotNull(getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue());
                     assertEquals(DatatypeConverter.printHexBinary("signature".getBytes()), getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
                     assertArrayEquals(new String[]{Base64.getEncoder().encodeToString("certificate".getBytes())}, getResponseObject.getDataResponseObject().getFirst().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
@@ -691,23 +690,20 @@ class SecomV2ControllerTest {
      */
     @Test
     void testRemoveSubscription() {
-        doReturn(removeSubscriptionObject.getSubscriptionIdentifier()).when(this.secomV2SubscriptionService).delete(any());
+        doReturn(this.removeSubscriptionObject.getEnvelope().getSubscriptionIdentifier()).when(this.secomV2SubscriptionService).delete(any());
 
-        webTestClient.method(HttpMethod.DELETE)
-                .uri(uriBuilder -> uriBuilder
-                        .path("/api/secom" + REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-                        .queryParam("subscriptionIdentifier", this.removeSubscriptionObject.getSubscriptionIdentifier())
-                        .build())
+        webTestClient.method(HttpMethod.POST)
+                .uri("/api/secom" + REMOVE_SUBSCRIPTION_INTERFACE_PATH)
                 .header(SecomRequestHeaders.MRN_HEADER, "mrn")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(Mono.just(removeSubscriptionObject.getSubscriptionIdentifier()), UUID.class))
+                .body(BodyInserters.fromPublisher(Mono.just(removeSubscriptionObject), RemoveSubscriptionObject.class))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(RemoveSubscriptionResponseObject.class)
                 .consumeWith(response -> {
                     RemoveSubscriptionResponseObject removeSubscriptionResponseObject = response.getResponseBody();
                     assertNotNull(removeSubscriptionResponseObject);
-                    assertEquals(String.format("Subscription %s removed", removeSubscriptionObject.getSubscriptionIdentifier()), removeSubscriptionResponseObject.getMessage());
+                    assertEquals(String.format("Subscription %s removed", this.removeSubscriptionObject.getEnvelope().getSubscriptionIdentifier()), removeSubscriptionResponseObject.getMessage());
                 });
     }
 
@@ -719,13 +715,11 @@ class SecomV2ControllerTest {
     void testRemoveSubscriptionBadRequest() {
         doThrow(SecomValidationException.class).when(this.secomV2SubscriptionService).delete(any());
 
-        webTestClient.method(HttpMethod.DELETE)
-                .uri(uriBuilder -> uriBuilder
-                        .path("/api/secom" + REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-                        .queryParam("subscriptionIdentifier", this.removeSubscriptionObject.getSubscriptionIdentifier())
-                        .build())
+        webTestClient.method(HttpMethod.POST)
+                .uri("/api/secom" + REMOVE_SUBSCRIPTION_INTERFACE_PATH)
                 .header(SecomRequestHeaders.MRN_HEADER, "mrn")
                 .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromPublisher(Mono.just(removeSubscriptionObject), RemoveSubscriptionObject.class))
                 .exchange()
                 .expectStatus().isBadRequest();
     }

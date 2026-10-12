@@ -17,12 +17,14 @@
 package org.grad.eNav.atonAdminService.controllers.secom.v2;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.grad.eNav.atonAdminService.components.DomainDtoMapper;
 import org.grad.eNav.atonAdminService.models.domain.secom.RemoveSubscription;
 import org.grad.eNav.atonAdminService.services.secom.v2.SecomV2SubscriptionService;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface;
+import org.grad.secomv2.core.models.EnvelopeRemoveSubscriptionObject;
 import org.grad.secomv2.core.models.RemoveSubscriptionObject;
 import org.grad.secomv2.core.models.RemoveSubscriptionResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
@@ -58,17 +61,24 @@ public class RemoveSubscriptionController implements RemoveSubscriptionServiceIn
     SecomV2SubscriptionService secomV2SubscriptionService;
 
     /**
-     * DELETE /api/secom/v2/subscription : Subscription(s) can be removed either
+     * POST /v2/subscription/delete : Subscription(s) can be removed either
      * internally by information owner, or externally by the consumer. This
      * interface shall be used by the consumer to request removal of
      * subscription.
      *
-     * @param subscriptionIdentifier the identified of the subscription to be removed
+     * @param removeSubscriptionObject the remove subscription object
      * @return the remove subscription response object
      */
     @Tag(name = "SECOM")
     @Transactional
-    public ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestParam(value="subscriptionIdentifier") UUID subscriptionIdentifier) {
+    public ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@Valid @RequestBody RemoveSubscriptionObject removeSubscriptionObject) {
+        // Get the subscription identifier to be removed
+        final UUID subscriptionIdentifier = Optional.ofNullable(removeSubscriptionObject)
+                .map(RemoveSubscriptionObject::getEnvelope)
+                .map(EnvelopeRemoveSubscriptionObject::getSubscriptionIdentifier)
+                .orElse(null);
+
+        // End remove the subscription
         final UUID deletedSubscriptionIdentifier = Optional.ofNullable(subscriptionIdentifier)
                 .map(this.secomV2SubscriptionService::delete)
                 .orElseThrow(() -> new SecomNotFoundException(String.format("%s", subscriptionIdentifier)));
