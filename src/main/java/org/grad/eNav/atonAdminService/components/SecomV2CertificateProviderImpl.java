@@ -79,7 +79,7 @@ public class SecomV2CertificateProviderImpl implements SecomCertificateProvider 
         // Build the SECOM digital certificate object
         try {
             digitalSignatureCertificate.setCertificateAlias(new String[]{String.format("%d", response.getCertificateId())});
-            digitalSignatureCertificate.setCertificate(SecomPemUtils.getCertsFromPem(new String[]{response.getCertificate()}));
+            digitalSignatureCertificate.setCertificate(SecomPemUtils.getCertsFromPem(response.getCertificates()));
             digitalSignatureCertificate.setPublicKey(digitalSignatureCertificate.getCertificate()[0].getPublicKey());
             digitalSignatureCertificate.setRootCertificate(SecomPemUtils.getCertFromPem(response.getRootCertificate()));
         } catch (CertificateException ex) {

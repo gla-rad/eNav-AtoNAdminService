@@ -120,7 +120,7 @@ public interface GetSecomControllerTestInterface {
         // Mock the cKeeper client behaviour
         final SignatureCertificateDto signatureCertificateDto = new SignatureCertificateDto();
         signatureCertificateDto.setCertificateId(BigInteger.ONE);
-        signatureCertificateDto.setCertificate(minPemData);
+        signatureCertificateDto.setCertificates(new String[]{minPemData});
         signatureCertificateDto.setPublicKey("publicKey");
         signatureCertificateDto.setRootCertificate(minPemData);
         doReturn(signatureCertificateDto)

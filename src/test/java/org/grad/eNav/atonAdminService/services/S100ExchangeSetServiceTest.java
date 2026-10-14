@@ -160,7 +160,7 @@ class S100ExchangeSetServiceTest {
         // Create the signature certificate to be used for signing
         SignatureCertificateDto signatureCertificate = new SignatureCertificateDto();
         signatureCertificate.setCertificateId(BigInteger.ONE);
-        signatureCertificate.setCertificate(this.testCertificatePem);
+        signatureCertificate.setCertificates(new String[]{this.testCertificatePem});
 
         // Mock the further internal operations
         doReturn("XX00").when(this.serviceInformationConfig).ihoProducerCode();
@@ -204,7 +204,7 @@ class S100ExchangeSetServiceTest {
                 .map(log -> new S100ExchangeSetService.DatasetData(
                         new File(String.format("s201-msg-%d.xml", index.getAndIncrement())),
                         BigInteger.ONE,
-                        this.testCertificatePem,
+                        new String[]{this.testCertificatePem},
                         this.s201Dataset,
                         log)
                 )
@@ -213,7 +213,7 @@ class S100ExchangeSetServiceTest {
         // Create the signature certificate to be used for signing
         SignatureCertificateDto signatureCertificate = new SignatureCertificateDto();
         signatureCertificate.setCertificateId(BigInteger.ONE);
-        signatureCertificate.setCertificate(this.testCertificatePem);
+        signatureCertificate.setCertificates(new String[]{this.testCertificatePem});
 
         // Mock the necessary service configuration and signature operations
         doReturn("XX00").when(this.serviceInformationConfig).ihoProducerCode();
